@@ -1,5 +1,8 @@
 package com.PierLorrai.Gestionale.config;
 
+
+import com.PierLorrai.Gestionale.common.Order;
+import com.PierLorrai.Gestionale.common.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -17,7 +20,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.PlatformTransactionManager;
-import com.PierLorrai.Gestionale.management_service.repository.OrderRepository;
+
 
 import java.util.HashMap;
 
