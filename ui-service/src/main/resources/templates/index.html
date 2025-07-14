@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microservices Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; color: #333; }
+        .container { max-width: 800px; margin: auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: #0056b3; text-align: center; margin-bottom: 30px; }
+        .section { margin-bottom: 25px; padding: 20px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9; }
+        .section h2 { margin-top: 0; color: #0056b3; }
+        .button-group { text-align: center; margin-top: 30px; }
+        .button-group a {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 0 10px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .button-group a:hover {
+            background-color: #0056b3;
+        }
+        ul { list-style-type: none; padding: 0; }
+        li { margin-bottom: 10px; }
+        li a { color: #007bff; text-decoration: none; }
+        li a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Welcome to Microservices Dashboard</h1>
+
+    <div class="section">
+        <h2>Security Service</h2>
+        <p>Manage user authentication and authorization.</p>
+        <ul>
+            <li><a href="/auth/register">Register New User</a></li>
+            <li><a href="/auth/login">Login</a></li>
+            <li><a href="/users">User Management (Admin Only)</a></li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Management & Processing Service</h2>
+        <p>Handle products, customers, and orders.</p>
+        <ul>
+            <li><a href="/products">View Products</a></li>
+            <li><a href="/customers">View Customers</a></li>
+            <li><a href="/orders">View Orders</a></li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Batch Service</h2>
+        <p>Execute batch processing jobs.</p>
+        <ul>
+            <li><a href="/batch/start-process-orders-job">Start Process Orders Job</a></li>
+        </ul>
+    </div>
+
+    <div class="button-group">
+        <a href="https://github.com/your-username/your-microservices-project" target="_blank">View on GitHub</a>
+    </div>
+</div>
+</body>
+</html>
