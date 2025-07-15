@@ -1,6 +1,7 @@
-package com.PierLorrai.Gestionale.config;
+// D:/Progetti/Git/Gestionale/security-service/src/main/java/com/PierLorrai/Gestionale/config/ApplicationConfig.java
+package com.PierLorrai.Gestionale.config; // AGGIORNATO
 
-import com.PierLorrai.Gestionale.repository.UserRepository;
+import com.PierLorrai.Gestionale.repository.UserRepository; // AGGIORNATO
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

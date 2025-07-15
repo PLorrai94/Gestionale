@@ -1,30 +1,24 @@
-package com.PierLorrai.Gestionale.model;
+// D:/Progetti/Git/Gestionale/security-service/src/main/java/com/PierLorrai/Gestionale/model/Role.java
+package com.PierLorrai.Gestionale.model; // AGGIORNATO
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "ROLES")
 public class Role {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "role_seq")
-    @SequenceGenerator(name = "role_seq", sequenceName = "ROLES_SEQ", allocationSize = 1)
-    @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "NAME", unique = true, nullable = false)
+    @Column(nullable = false, unique = true, length = 50)
     private String name;
-
-    @Column(name = "DESCRIPTION")
-    private String description;
-
-
 }

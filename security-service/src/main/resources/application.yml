@@ -1,24 +1,51 @@
+# src/main/resources/application.yml
+
 spring:
-    application:
-        name: security-service
+    # === Configurazione della connessione per l'Applicazione (JPA/Hibernate) ===
     datasource:
         url: jdbc:oracle:thin:@localhost:1521/XEPDB1
-        username: SYSTEM
-        password: yourStrongPassword!
+        username: security_user                     # Questo utente gestirà le operazioni CRUD dell'applicazione
+        password: SecurityAppPass123!
         driver-class-name: oracle.jdbc.OracleDriver
+        hikari:
+            schema: GESTIONALE_OWNER                  # Lo schema predefinito per le tabelle gestite da JPA
+
+    # === Configurazione di JPA (Hibernate) ===
     jpa:
-        hibernate:
-            ddl-auto: update
-        show-sql: true
         properties:
             hibernate:
+                dialect: org.hibernate.dialect.OracleDialect
                 format_sql: true
+                default_schema: GESTIONALE_OWNER        # Lo schema predefinito per Hibernate
+        show-sql: true # Mostra le query SQL generate da Hibernate nel log
+
+
+    # === Configurazione di Flyway per le migrazioni del database ===
+    flyway:
+        enabled: true # Lascia a true per abilitare Flyway e le migrazioni all'avvio
+        baseline-on-migrate: true # Crea la tabella di history di Flyway se non esiste e la allinea
+        locations: classpath:db/migration # Percorso delle tue script di migrazione SQL
+        url: jdbc:oracle:thin:@localhost:1521/XEPDB1 # Connessione di Flyway allo stesso PDB
+        user: GESTIONALE_OWNER                  # Utente con privilegi DDL per le migrazioni
+        password: GESTIONALE_PASS                   # Password verificata con successo
+        schemas: GESTIONALE_OWNER                   # Lo schema in cui Flyway gestirà le tabelle (incluso flyway_schema_history)
+
+# === Configurazione del server web integrato (Tomcat) ===
+server:
+    port: 8080 # Porta su cui l'applicazione Spring Boot sarà accessibile
+
+# === Configurazione JWT (esempio, adatta alle tue esigenze) ===
+application:
     security:
         jwt:
-            secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970 # ES.: una stringa base64 encoding di 256-bit (32 bytes) o più. GENERARE UNA NUOVA CHIAVE!
-            expiration: 86400000 # 24 ore in millisecondi (24 * 60 * 60 * 1000)
+            secret-key: YourSuperSecretKeyThatIsLongEnoughAndSecureForHS256Algorithm # Sostituisci con una chiave segreta robusta e complessa
+            expiration-minutes: 60 # Validità del token JWT in minuti (es. 1 ora)
 
-eureka:
-    client:
-        serviceUrl:
-            defaultZone: http://localhost:8761/eureka/
+# === Configurazione del logging per il debug ===
+logging:
+    level:
+        org.springframework.jdbc: DEBUG # Dettagli sulle operazioni JDBC di Spring
+        org.flywaydb: DEBUG # Dettagli sul processo di migrazione di Flyway
+        com.zaxxer.hikari: DEBUG # Dettagli sul pool di connessioni HikariCP
+        org.hibernate.orm.jdbc.connections.internal: DEBUG # Dettagli sulle connessioni interne di Hibernate
+        com.PierLorrai.Gestionale: DEBUG # Per vedere i log della tua applicazione
