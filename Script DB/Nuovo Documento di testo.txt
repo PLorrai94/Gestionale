@@ -1,0 +1,43 @@
+-- Esegui questi comandi connesso come SYS o SYSTEM
+-- Assicurati di essere connesso al PDB (es. XEPDB1) e non al CDB Root!
+
+-- 1. Crea l'utente che sarà il PROPRIETARIO di tutte le tabelle dell'applicazione "Gestionale".
+--    Ora con il prefisso C##
+CREATE USER C##GESTIONALE_OWNER IDENTIFIED BY "GestOwnerPass123!"
+    DEFAULT TABLESPACE USERS
+    TEMPORARY TABLESPACE TEMP
+    ACCOUNT UNLOCK;
+
+-- Concedi i privilegi a C##GESTIONALE_OWNER:
+GRANT CONNECT, RESOURCE TO C##GESTIONALE_OWNER;
+GRANT UNLIMITED TABLESPACE TO C##GESTIONALE_OWNER;
+
+-- 2. Crea l'utente APPLICATIVO per il microservizio "security-service".
+--    Anche qui, aggiungi il prefisso C##.
+CREATE USER C##SECURITY_USER IDENTIFIED BY "SecurityAppPass123!"
+    DEFAULT TABLESPACE USERS
+    TEMPORARY TABLESPACE TEMP
+    ACCOUNT UNLOCK;
+
+-- Concedi solo i privilegi di sessione a C##SECURITY_USER.
+GRANT CREATE SESSION TO C##SECURITY_USER;
+
+CREATE USER MANAGEMENT_USER IDENTIFIED BY MANAGEMENTPASS
+  DEFAULT TABLESPACE USERS
+  TEMPORARY TABLESPACE TEMP
+  ACCOUNT UNLOCK;
+
+GRANT CREATE SESSION TO MANAGEMENT_USER;
+
+
+
+-- (Opzionale) Esempio per un futuro microservizio 'product-service':
+-- CREATE USER C##PRODUCT_USER IDENTIFIED BY "ProductAppPass123!"
+--     DEFAULT TABLESPACE USERS TEMPORARY TABLESPACE TEMP ACCOUNT UNLOCK;
+-- GRANT CREATE SESSION TO C##PRODUCT_USER;
+
+-- ** IMPORTANTE: ANNOTA LE NUOVE PASSWORD "GestOwnerPass123!" e "SecurityAppPass123!" **
+-- E i NUOVI NOMI UTENTE: C##GESTIONALE_OWNER e C##SECURITY_USER.
+
+
+

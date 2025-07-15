@@ -1,0 +1,1 @@
+docker run -d -p 1521:1521 --name oracle-xe -e ORACLE_PWD=yourStrongPassword! -e ORACLE_ALLOW_REMOTE_SETTINGS=true container-registry.oracle.com/database/express:latest
