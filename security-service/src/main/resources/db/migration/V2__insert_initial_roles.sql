@@ -1,6 +1,6 @@
 -- V2__insert_initial_roles.sql
 
-INSERT INTO ROLE (NAME) VALUES ('ADMIN');
-INSERT INTO ROLE (NAME) VALUES ('USER');
-INSERT INTO ROLE (NAME) VALUES ('MANAGER');
--- Aggiungi altri ruoli se necessario
+INSERT INTO ROLES (NAME) VALUES ('ADMIN');
+INSERT INTO ROLES (NAME) VALUES ('USER');
+INSERT INTO ROLES (NAME) VALUES ('MANAGER');
+-- Add other roles if necessary
