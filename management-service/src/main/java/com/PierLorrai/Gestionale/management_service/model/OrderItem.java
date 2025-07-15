@@ -14,12 +14,12 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "ORDER_ITEMS") // Nome della tabella nel DB Oracle
+@Table(name = "ORDER_ITEM") // Nome della tabella nel DB Oracle
 public class OrderItem {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_item_seq")
-    @SequenceGenerator(name = "order_item_seq", sequenceName = "ORDER_ITEMS_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ORDER_ITEMS_SEQ")
+    @SequenceGenerator(name = "ORDER_ITEMS_SEQ", sequenceName = "ORDER_ITEMS_SEQ", allocationSize = 1)
     @Column(name = "ID")
     private Long id;
 

@@ -26,7 +26,7 @@ spring:
     # === Flyway Database Migration Configuration ===
     flyway:
         enabled: true # Lascia a true per abilitare Flyway e le migrazioni all'avvio
-        baseline-on-migrate: true # Crea la tabella di history di Flyway se non esiste e la allinea
+        baseline-on-migrate: false # Crea la tabella di history di Flyway se non esiste e la allinea
         locations: classpath:db/migration # Percorso delle tue script di migrazione SQL
         url: jdbc:oracle:thin:@localhost:1521/XEPDB1 # Connessione di Flyway allo stesso PDB
         user: GESTIONALE_OWNER                  # Utente con privilegi DDL per le migrazioni

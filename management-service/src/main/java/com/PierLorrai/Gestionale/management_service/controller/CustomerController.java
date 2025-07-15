@@ -1,8 +1,10 @@
 package com.PierLorrai.Gestionale.management_service.controller;
 
+import com.PierLorrai.Gestionale.management_service.exception.DuplicateEmailException;
 import com.PierLorrai.Gestionale.management_service.model.Customer;
 import com.PierLorrai.Gestionale.management_service.service.CustomerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/management/customers") // Base URL per i clienti
+@RequestMapping("/api/management/customers")
 @RequiredArgsConstructor
 public class CustomerController {
 
@@ -25,20 +27,24 @@ public class CustomerController {
     public ResponseEntity<Customer> getCustomerById(@PathVariable Long id) {
         return customerService.getCustomerById(id)
                 .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) {
-        Customer createdCustomer = customerService.createCustomer(customer);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdCustomer);
+    public ResponseEntity<?> createCustomer(@RequestBody Customer customer) {
+        try {
+            Customer created = customerService.createCustomer(customer);
+            return ResponseEntity.status(HttpStatus.CREATED).body(created);
+        } catch (DuplicateEmailException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Customer> updateCustomer(@PathVariable Long id, @RequestBody Customer customerDetails) {
+    public ResponseEntity<?> updateCustomer(@PathVariable Long id, @RequestBody Customer customer) {
         try {
-            Customer updatedCustomer = customerService.updateCustomer(id, customerDetails);
-            return ResponseEntity.ok(updatedCustomer);
+            Customer updated = customerService.updateCustomer(id, customer);
+            return ResponseEntity.ok(updated);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
         }

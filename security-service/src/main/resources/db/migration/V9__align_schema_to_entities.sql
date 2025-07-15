@@ -1,0 +1,60 @@
+-- V9__align_schema_with_entities.sql
+-- Questo script allinea il database alle entità Java del microservizio management
+
+-- === CUSTOMER ===
+-- (Già risolto nei passaggi precedenti, non si ripete)
+
+-- === PRODUCT ===
+-- Aggiunta DESCRIPTION se non esiste
+BEGIN
+  DECLARE v_count NUMBER;
+  BEGIN
+    SELECT COUNT(*) INTO v_count FROM USER_TAB_COLUMNS
+    WHERE TABLE_NAME = 'PRODUCT' AND COLUMN_NAME = 'DESCRIPTION';
+    IF v_count = 0 THEN
+      EXECUTE IMMEDIATE 'ALTER TABLE PRODUCT ADD (DESCRIPTION VARCHAR2(255 CHAR))';
+    END IF;
+  END;
+END;
+/
+
+-- Rinomina STOCK_QUANTITY in STOCK se necessario
+BEGIN
+  DECLARE v_count NUMBER;
+  BEGIN
+    SELECT COUNT(*) INTO v_count FROM USER_TAB_COLUMNS
+    WHERE TABLE_NAME = 'PRODUCT' AND COLUMN_NAME = 'STOCK_QUANTITY';
+    IF v_count > 0 THEN
+      EXECUTE IMMEDIATE 'ALTER TABLE PRODUCT RENAME COLUMN STOCK_QUANTITY TO STOCK';
+    END IF;
+  END;
+END;
+/
+
+-- === ORDERS ===
+-- Aggiunge TOTAL_AMOUNT se non esiste
+BEGIN
+  DECLARE v_count NUMBER;
+  BEGIN
+    SELECT COUNT(*) INTO v_count FROM USER_TAB_COLUMNS
+    WHERE TABLE_NAME = 'ORDERS' AND COLUMN_NAME = 'TOTAL_AMOUNT';
+    IF v_count = 0 THEN
+      EXECUTE IMMEDIATE 'ALTER TABLE ORDERS ADD (TOTAL_AMOUNT NUMBER(10, 2))';
+    END IF;
+  END;
+END;
+/
+
+-- === ORDER_ITEM ===
+-- Rinomina PRICE in UNIT_PRICE se esiste
+BEGIN
+  DECLARE v_count NUMBER;
+  BEGIN
+    SELECT COUNT(*) INTO v_count FROM USER_TAB_COLUMNS
+    WHERE TABLE_NAME = 'ORDER_ITEM' AND COLUMN_NAME = 'PRICE';
+    IF v_count > 0 THEN
+      EXECUTE IMMEDIATE 'ALTER TABLE ORDER_ITEM RENAME COLUMN PRICE TO UNIT_PRICE';
+    END IF;
+  END;
+END;
+/

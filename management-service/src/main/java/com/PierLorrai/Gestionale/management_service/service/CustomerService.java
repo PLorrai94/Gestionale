@@ -1,5 +1,6 @@
 package com.PierLorrai.Gestionale.management_service.service;
 
+import com.PierLorrai.Gestionale.management_service.exception.DuplicateEmailException;
 import com.PierLorrai.Gestionale.management_service.model.Customer;
 import com.PierLorrai.Gestionale.management_service.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,25 +24,27 @@ public class CustomerService {
     }
 
     public Customer createCustomer(Customer customer) {
-        // Potresti aggiungere validazione per email unica qui se non gestita a livello DB
+        if (customerRepository.findByEmail(customer.getEmail()).isPresent()) {
+            throw new DuplicateEmailException("Email già registrata: " + customer.getEmail());
+        }
         return customerRepository.save(customer);
     }
 
     public Customer updateCustomer(Long id, Customer customerDetails) {
-        Customer customer = customerRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Customer not found with id: " + id));
+        Customer existing = customerRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Cliente non trovato con ID: " + id));
 
-        customer.setFirstName(customerDetails.getFirstName());
-        customer.setLastName(customerDetails.getLastName());
-        customer.setEmail(customerDetails.getEmail());
-        customer.setPhoneNumber(customerDetails.getPhoneNumber());
+        existing.setFirstName(customerDetails.getFirstName());
+        existing.setLastName(customerDetails.getLastName());
+        existing.setEmail(customerDetails.getEmail());
+        existing.setPhoneNumber(customerDetails.getPhoneNumber());
 
-        return customerRepository.save(customer);
+        return customerRepository.save(existing);
     }
 
     public void deleteCustomer(Long id) {
         if (!customerRepository.existsById(id)) {
-            throw new IllegalArgumentException("Customer not found with id: " + id);
+            throw new IllegalArgumentException("Cliente non trovato con ID: " + id);
         }
         customerRepository.deleteById(id);
     }

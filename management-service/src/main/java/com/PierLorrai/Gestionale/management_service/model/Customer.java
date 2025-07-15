@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "CUSTOMERS") // Nome della tabella nel DB Oracle
+@Table(name = "CUSTOMER") // Nome della tabella nel DB Oracle
 public class Customer {
 
     @Id
