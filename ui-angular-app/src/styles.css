@@ -7,8 +7,10 @@
   --color-accent-light: #26C6DA; /* Versione più chiara dell'accento */
   --color-text: #F7FAFC; /* Testo bianco quasi puro */
   --color-subtle: #CBD5E0; /* Testo più tenue e leggibile */
-  --shadow-md: none; /* Manteniamo il look piatto senza ombre */
-  --radius: 0; /* Angoli retti per un design Metro puro */
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.3); /* Reintroduciamo un'ombra sottile per la rotondità */
+  --radius-card: 1rem; /* Nuovo raggio per le card */
+  --radius-button: 0.5rem; /* Nuovo raggio per i bottoni */
+  --radius-general: 0.25rem; /* Raggio generale per altri elementi */
 }
 
 /* Reset di base */
@@ -19,7 +21,7 @@
 }
 
 body {
-  font-family: 'Segoe UI', sans-serif; /* Manteniamo il font Metro */
+  font-family: 'Segoe UI', sans-serif;
   background: var(--color-bg);
   color: var(--color-text);
   line-height: 1.6;
@@ -28,13 +30,13 @@ body {
 /* === Navbar === */
 .navbar {
   background-color: var(--color-surface);
-  padding: 1.5rem 0; /* Padding consistente */
-  border-bottom: 3px solid var(--color-accent); /* Linea di accento più pronunciata */
+  padding: 1.5rem 0;
+  border-bottom: 3px solid var(--color-accent);
   position: sticky;
   top: 0;
   z-index: 1000;
   font-family: 'Segoe UI', sans-serif;
-  box-shadow: none; /* Nessuna ombra */
+  box-shadow: var(--shadow-md); /* Applichiamo un'ombra sottile anche qui */
 }
 
 .navbar .container {
@@ -44,7 +46,7 @@ body {
 }
 
 .logo {
-  font-size: 1.8rem; /* Logo più grande e vivace */
+  font-size: 1.7rem; /* Leggermente ridotto */
   font-weight: 700;
   color: var(--color-accent);
   text-transform: uppercase;
@@ -53,119 +55,110 @@ body {
 
 .nav-links {
   display: flex;
-  gap: 2.2rem; /* Spazio maggiore tra i link */
+  gap: 2rem; /* Spazio leggermente ridotto */
 }
 
 .nav-link {
-  font-size: 1.1rem;
-  padding: 0.8rem 1.4rem; /* Padding aumentato per i link */
+  font-size: 1rem; /* Leggermente più piccolo */
+  padding: 0.7rem 1.2rem;
   color: var(--color-text);
-  border-radius: 0; /* Angoli retti */
+  border-radius: var(--radius-general); /* Leggermente arrotondato */
   transition: background-color 0.2s ease, color 0.2s ease;
   text-transform: uppercase;
-  text-decoration: none; /* Rimuovi sottolineatura */
+  text-decoration: none;
 }
 
 .nav-link:hover {
   background-color: var(--color-accent);
-  color: var(--color-bg); /* Testo scuro sull'accento */
+  color: var(--color-bg);
   cursor: pointer;
 }
 
-/* Questo blocco era ridondante o in conflitto, l'ho pulito e integrato nel .nav-link */
-/* .nav-links a {
-  margin-left: 1.5rem;
-  color: var(--color-text);
-  font-weight: 500;
-  text-decoration: none;
-  transition: color 0.3s;
-} */
-
-.nav-links .active { /* Per lo stato attivo, non solo hover */
+.nav-links .active {
   color: var(--color-accent-light);
-  background-color: var(--color-card); /* Sfondo per il link attivo */
+  background-color: var(--color-card);
 }
 
 
 /* === Hero Section === */
 .hero {
-  background: var(--color-bg); /* Sfondo solido per coerenza Metro */
-  padding: 8rem 2rem 6rem;
+  background: var(--color-bg);
+  padding: 7rem 2rem 5rem; /* Padding leggermente ridotto */
   text-align: center;
-  border-bottom: 1px solid var(--color-surface); /* Separatore sottile */
+  border-bottom: 1px solid var(--color-surface);
 }
 
 .hero h1 {
-  font-size: 4.2rem; /* Titolo più grande e impattante */
-  font-weight: 800; /* Più audace */
+  font-size: 3.8rem; /* Ridotto per un look meno imponente */
+  font-weight: 800;
   color: var(--color-accent-light);
-  margin-bottom: 1.8rem;
+  margin-bottom: 1.5rem;
   text-transform: uppercase;
   line-height: 1.2;
 }
 
 .hero p {
-  font-size: 1.5rem;
+  font-size: 1.3rem; /* Ridotto */
   color: var(--color-subtle);
-  max-width: 900px;
-  margin: 0 auto 3rem auto; /* Spazio sotto il paragrafo */
+  max-width: 800px;
+  margin: 0 auto 2.5rem auto; /* Spazio sotto il paragrafo ridotto */
 }
 
 /* === Bottoni Primari e Secondari nel Hero === */
 .hero-buttons {
   display: flex;
   justify-content: center;
-  gap: 1.5rem; /* Spazio tra i bottoni */
-  margin: 2rem 0; /* Margine per separare dai contenuti */
+  gap: 1.2rem; /* Spazio tra i bottoni ridotto */
+  margin: 1.8rem 0; /* Margine ridotto */
 }
 
 .btn {
-  padding: 1rem 2.5rem; /* Padding generoso */
-  border-radius: 0; /* Angoli retti */
+  padding: 0.9rem 2.2rem; /* Padding leggermente ridotto */
+  border-radius: var(--radius-button); /* Arrotondamento dei bottoni */
   font-weight: 600;
   transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease;
   cursor: pointer;
   border: none;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  font-size: 1.1rem;
+  font-size: 1rem; /* Ridotto */
 }
 
 .btn-primary {
   background-color: var(--color-accent);
-  color: var(--color-bg); /* Testo scuro sul colore vivace */
+  color: var(--color-bg);
 }
 
 .btn-primary:hover {
   background-color: var(--color-accent-light);
-  transform: translateY(-3px); /* Leggero effetto "sollevamento" Metro */
+  transform: translateY(-2px); /* Effetto sollevamento leggermente ridotto */
 }
 
 .btn-secondary {
   background-color: transparent;
   color: var(--color-subtle);
-  border: 2px solid var(--color-subtle); /* Bordo ben definito */
+  border: 2px solid var(--color-subtle);
 }
 
 .btn-secondary:hover {
-  background-color: var(--color-card); /* Sfondo al hover */
+  background-color: var(--color-card);
   color: var(--color-text);
   border-color: var(--color-text);
-  transform: translateY(-3px); /* Leggero effetto "sollevamento" */
+  transform: translateY(-2px);
 }
 
 
 /* === Features Section (Sezione generica per le funzionalità/caratteristiche) === */
-.features-section { /* Ho preferito usare questo nome generico come nel tuo originale */
-  background: var(--color-surface); /* Sfondo leggermente diverso dal body */
-  padding: 6rem 2rem;
+.features-section {
+  background: var(--color-surface);
+  padding: 5rem 2rem; /* Padding leggermente ridotto */
   color: var(--color-text);
 }
 
 .features-section h2 {
   text-align: center;
-  font-size: 3.2rem; /* Titolo grande */
-  margin-bottom: 1.5rem;
+  font-size: 2.8rem; /* Ridotto */
+  margin-bottom: 1.2rem;
   color: var(--color-accent);
   text-transform: uppercase;
   line-height: 1.2;
@@ -174,57 +167,57 @@ body {
 .section-subtitle {
   text-align: center;
   color: var(--color-subtle);
-  margin-bottom: 4rem; /* Spazio maggiore sotto il sottotitolo */
-  font-size: 1.3rem;
+  margin-bottom: 3.5rem; /* Spazio sotto il sottotitolo ridotto */
+  font-size: 1.1rem; /* Ridotto */
 }
 
 /* === Features Grid (Griglia delle card) === */
 .features-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* Card leggermente più grandi e flessibili */
-  gap: 3rem; /* Spazio aumentato tra le card */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Min-width leggermente ridotto */
+  gap: 2.5rem; /* Spazio tra le card leggermente ridotto */
 }
 
 /* === Feature Card === */
 .card {
   background: var(--color-card);
-  padding: 2.5rem; /* Padding interno generoso */
-  border-radius: 0; /* Angoli retti */
-  box-shadow: none; /* Nessuna ombra */
-  text-align: left; /* Allineamento testo a sinistra per le card */
-  transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+  padding: 2rem; /* Padding interno ridotto */
+  border-radius: var(--radius-card); /* *** Tondeggiante: 1rem di raggio *** */
+  box-shadow: var(--shadow-md); /* Reintroduciamo l'ombra */
+  text-align: left;
+  transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease, box-shadow 0.3s ease;
   color: var(--color-text);
-  border: 1px solid var(--color-light); /* Bordo sottile ma visibile */
+  border: none; /* Rimuoviamo il bordo per affidarci all'ombra e al raggio */
 }
 
 .card:hover {
-  transform: translateY(-8px); /* Effetto di sollevamento più marcato all'hover */
-  background-color: var(--color-accent); /* Colore accento all'hover */
-  color: var(--color-bg); /* Testo scuro all'hover */
-  border-color: var(--color-accent); /* Bordo cambia colore all'hover */
+  transform: translateY(-5px); /* Effetto sollevamento più sottile */
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5); /* Ombra più pronunciata all'hover */
 }
 
 .card h3 {
-  font-size: 1.6rem; /* Titolo della card più grande */
+  font-size: 1.4rem; /* Ridotto */
   color: var(--color-accent-light);
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: 0.7rem;
   text-transform: uppercase;
 }
 
 .card:hover h3 {
-  color: var(--color-bg); /* Testo del titolo scuro all'hover */
+  color: var(--color-bg);
 }
 
 .card p {
-  font-size: 1.1rem;
+  font-size: 0.95rem; /* Ridotto */
   color: var(--color-subtle);
 }
 
 .card:hover p {
-  color: var(--color-bg); /* Testo del paragrafo scuro all'hover */
+  color: var(--color-bg);
 }
 
 
@@ -232,96 +225,96 @@ body {
 .stats-grid {
   display: flex;
   justify-content: center;
-  gap: 2.5rem; /* Spazio tra le statistiche */
-  margin-top: 4rem; /* Margine superiore */
-  flex-wrap: wrap; /* Permette il wrapping su schermi piccoli */
+  gap: 2rem; /* Spazio tra le statistiche ridotto */
+  margin-top: 3.5rem; /* Margine superiore ridotto */
+  flex-wrap: wrap;
 }
 
 .stat-card {
-  background: var(--color-surface); /* Sfondo leggero per la stat card */
-  padding: 2rem 2.5rem;
-  border-radius: 0; /* Angoli retti */
+  background: var(--color-surface);
+  padding: 1.8rem 2.2rem; /* Padding ridotto */
+  border-radius: var(--radius-card); /* *** Tondeggiante: 1rem di raggio *** */
   text-align: center;
-  min-width: 220px; /* Larghezza minima maggiore */
-  box-shadow: none;
-  border: 2px solid var(--color-light); /* Bordo più evidente */
-  transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  min-width: 200px; /* Min-width leggermente ridotto */
+  box-shadow: var(--shadow-md); /* Reintroduciamo l'ombra */
+  border: none; /* Rimuoviamo il bordo */
+  transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .stat-card:hover {
-  transform: none; /* Rimuoviamo il sollevamento qui per le stat card */
+  transform: translateY(-5px); /* Reintroduciamo un leggero sollevamento */
   background: var(--color-accent);
   color: var(--color-bg);
-  border-color: var(--color-accent);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
 }
 
 .stat-value {
-  font-size: 3rem; /* Valore statistico molto grande */
+  font-size: 2.6rem; /* Ridotto */
   font-weight: bold;
   color: var(--color-accent-light);
   display: block;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
 }
 
 .stat-card:hover .stat-value {
-  color: var(--color-bg); /* Colore scuro all'hover */
+  color: var(--color-bg);
 }
 
 .stat-label {
   color: var(--color-subtle);
-  font-size: 1.2rem;
+  font-size: 1.1rem; /* Ridotto */
   margin-top: 0.25rem;
   text-transform: uppercase;
 }
 
 .stat-card:hover .stat-label {
-  color: var(--color-bg); /* Colore scuro all'hover */
+  color: var(--color-bg);
 }
 
 /* === Layout - Contenitore Generale === */
 .container {
-  max-width: 1280px; /* Larghezza massima più ampia */
+  max-width: 1200px; /* Larghezza massima leggermente ridotta */
   margin: 0 auto;
-  padding: 0 1.5rem; /* Padding laterale per spaziatura interna */
+  padding: 0 1.2rem; /* Padding laterale leggermente ridotto */
 }
 
 
 /* === Footer === */
 .footer {
   background: var(--color-surface);
-  padding: 3.5rem 1rem; /* Padding maggiore */
+  padding: 3rem 1rem; /* Padding ridotto */
   color: var(--color-subtle);
-  font-size: 0.95rem;
-  border-top: 3px solid var(--color-accent); /* Linea di accento sopra il footer */
+  font-size: 0.9rem; /* Ridotto */
+  border-top: 3px solid var(--color-accent);
 }
 
 .footer-content {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start; /* Allinea in alto per un layout più pulito */
+  align-items: flex-start;
   flex-wrap: wrap;
-  gap: 3rem; /* Spazio maggiore tra le sezioni del footer */
+  gap: 2.5rem; /* Spazio tra le sezioni del footer ridotto */
 }
 
 .footer-section {
   flex: 1;
-  min-width: 200px; /* Larghezza minima per le sezioni */
+  min-width: 180px; /* Min-width ridotto */
 }
 
 .footer-logo {
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: 0.7rem;
   font-weight: bold;
-  font-size: 1.4rem;
-  margin-bottom: 1.2rem;
+  font-size: 1.2rem; /* Ridotto */
+  margin-bottom: 1rem;
   color: var(--color-accent);
   text-transform: uppercase;
 }
 
 .footer-link {
   display: block;
-  margin: 0.5rem 0; /* Spazio tra i link del footer */
+  margin: 0.4rem 0;
   color: var(--color-subtle);
   text-decoration: none;
   transition: color 0.2s ease;
@@ -333,45 +326,45 @@ body {
 
 .footer-bottom {
   text-align: center;
-  margin-top: 4rem; /* Margine superiore significativo */
+  margin-top: 3rem; /* Margine superiore ridotto */
   color: var(--color-light);
-  border-top: 1px solid var(--color-card); /* Separatore sottile per il copyright */
-  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-card);
+  padding-top: 1.2rem; /* Padding ridotto */
 }
 
 /* Ulteriori piccoli miglioramenti di layout per coerenza */
-.card-content { /* Usato per centrare il contenuto della card se necessario */
+.card-content {
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* Allineamento a sinistra per coerenza con .card */
+  align-items: flex-start;
   text-align: left;
 }
 
 .card-content h3 {
-  font-size: 1.4rem; /* Assicurati che sia coerente con .card h3 */
-  margin-bottom: 0.8rem;
+  font-size: 1.3rem; /* Ridotto */
+  margin-bottom: 0.7rem;
   color: var(--color-accent-light);
 }
 
-/* Media Queries per la Responsiveness (miglioramento generico) */
+/* Media Queries per la Responsiveness */
 @media (max-width: 768px) {
   .navbar .container {
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.8rem;
   }
 
   .nav-links {
     flex-wrap: wrap;
     justify-content: center;
-    gap: 1rem;
+    gap: 0.8rem;
   }
 
   .hero h1 {
-    font-size: 3rem;
+    font-size: 2.5rem; /* Ancora più piccolo su mobile */
   }
 
   .hero p {
-    font-size: 1.1rem;
+    font-size: 1rem; /* Ancora più piccolo su mobile */
   }
 
   .hero-buttons {
@@ -380,17 +373,33 @@ body {
   }
 
   .btn {
-    width: 80%; /* Bottoni più larghi su mobile */
-    margin: 0.5rem 0;
+    width: 90%; /* Bottoni più larghi su mobile */
+    margin: 0.4rem 0;
+    font-size: 0.9rem; /* Testo dei bottoni più piccolo su mobile */
   }
 
-  .features-section h2,
-  .footer-logo {
-    font-size: 2.2rem;
+  .features-section h2 {
+    font-size: 2rem; /* Titoli di sezione più piccoli su mobile */
+  }
+
+  .section-subtitle {
+    font-size: 0.9rem; /* Sottotitoli più piccoli su mobile */
   }
 
   .features-grid {
-    grid-template-columns: 1fr; /* Colonna singola su schermi piccoli */
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    padding: 1.5rem; /* Padding ridotto per le card su mobile */
+  }
+
+  .card h3 {
+    font-size: 1.2rem; /* Titolo card più piccolo su mobile */
+  }
+
+  .card p {
+    font-size: 0.85rem; /* Testo card più piccolo su mobile */
   }
 
   .stats-grid {
@@ -399,7 +408,16 @@ body {
   }
 
   .stat-card {
-    width: 80%; /* Stat card più larghe su mobile */
+    width: 90%;
+    padding: 1.5rem 2rem;
+  }
+
+  .stat-value {
+    font-size: 2.2rem; /* Valore stat più piccolo su mobile */
+  }
+
+  .stat-label {
+    font-size: 1rem; /* Label stat più piccole su mobile */
   }
 
   .footer-content {
@@ -408,12 +426,39 @@ body {
   }
 
   .footer-section {
-    min-width: unset; /* Rimuove il min-width per mobile */
+    min-width: unset;
     width: 100%;
   }
 
   .footer-link {
-    display: inline-block; /* Per permettere una visualizzazione orizzontale */
-    margin: 0.25rem 0.5rem; /* Margine ridotto */
+    display: inline-block;
+    margin: 0.2rem 0.4rem;
+  }
+
+  .footer-logo {
+    font-size: 1.1rem;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  /* Regole per tablet (opzionali, se vuoi differenziare ulteriormente) */
+  .hero h1 {
+    font-size: 3.2rem;
+  }
+
+  .hero p {
+    font-size: 1.2rem;
+  }
+
+  .features-section h2 {
+    font-size: 2.4rem;
+  }
+
+  .features-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+
+  .container {
+    padding: 0 1rem;
   }
 }

@@ -1,0 +1,76 @@
+<nav class="navbar" @fadeIn>
+  <div class="container">
+    <div class="logo">
+      <i class="lucide lucide-shield-check floating-icon" [class.floating]="isFloating"></i>
+      <span class="logo-text">Microservices Dashboard</span>
+    </div>
+    <div class="nav-links">
+      <a routerLink="/" class="nav-link">
+        <i class="lucide lucide-home"></i>
+        Home
+      </a>
+      <a routerLink="/auth/register" class="nav-link active">
+        <i class="lucide lucide-user-plus"></i>
+        Register
+      </a>
+      <a routerLink="/auth/login" class="nav-link">
+        <i class="lucide lucide-log-in"></i>
+        Login
+      </a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero register-hero">
+  <div class="container">
+    <div class="form-wrapper" @heroText>
+      <h1 class="form-title">Crea un nuovo account</h1>
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input id="username" type="text" formControlName="username" placeholder="Inserisci il tuo username" />
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input id="email" type="email" formControlName="email" placeholder="Inserisci la tua email" />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input id="password" type="password" formControlName="password" placeholder="Crea una password sicura" />
+        </div>
+        <button type="submit" class="btn btn-primary" [disabled]="!registerForm.valid">
+          Registrati
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer class="footer" @fadeIn>
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-section">
+        <div class="footer-logo">
+          <i class="lucide lucide-shield-check"></i>
+          <span>Microservices Dashboard</span>
+        </div>
+        <p>La soluzione completa per gestire i tuoi microservizi</p>
+      </div>
+      <div class="footer-section">
+        <h4>Prodotto</h4>
+        <a routerLink="/features" class="footer-link">Funzionalità</a>
+        <a routerLink="/pricing" class="footer-link">Pricing</a>
+        <a routerLink="/docs" class="footer-link">Documentazione</a>
+      </div>
+      <div class="footer-section">
+        <h4>Supporto</h4>
+        <a routerLink="/contact" class="footer-link">Contatti</a>
+        <a routerLink="/faq" class="footer-link">FAQ</a>
+        <a routerLink="/community" class="footer-link">Community</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2023 Microservices Dashboard. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
