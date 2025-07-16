@@ -1,6 +1,5 @@
 package com.PierLorrai.Gestionale.ui_service.controller;
 
-import com.yourcompany.microservices.management.model.Product; // Importa Product dal Management Service
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;

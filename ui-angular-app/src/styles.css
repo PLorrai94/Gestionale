@@ -1,0 +1,419 @@
+:root {
+  --color-bg: #1A202C; /* Scuro ma non nero, per profondità */
+  --color-surface: #2D3748; /* Superfici leggermente più chiare */
+  --color-card: #4A5568; /* Sfondi delle card con un po' di profondità */
+  --color-light: #A0AEC0; /* Elementi testuali o bordi leggeri, più chiari */
+  --color-accent: #00BCD4; /* Ciano brillante per l'accento */
+  --color-accent-light: #26C6DA; /* Versione più chiara dell'accento */
+  --color-text: #F7FAFC; /* Testo bianco quasi puro */
+  --color-subtle: #CBD5E0; /* Testo più tenue e leggibile */
+  --shadow-md: none; /* Manteniamo il look piatto senza ombre */
+  --radius: 0; /* Angoli retti per un design Metro puro */
+}
+
+/* Reset di base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif; /* Manteniamo il font Metro */
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+}
+
+/* === Navbar === */
+.navbar {
+  background-color: var(--color-surface);
+  padding: 1.5rem 0; /* Padding consistente */
+  border-bottom: 3px solid var(--color-accent); /* Linea di accento più pronunciata */
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  font-family: 'Segoe UI', sans-serif;
+  box-shadow: none; /* Nessuna ombra */
+}
+
+.navbar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.8rem; /* Logo più grande e vivace */
+  font-weight: 700;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2.2rem; /* Spazio maggiore tra i link */
+}
+
+.nav-link {
+  font-size: 1.1rem;
+  padding: 0.8rem 1.4rem; /* Padding aumentato per i link */
+  color: var(--color-text);
+  border-radius: 0; /* Angoli retti */
+  transition: background-color 0.2s ease, color 0.2s ease;
+  text-transform: uppercase;
+  text-decoration: none; /* Rimuovi sottolineatura */
+}
+
+.nav-link:hover {
+  background-color: var(--color-accent);
+  color: var(--color-bg); /* Testo scuro sull'accento */
+  cursor: pointer;
+}
+
+/* Questo blocco era ridondante o in conflitto, l'ho pulito e integrato nel .nav-link */
+/* .nav-links a {
+  margin-left: 1.5rem;
+  color: var(--color-text);
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.3s;
+} */
+
+.nav-links .active { /* Per lo stato attivo, non solo hover */
+  color: var(--color-accent-light);
+  background-color: var(--color-card); /* Sfondo per il link attivo */
+}
+
+
+/* === Hero Section === */
+.hero {
+  background: var(--color-bg); /* Sfondo solido per coerenza Metro */
+  padding: 8rem 2rem 6rem;
+  text-align: center;
+  border-bottom: 1px solid var(--color-surface); /* Separatore sottile */
+}
+
+.hero h1 {
+  font-size: 4.2rem; /* Titolo più grande e impattante */
+  font-weight: 800; /* Più audace */
+  color: var(--color-accent-light);
+  margin-bottom: 1.8rem;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 1.5rem;
+  color: var(--color-subtle);
+  max-width: 900px;
+  margin: 0 auto 3rem auto; /* Spazio sotto il paragrafo */
+}
+
+/* === Bottoni Primari e Secondari nel Hero === */
+.hero-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem; /* Spazio tra i bottoni */
+  margin: 2rem 0; /* Margine per separare dai contenuti */
+}
+
+.btn {
+  padding: 1rem 2.5rem; /* Padding generoso */
+  border-radius: 0; /* Angoli retti */
+  font-weight: 600;
+  transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease;
+  cursor: pointer;
+  border: none;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 1.1rem;
+}
+
+.btn-primary {
+  background-color: var(--color-accent);
+  color: var(--color-bg); /* Testo scuro sul colore vivace */
+}
+
+.btn-primary:hover {
+  background-color: var(--color-accent-light);
+  transform: translateY(-3px); /* Leggero effetto "sollevamento" Metro */
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--color-subtle);
+  border: 2px solid var(--color-subtle); /* Bordo ben definito */
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-card); /* Sfondo al hover */
+  color: var(--color-text);
+  border-color: var(--color-text);
+  transform: translateY(-3px); /* Leggero effetto "sollevamento" */
+}
+
+
+/* === Features Section (Sezione generica per le funzionalità/caratteristiche) === */
+.features-section { /* Ho preferito usare questo nome generico come nel tuo originale */
+  background: var(--color-surface); /* Sfondo leggermente diverso dal body */
+  padding: 6rem 2rem;
+  color: var(--color-text);
+}
+
+.features-section h2 {
+  text-align: center;
+  font-size: 3.2rem; /* Titolo grande */
+  margin-bottom: 1.5rem;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.section-subtitle {
+  text-align: center;
+  color: var(--color-subtle);
+  margin-bottom: 4rem; /* Spazio maggiore sotto il sottotitolo */
+  font-size: 1.3rem;
+}
+
+/* === Features Grid (Griglia delle card) === */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* Card leggermente più grandi e flessibili */
+  gap: 3rem; /* Spazio aumentato tra le card */
+}
+
+/* === Feature Card === */
+.card {
+  background: var(--color-card);
+  padding: 2.5rem; /* Padding interno generoso */
+  border-radius: 0; /* Angoli retti */
+  box-shadow: none; /* Nessuna ombra */
+  text-align: left; /* Allineamento testo a sinistra per le card */
+  transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+  color: var(--color-text);
+  border: 1px solid var(--color-light); /* Bordo sottile ma visibile */
+}
+
+.card:hover {
+  transform: translateY(-8px); /* Effetto di sollevamento più marcato all'hover */
+  background-color: var(--color-accent); /* Colore accento all'hover */
+  color: var(--color-bg); /* Testo scuro all'hover */
+  border-color: var(--color-accent); /* Bordo cambia colore all'hover */
+}
+
+.card h3 {
+  font-size: 1.6rem; /* Titolo della card più grande */
+  color: var(--color-accent-light);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  text-transform: uppercase;
+}
+
+.card:hover h3 {
+  color: var(--color-bg); /* Testo del titolo scuro all'hover */
+}
+
+.card p {
+  font-size: 1.1rem;
+  color: var(--color-subtle);
+}
+
+.card:hover p {
+  color: var(--color-bg); /* Testo del paragrafo scuro all'hover */
+}
+
+
+/* === Statistiche === */
+.stats-grid {
+  display: flex;
+  justify-content: center;
+  gap: 2.5rem; /* Spazio tra le statistiche */
+  margin-top: 4rem; /* Margine superiore */
+  flex-wrap: wrap; /* Permette il wrapping su schermi piccoli */
+}
+
+.stat-card {
+  background: var(--color-surface); /* Sfondo leggero per la stat card */
+  padding: 2rem 2.5rem;
+  border-radius: 0; /* Angoli retti */
+  text-align: center;
+  min-width: 220px; /* Larghezza minima maggiore */
+  box-shadow: none;
+  border: 2px solid var(--color-light); /* Bordo più evidente */
+  transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: none; /* Rimuoviamo il sollevamento qui per le stat card */
+  background: var(--color-accent);
+  color: var(--color-bg);
+  border-color: var(--color-accent);
+}
+
+.stat-value {
+  font-size: 3rem; /* Valore statistico molto grande */
+  font-weight: bold;
+  color: var(--color-accent-light);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.stat-card:hover .stat-value {
+  color: var(--color-bg); /* Colore scuro all'hover */
+}
+
+.stat-label {
+  color: var(--color-subtle);
+  font-size: 1.2rem;
+  margin-top: 0.25rem;
+  text-transform: uppercase;
+}
+
+.stat-card:hover .stat-label {
+  color: var(--color-bg); /* Colore scuro all'hover */
+}
+
+/* === Layout - Contenitore Generale === */
+.container {
+  max-width: 1280px; /* Larghezza massima più ampia */
+  margin: 0 auto;
+  padding: 0 1.5rem; /* Padding laterale per spaziatura interna */
+}
+
+
+/* === Footer === */
+.footer {
+  background: var(--color-surface);
+  padding: 3.5rem 1rem; /* Padding maggiore */
+  color: var(--color-subtle);
+  font-size: 0.95rem;
+  border-top: 3px solid var(--color-accent); /* Linea di accento sopra il footer */
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* Allinea in alto per un layout più pulito */
+  flex-wrap: wrap;
+  gap: 3rem; /* Spazio maggiore tra le sezioni del footer */
+}
+
+.footer-section {
+  flex: 1;
+  min-width: 200px; /* Larghezza minima per le sezioni */
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-weight: bold;
+  font-size: 1.4rem;
+  margin-bottom: 1.2rem;
+  color: var(--color-accent);
+  text-transform: uppercase;
+}
+
+.footer-link {
+  display: block;
+  margin: 0.5rem 0; /* Spazio tra i link del footer */
+  color: var(--color-subtle);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer-link:hover {
+  color: var(--color-accent-light);
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 4rem; /* Margine superiore significativo */
+  color: var(--color-light);
+  border-top: 1px solid var(--color-card); /* Separatore sottile per il copyright */
+  padding-top: 1.5rem;
+}
+
+/* Ulteriori piccoli miglioramenti di layout per coerenza */
+.card-content { /* Usato per centrare il contenuto della card se necessario */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Allineamento a sinistra per coerenza con .card */
+  text-align: left;
+}
+
+.card-content h3 {
+  font-size: 1.4rem; /* Assicurati che sia coerente con .card h3 */
+  margin-bottom: 0.8rem;
+  color: var(--color-accent-light);
+}
+
+/* Media Queries per la Responsiveness (miglioramento generico) */
+@media (max-width: 768px) {
+  .navbar .container {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .hero h1 {
+    font-size: 3rem;
+  }
+
+  .hero p {
+    font-size: 1.1rem;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .btn {
+    width: 80%; /* Bottoni più larghi su mobile */
+    margin: 0.5rem 0;
+  }
+
+  .features-section h2,
+  .footer-logo {
+    font-size: 2.2rem;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr; /* Colonna singola su schermi piccoli */
+  }
+
+  .stats-grid {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .stat-card {
+    width: 80%; /* Stat card più larghe su mobile */
+  }
+
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer-section {
+    min-width: unset; /* Rimuove il min-width per mobile */
+    width: 100%;
+  }
+
+  .footer-link {
+    display: inline-block; /* Per permettere una visualizzazione orizzontale */
+    margin: 0.25rem 0.5rem; /* Margine ridotto */
+  }
+}

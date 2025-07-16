@@ -35,7 +35,7 @@ spring:
 
 # === Embedded Web Server (Tomcat) Configuration ===
 server:
-    port: 8080 # Porta su cui l'applicazione Spring Boot sarà accessibile
+    port: 8081 # Porta su cui l'applicazione Spring Boot sarà accessibile
 
 # === Eureka Client Configuration ===
 eureka:

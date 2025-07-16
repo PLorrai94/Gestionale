@@ -1,42 +1,50 @@
 server:
-  port: 8080 # Porta di default per l'API Gateway, solitamente la porta 80 o 443 in produzione
+  port: 8080 # L'API Gateway ascolterà su questa porta. Attenzione: Il security-service non potrà più usare la 8080.
 
 spring:
   application:
-    name: api-gateway
+    name: api-gateway # Nome del servizio per la registrazione su Eureka
   cloud:
     gateway:
       discovery:
         locator:
-          enabled: true # Abilita il discovery locator, per instradare automaticamente in base al nome del servizio Eureka
+          enabled: true # Abilita il discovery locator per l'instradamento automatico basato sul nome del servizio Eureka
           lower-case-service-id: true # Converti l'ID del servizio Eureka in minuscolo
       routes: # Definizione delle rotte esplicite
         - id: security-service-route
-          uri: lb://security-service # lb:// indica che useremo Eureka Load Balancer
+          # Il security-service, dovendo coesistere con il gateway, dovrà essere spostato su un'altra porta (e.g., 8081).
+          # Il gateway instraderà le richieste ad esso tramite il load balancer di Eureka.
+          uri: lb://security-service
           predicates:
             - Path=/api/auth/** # Tutte le richieste che iniziano con /api/auth
           filters:
             - StripPrefix=1 # Rimuove /api/ dalla URL prima di inoltrarla al servizio (es. /api/auth/login diventa /auth/login)
 
         - id: management-service-route
-          uri: lb://management-service
+          uri: lb://management-service # lb:// indica che useremo Eureka Load Balancer
           predicates:
-            - Path=/api/management/**
+            - Path=/api/management/** # Tutte le richieste che iniziano con /api/management
           filters:
             - StripPrefix=1 # Rimuove /api/ dalla URL prima di inoltrarla al servizio (es. /api/management/products diventa /management/products)
-            # Potresti voler aggiungere un filtro qui per la sicurezza, come la validazione del JWT,
-            # ma per ora la lasciamo gestire direttamente al microservizio di destinazione.
 
         - id: batch-service-route
-          uri: lb://batch-service
+          uri: lb://batch-service # lb:// indica che useremo Eureka Load Balancer
           predicates:
-            - Path=/api/batch/**
+            - Path=/api/batch/** # Tutte le richieste che iniziano con /api/batch
           filters:
-            - StripPrefix=1
+            - StripPrefix=1 # Rimuove /api/ dalla URL prima di inoltrarla al servizio
 
 eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/ # Indirizzo dell'Eureka Server
   instance:
-    preferIpAddress: true # Registra l'IP invece dell'hostname con Eureka
+    preferIpAddress: true # Registra l'IP del gateway invece dell'hostname con Eureka
+
+# === Logging Configuration for Debugging ===
+logging:
+  level:
+    root: INFO
+    org.springframework.cloud.gateway: DEBUG # Dettagli sull'instradamento e i filtri del gateway
+    com.netflix.eureka: DEBUG # Dettagli sul client Eureka nel gateway
+    org.springframework.cloud.netflix.eureka: DEBUG

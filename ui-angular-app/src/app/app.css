@@ -1,0 +1,102 @@
+/* Reset base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Impostazioni globali */
+body {
+  font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+  background-color: #f5f7fa;
+  color: #333;
+}
+
+/* Contenitore principale */
+.container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 1rem 2rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Titoli */
+h1, h2, h3 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+/* Navigazione */
+nav {
+  background-color: #fff;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  gap: 1rem;
+}
+
+nav a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+/* Tabelle */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+th, td {
+  padding: 0.75rem 1rem;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+th {
+  background-color: #007bff;
+  color: white;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Messaggi */
+.info-message {
+  color: #2e7d32;
+  background-color: #e8f5e9;
+  padding: 0.75rem 1rem;
+  border-left: 4px solid #2e7d32;
+  margin-top: 1rem;
+}
+
+.error-message {
+  color: #c62828;
+  background-color: #fdecea;
+  padding: 0.75rem 1rem;
+  border-left: 4px solid #c62828;
+  margin-top: 1rem;
+}
+
+/* Pulsanti */
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+button:hover {
+  background-color: #0056b3;
+}

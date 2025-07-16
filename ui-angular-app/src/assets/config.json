@@ -1,0 +1,4 @@
+{
+  "apiGatewayUrl": "http://localhost:8080",
+  "securityServiceUrl": "http://host.docker.internal:8081"
+}

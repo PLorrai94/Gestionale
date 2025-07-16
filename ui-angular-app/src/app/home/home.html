@@ -1,0 +1,122 @@
+<nav class="navbar" @fadeIn>
+  <div class="container">
+    <div class="logo">
+      <i class="lucide lucide-shield-check floating-icon"
+         [class.floating]="isFloating"></i>
+      <span class="logo-text">Microservices Dashboard</span>
+    </div>
+    <div class="nav-links">
+      <a routerLink="/" class="nav-link">
+        <i class="lucide lucide-home"></i>
+        Home
+      </a>
+      <a routerLink="/auth/register" class="nav-link">
+        <i class="lucide lucide-user-plus"></i>
+        Register
+      </a>
+      <a routerLink="/auth/login" class="nav-link">
+        <i class="lucide lucide-log-in"></i>
+        Login
+      </a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" #heroSection>
+  <div class="particles-container">
+    <div
+      *ngFor="let particle of particles; trackBy: trackByParticle"
+      class="particle"
+      [style.left.%]="particle.x"
+      [style.top.%]="particle.y"
+      [style.width.px]="particle.size"
+      [style.height.px]="particle.size"
+      [style.opacity]="particle.opacity">
+    </div>
+  </div>
+
+  <div class="hero-gradient"></div>
+  <div class="container">
+    <div class="hero-content" @heroText>
+      <h1>Gestisci i Tuoi Microservizi con Semplicità</h1>
+      <p class="subtitle">
+        Una dashboard intuitiva per monitorare e interagire con la tua architettura a microservizi.
+      </p>
+      <div class="hero-buttons">
+        <button class="btn btn-primary" (click)="scrollToFeatures()">Scopri i Servizi</button>
+        <a href="https://github.com/your-username/your-microservices-project" target="_blank" class="btn btn-secondary">
+          <i class="lucide lucide-github"></i>
+          GitHub
+        </a>
+      </div>
+      <div class="stats-grid" @staggerCards>
+        <div class="stat-card" *ngFor="let stat of stats">
+          <span class="stat-value">{{ stat.value | number:'1.0-0' }}</span>
+          <span class="stat-label">{{ stat.label }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="features-section" #featuresSection @staggerCards>
+  <div class="container">
+    <h2>I Tuoi Servizi</h2>
+    <p class="section-subtitle">Esplora i microservizi che compongono la tua applicazione.</p>
+
+    <div *ngIf="batchMessage" class="message success-message">
+        <p>{{ batchMessage }}</p>
+    </div>
+    <div *ngIf="batchErrorMessage" class="message error-message">
+        <p>{{ batchErrorMessage }}</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="card" *ngFor="let feature of features; trackBy: trackByFeature">
+        <div class="card-icon">
+          <i class="lucide" [class]="'lucide-' + feature.icon"></i>
+        </div>
+        <div class="card-content">
+          <h3>{{ feature.title }}</h3>
+          <p>{{ feature.description }}</p>
+          <a *ngIf="feature.link" [routerLink]="feature.link" class="card-arrow">
+            <i class="lucide lucide-arrow-right"></i>
+          </a>
+          <button *ngIf="feature.action" (click)="feature.action()" class="card-button">
+            Avvia <i class="lucide lucide-play"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<footer class="footer" @fadeIn>
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-section">
+        <div class="footer-logo">
+          <i class="lucide lucide-shield-check"></i>
+          <span>Microservices Dashboard</span>
+        </div>
+        <p>La soluzione completa per gestire i tuoi microservizi</p>
+      </div>
+      <div class="footer-section">
+        <h4>Prodotto</h4>
+        <a routerLink="/features" class="footer-link">Funzionalità</a>
+        <a routerLink="/pricing" class="footer-link">Pricing</a>
+        <a routerLink="/docs" class="footer-link">Documentazione</a>
+      </div>
+      <div class="footer-section">
+        <h4>Supporto</h4>
+        <a routerLink="/contact" class="footer-link">Contatti</a>
+        <a routerLink="/faq" class="footer-link">FAQ</a>
+        <a routerLink="/community" class="footer-link">Community</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2023 Microservices Dashboard. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
