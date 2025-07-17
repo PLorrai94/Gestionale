@@ -2,7 +2,7 @@ import { Component, ViewChild, ElementRef, OnInit, OnDestroy } from '@angular/co
 import { CommonModule } from '@angular/common'; // Per *ngIf, *ngFor
 import { RouterLink } from '@angular/router'; // Per routerLink
 import { trigger, state, style, transition, animate, query, stagger } from '@angular/animations';
-import { BatchService } from '../../services/batch.service'; // Importa il BatchService (assicurati che il percorso sia corretto)
+import { BatchService } from '../../core/services/batch.service'; // Importa il BatchService (assicurati che il percorso sia corretto)
 import { filter, fromEvent, map } from 'rxjs'; // Per gestione scroll
 
 // Interfaccia per le funzionalità/microservizi

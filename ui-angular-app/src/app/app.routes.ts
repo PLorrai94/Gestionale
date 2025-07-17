@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { LayoutComponent } from './components/layout/layout.component';
+import { LayoutComponent } from './shared/layout/layout.component';
 import { authGuard } from './guards/auth.guard';
 import { loginGuard } from './guards/login.guard';
 
@@ -52,7 +52,7 @@ export const routes: Routes = [
         path: 'products/all',
         canActivate: [authGuard],
         loadComponent: () =>
-          import('./pages/products/products-page').then(m => m.ProductsPageComponent)
+  import('./pages/products/products-page/products-page').then(m => m.ProductsPageComponent)
       }
 
     ]

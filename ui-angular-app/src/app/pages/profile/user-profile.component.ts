@@ -2,8 +2,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService } from '../../services/auth';
-import { AuthResponse } from '../../models/auth-response.model';
+import { AuthService } from '../../core/services/auth';
+import { AuthResponse } from '../../core/models/auth-response.model';
 
 @Component({
   standalone: true,

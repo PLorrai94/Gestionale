@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ProductService } from '../../core/services/product.service';
-import { Product } from '../../core/models/product';
+import { Product } from '../models/product'; // corretto percorso
 
-
-@Injectable({ providedIn: 'root' })
-export class ProductsComponent  {
-  private apiUrl = '/api/management/products';
+@Injectable({
+  providedIn: 'root',
+})
+export class ProductService {
+  private apiUrl = 'http://localhost:8082/products'; // Modifica se serve
 
   constructor(private http: HttpClient) {}
 
   getAll(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.apiUrl);
+    return this.http.get<Product[]>(`${this.apiUrl}/all`);
   }
 
   searchByName(name: string): Observable<Product[]> {

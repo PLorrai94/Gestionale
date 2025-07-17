@@ -4,9 +4,9 @@ import { Router } from '@angular/router';
 import { HttpErrorResponse, HttpClientModule } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../../services/auth';
+import { AuthService } from '../../../core/services/auth';
 import { fadeIn, heroText } from '../../home/animations';
-import { UserLoginRequest } from '../../../models/user-login-request.model';
+import { UserLoginRequest } from '../../../core/models/user-login-request.model';
 
 @Component({
   standalone: true,

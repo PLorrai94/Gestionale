@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { AuthService, RegisterPayload } from '../../../services/auth';
+import { AuthService, RegisterPayload } from '../../../core/services/auth';
 import { HttpClientModule } from '@angular/common/http';
 import { fadeIn, heroText } from '../../home/animations';
 

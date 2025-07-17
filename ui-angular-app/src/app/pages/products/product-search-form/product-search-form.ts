@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ProductService } from '../../../services/product.service';
+import { ProductService } from '../../../core/services/product.service';
+import { Product } from '../../../core/models/product';
 
 @Component({
   standalone: true,
