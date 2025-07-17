@@ -19,6 +19,12 @@
         <span class="nav-link">
           <i class="lucide lucide-mail"></i> {{ currentUser.email }}
         </span>
+        <a routerLink="/profile" class="nav-link">
+          <i class="lucide lucide-user"></i> Profilo
+        </a>
+        <a routerLink="/dashboard" class="nav-link">
+          <i class="lucide lucide-user"></i> Dashboard
+        </a>
         <button class="btn btn-primary" (click)="logout()">
           <i class="lucide lucide-log-out"></i> Logout
         </button>

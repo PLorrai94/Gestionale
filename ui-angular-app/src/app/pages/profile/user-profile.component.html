@@ -1,0 +1,23 @@
+<div class="profile-container">
+  <div class="profile-card">
+    <h2>Il tuo profilo</h2>
+
+    <form [formGroup]="profileForm">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input id="username" formControlName="username" [readonly]="!isEditing" />
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input id="email" formControlName="email" [readonly]="!isEditing" />
+      </div>
+    </form>
+
+    <div class="profile-actions">
+      <button *ngIf="!isEditing" class="btn btn-primary" (click)="toggleEdit()">Modifica</button>
+      <button *ngIf="isEditing" class="btn btn-primary" (click)="saveChanges()">Salva</button>
+      <button *ngIf="isEditing" class="btn btn-secondary" (click)="toggleEdit()">Annulla</button>
+    </div>
+  </div>
+</div>

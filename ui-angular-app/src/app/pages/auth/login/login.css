@@ -10,3 +10,78 @@
 .form-control::placeholder {
   color: var(--color-subtle);
 }
+
+/* Contenitore della pagina di registrazione */
+.form-wrapper {
+  max-width: 500px;
+  margin: 0 auto;
+  background-color: var(--color-surface);
+  padding: 2.5rem;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-md);
+}
+
+/* Titolo del form */
+.form-title {
+  text-align: center;
+  font-size: 2rem;
+  color: var(--color-accent);
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+}
+
+/* Ogni gruppo di input */
+.form-group {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Etichette */
+.form-group label {
+  margin-bottom: 0.5rem;
+  color: var(--color-subtle);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+/* Campi input */
+.form-group input {
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-button);
+  border: 1px solid var(--color-light);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-size: 1rem;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.form-group input:focus {
+  border-color: var(--color-accent-light);
+  background-color: var(--color-surface);
+  outline: none;
+}
+
+/* Pulsante di submit */
+button[type="submit"] {
+  width: 100%;
+  font-size: 1rem;
+  padding: 0.9rem;
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  border: none;
+  border-radius: var(--radius-button);
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: var(--color-accent-light);
+}
+
+/* Stile disabilitato */
+button[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AppConfigService } from '../../core/app-config.service';
+import { AppConfigService } from '../core/app-config.service';
 
 export interface Product {
   id: number;

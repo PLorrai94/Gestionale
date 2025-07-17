@@ -1,25 +1,25 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
-import { ProductService, Product } from '../../core/product.service';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
-@Component({
-  standalone: true,
-  selector: 'app-products',
-  templateUrl: './products.html',
-  styleUrls: ['./products.css'],
-  imports: [CommonModule, RouterLink]
-})
-export class ProductsComponent implements OnInit {
-  products: Product[] = [];
-  errorMessage = '';
+export interface Product {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+}
 
-  constructor(private productService: ProductService) {}
+@Injectable({ providedIn: 'root' })
+export class ProductService {
+  private apiUrl = '/api/management/products';
 
-  ngOnInit(): void {
-    this.productService.getProducts().subscribe({
-      next: data => this.products = data,
-      error: err => this.errorMessage = err.message
-    });
+  constructor(private http: HttpClient) {}
+
+  getAll(): Observable<Product[]> {
+    return this.http.get<Product[]>(this.apiUrl);
+  }
+
+  searchByName(name: string): Observable<Product[]> {
+    return this.http.get<Product[]>(`${this.apiUrl}/search?name=${name}`);
   }
 }
