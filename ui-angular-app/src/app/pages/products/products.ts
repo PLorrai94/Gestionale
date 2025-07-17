@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { ProductService, Product } from '../core/product.service';
+import { ProductService, Product } from '../../core/product.service';
 
 @Component({
   standalone: true,

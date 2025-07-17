@@ -1,13 +1,50 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './home/home';
-import { ProductsComponent } from './products/products';
+import { LayoutComponent } from './components/layout/layout.component';
+import { authGuard } from './guards/auth.guard';
+import { loginGuard } from './guards/login.guard';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'products', component: ProductsComponent },
-  { path: 'auth/register', loadComponent: () =>
-      import('./pages/auth/register/register')
-        .then(m => m.RegisterComponent)
+  {
+    path: '',
+    component: LayoutComponent,
+    children: [
+      // Home page
+      {
+        path: '',
+        canActivate: [loginGuard],
+        loadComponent: () =>
+          import('./pages/home/home').then(m => m.HomeComponent)
+      },
+      // Products page
+      {
+        path: 'products',
+        canActivate: [loginGuard],
+        loadComponent: () =>
+          import('./pages/products/products').then(m => m.ProductsComponent)
+      },
+      // Register
+      {
+        path: 'auth/register',
+        canActivate: [loginGuard],
+        loadComponent: () =>
+          import('./pages/auth/register/register').then(m => m.RegisterComponent)
+      },
+      // Login
+      {
+        path: 'auth/login',
+        canActivate: [loginGuard],
+        loadComponent: () =>
+          import('./pages/auth/login/login').then(m => m.LoginComponent)
+      },
+      {
+        path: 'dashboard',
+        canActivate: [authGuard],
+        loadComponent: () =>
+          import('./pages/dashboard/dashboard').then(m => m.DashboardComponent)
+      }
+
+    ]
   },
+  // Fallback route
   { path: '**', redirectTo: '' }
 ];

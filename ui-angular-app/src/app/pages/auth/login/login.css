@@ -1,0 +1,12 @@
+.login-container {
+  background-color: var(--color-surface); /* più coerente col tema */
+  color: var(--color-text);
+}
+.form-control {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  border: 1px solid var(--color-light);
+}
+.form-control::placeholder {
+  color: var(--color-subtle);
+}
