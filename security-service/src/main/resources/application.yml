@@ -71,11 +71,12 @@ logging:
 management:
     metrics:
         enable:
+            system:
+                cpu: false
             process:
                 cpu: false
                 files: false
                 memory: false
                 uptime: false
-            system:
-                cpu: false
-                uptime: false
+    defaults:
+        enabled: false
