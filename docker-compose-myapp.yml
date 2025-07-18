@@ -1,0 +1,52 @@
+version: '3.8'
+services:
+  eureka-server:
+    build:
+      context: ./eureka-server
+      dockerfile: Dockerfile
+    environment:
+      - JAVA_TOOL_OPTIONS=-Dmicrometer.enable.system.metrics=false
+    ports:
+      - "8761:8761"
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    environment:
+      - JAVA_TOOL_OPTIONS=-Dmicrometer.enable.system.metrics=false
+    ports:
+      - "8082:8082"
+    depends_on:
+      - eureka-server
+
+  management-service:
+    build:
+      context: ./management-service
+      dockerfile: Dockerfile
+    environment:
+      - JAVA_TOOL_OPTIONS=-Dmicrometer.enable.system.metrics=false
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka-server
+
+  security-service:
+    build:
+      context: ./security-service
+      dockerfile: Dockerfile
+    environment:
+      - JAVA_TOOL_OPTIONS=-Dmicrometer.enable.system.metrics=false
+    ports:
+      - "8090:8090"
+    depends_on:
+      - eureka-server
+
+  angular-ui:
+    build:
+      context: ./ui-angular-app
+      dockerfile: Dockerfile
+    ports:
+      - "4200:80"
+    depends_on:
+      - api-gateway
