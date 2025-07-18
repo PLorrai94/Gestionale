@@ -7,7 +7,9 @@ spring:
 
     # === Database Connection Configuration for Application (JPA/Hibernate) ===
     datasource:
-        url: jdbc:oracle:thin:@localhost:1521/XEPDB1
+        # url: jdbc:oracle:thin:@localhost:1521/XEPDB1  <--- originale
+        # spring.datasource.url=jdbc:oracle:thin:@oracle-db:1521:XE
+        url: jdbc:oracle:thin:@oracle-db:1521/XEPDB1 # OK: Utilizza il nome del servizio Docker
         username: security_user                     # Questo utente gestirà le operazioni CRUD dell'applicazione
         password: SECURITYAPP
         driver-class-name: oracle.jdbc.OracleDriver
@@ -28,7 +30,7 @@ spring:
         enabled: true # Lascia a true per abilitare Flyway e le migrazioni all'avvio
         baseline-on-migrate: false # Crea la tabella di history di Flyway se non esiste e la allinea
         locations: classpath:db/migration # Percorso delle tue script di migrazione SQL
-        url: jdbc:oracle:thin:@localhost:1521/XEPDB1 # Connessione di Flyway allo stesso PDB
+        url: jdbc:oracle:thin:@oracle-db:1521/XEPDB1 # OK: Connessione di Flyway allo stesso PDB (utilizza il nome del servizio Docker)
         user: GESTIONALE_OWNER                  # Utente con privilegi DDL per le migrazioni
         password: GESTIONALE_PASS                   # Password verificata con successo
         schemas: GESTIONALE_OWNER                   # Lo schema in cui Flyway gestirà le tabelle (incluso flyway_schema_history)
@@ -36,7 +38,6 @@ spring:
     autoconfigure:
         exclude:
             - org.springframework.boot.actuate.autoconfigure.metrics.SystemMetricsAutoConfiguration
-
 
 
 # === Embedded Web Server (Tomcat) Configuration ===
@@ -47,10 +48,15 @@ server:
 eureka:
     client:
         serviceUrl:
-            defaultZone: http://localhost:8761/eureka/ # URL del Discovery Server (Eureka Server)
+            # PUNTAMENTO AL NOME DEL SERVIZIO EUREKA NEL NETWORK DOCKER
+            defaultZone: http://gestionale-eureka-server:8761/eureka/
     instance:
-        hostname: localhost # L'hostname con cui il servizio si registra su Eureka
-        # preferIpAddress: true # Decommenta se preferisci che il servizio si registri con il suo indirizzo IP anziché l'hostname
+        # Importante: registra il servizio su Eureka con il suo NOME del servizio Docker
+        # Questo permette ad altri servizi nello stesso network Docker di trovarlo
+        hostname: gestionale-security-service # Utilizza il nome del container Docker per questo servizio
+          # preferIpAddress: true # Considera di decommentare se hai problemi di risoluzione DNS tra i container
+          # o se preferisci che Eureka registri l'IP del container anziché il suo hostname Docker.
+        # Generalmente, hostname funziona meglio con i nomi dei servizi nel network Docker.
 
 # === JWT (JSON Web Token) Configuration (example, adjust as needed) ===
 application:

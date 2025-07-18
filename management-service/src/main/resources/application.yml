@@ -6,7 +6,7 @@ spring:
     name: management-service
 
   datasource:
-    url: jdbc:oracle:thin:@localhost:1521/XEPDB1
+    url: jdbc:oracle:thin:@oracle-db:1521/XEPDB1
     username: MANAGEMENT_USER                    # Utente con accesso in sola lettura/scrittura
     password: MANAGEMENTPASS
     driver-class-name: oracle.jdbc.OracleDriver
@@ -30,7 +30,7 @@ spring:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://gestionale-eureka-server:8761/eureka/
   instance:
     hostname: localhost
 
