@@ -1,0 +1,93 @@
+.sidebar {
+  /* Larghezza e posizione gestite da layout.component.css */
+  background-color: var(--color-surface);
+  display: flex;
+  flex-direction: column;
+  border-right: 3px solid var(--color-accent);
+  /* transition gestita da layout.component.css */
+  /* padding: 0; Assicurati che non ci sia padding sulla sidebar stessa, sarà gestito internamente */
+}
+
+/* Stili per il bottone di toggle (indipendentemente dallo stato collapsed) */
+.toggle-btn {
+  background: transparent;
+  border: none;
+  color: var(--color-accent);
+  font-size: 1.5rem; /* Dimensione dell'icona */
+  cursor: pointer;
+  margin-bottom: 2rem; /* Spazio sotto il bottone */
+  width: 100%; /* Occupa tutta la larghezza per il padding */
+  box-sizing: border-box; /* Include padding nella larghezza */
+  display: flex; /* Rendi flex per allineare icona e testo */
+  align-items: center; /* Centra verticalmente */
+  gap: 1rem; /* Spazio tra icona e testo */
+  transition: padding 0.3s ease; /* Aggiungi transizione per il padding */
+}
+
+/* Stile per il testo "Funzionalità" nel bottone */
+.toggle-btn span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 1rem; /* Dimensione del font per il testo "Funzionalità" */
+}
+
+/* Stili per la lista di navigazione */
+.nav-list {
+  list-style: none;
+  padding: 0; /* Rimuovi padding dalla lista per gestirlo sulle voci */
+  width: 100%; /* Assicurati che la lista occupi tutta la larghezza */
+}
+
+/* Stili per ogni voce di navigazione */
+.nav-list li {
+  display: flex;
+  align-items: center; /* Allinea verticalmente icona e testo */
+  gap: 1rem;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background-color 0.2s ease, padding 0.3s ease; /* Transizione per padding */
+  border-radius: var(--radius-general);
+  box-sizing: border-box; /* Include padding nella larghezza */
+}
+
+.icon {
+  font-size: 1.2rem;
+  flex-shrink: 0; /* Assicurati che le icone non si riducano */
+}
+
+.nav-list li:hover {
+  background-color: var(--color-card);
+}
+
+.nav-list li.active {
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+/* Regole quando la sidebar NON è collassata (aperta) */
+.sidebar:not(.collapsed) .toggle-btn {
+  justify-content: flex-start; /* Allinea a sinistra */
+  padding: 1rem 1rem; /* Padding a sinistra per allineamento */
+}
+
+.sidebar:not(.collapsed) .nav-list li {
+  justify-content: flex-start; /* Allinea icone e testo a sinistra */
+  padding: 1rem 1rem; /* Padding uniforme per mantenere l'altezza delle voci */
+}
+
+
+/* Regole quando la sidebar È collassata */
+.sidebar.collapsed {
+  align-items: center; /* Centra tutti gli elementi figli */
+}
+
+.sidebar.collapsed .toggle-btn {
+  justify-content: center; /* Centra l'icona */
+  padding: 1rem 0.5rem; /* Padding ridotto per il bottone collassato */
+}
+
+.sidebar.collapsed .nav-list li {
+  justify-content: center; /* Centra icona e testo quando sidebar collassata */
+  padding: 1rem 0.5rem; /* Stesso padding verticale, padding orizzontale ridotto */
+}

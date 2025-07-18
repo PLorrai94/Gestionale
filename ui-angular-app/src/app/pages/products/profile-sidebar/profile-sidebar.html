@@ -1,8 +1,17 @@
-<aside class="sidebar">
-  <h3>Profilo</h3>
-  <ul>
-    <li><a routerLink="/profile">Visualizza profilo</a></li>
-    <li><a routerLink="/orders">I tuoi ordini</a></li>
-    <!-- altri collegamenti futuri -->
+<nav class="sidebar" [class.collapsed]="collapsed">
+  <button class="toggle-btn" (click)="onToggleClick()">
+    ☰ 
+    <span *ngIf="!collapsed">Funzionalità</span>
+  </button>
+
+  <ul class="nav-list">
+    <li routerLink="/profile" routerLinkActive="active">
+      <i class="icon">👤</i>
+      <span *ngIf="!collapsed">Profilo</span>
+    </li>
+    <li routerLink="/orders" routerLinkActive="active">
+      <i class="icon">📦</i>
+      <span *ngIf="!collapsed">Ordini</span>
+    </li>
   </ul>
-</aside>
+</nav>

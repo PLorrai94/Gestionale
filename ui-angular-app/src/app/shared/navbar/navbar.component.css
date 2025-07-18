@@ -1,22 +1,69 @@
-.spinner {
-  width: 24px;
-  height: 24px;
-  border: 3px solid var(--color-light);
-  border-top: 3px solid var(--color-accent);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-  margin-left: auto;
-  margin-right: auto;
+/* navbar.component.css */
+
+.navbar {
+  background-color: var(--color-primary);
+  padding: 1rem 2rem;
+  color: var(--color-light);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
+.navbar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.user-details {
+.logo {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.8rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.logo .floating-icon {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* Stili per i link di navigazione (Desktop default) */
+/* Aumentiamo leggermente la specificità qui se necessario, ma di solito non serve */
+.navbar .nav-links { /* Aggiunto .navbar per specificità */
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nav-link {
+  color: var(--color-light);
+  text-decoration: none;
+  padding: 0.5rem 0.8rem;
+  border-radius: var(--radius-general);
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.nav-link:hover {
+  background-color: var(--color-primary-dark);
+}
+
+.nav-link i {
+  font-size: 1rem;
 }
 
 .user-info {
@@ -28,16 +75,88 @@
   font-size: 0.95rem;
 }
 
-
 .btn.btn-primary {
-  background-color: #00d9ff;
-  color: black;
+  background-color: var(--color-accent);
+  color: var(--color-bg);
   border: none;
   padding: 0.4rem 1rem;
   border-radius: 5px;
   font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 
 .btn.btn-primary:hover {
-  background-color: #00c4e0;
+  background-color: var(--color-accent-dark);
+}
+
+/* Pulsante hamburger: Nascosto di default sul desktop */
+.menu-toggle {
+  display: none; /* Nascondi per desktop */
+  background: none;
+  border: none;
+  color: var(--color-light);
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+/* ========================================================= */
+/* Responsive: Comportamento mobile (schermi <= 768px) */
+/* ========================================================= */
+@media (max-width: 768px) {
+  .navbar .container {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .logo {
+    margin-right: auto;
+  }
+
+  /* Il pulsante hamburger diventa visibile in mobile */
+  .menu-toggle {
+    display: block !important; /* <--- FORZATURA: Usa !important per sovrascrivere */
+  }
+
+  /* I link di navigazione: INIZIALMENTE NASCOSTI su mobile */
+  .navbar .nav-links { /* <--- CRUCIALE: Aggiunto .navbar per specificità */
+    display: none; /* <--- CRUCIALE: Nascondi i link per default su mobile */
+    flex-direction: column;
+    width: 100%;
+    background-color: var(--color-primary-dark);
+    padding: 1rem 0;
+    
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+    box-shadow: var(--shadow-md);
+  }
+
+  /* Quando il menu è aperto (.open), i link diventano visibili */
+  .navbar .nav-links.open { /* <--- CRUCIALE: Aggiunto .navbar per specificità */
+    display: flex !important; /* <--- FORZATURA: Usa !important per sovrascrivere */
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+  }
+
+  /* Stili per i singoli link all'interno del menu mobile */
+  .nav-link, .btn.btn-primary {
+    width: calc(100% - 2rem);
+    text-align: left;
+    padding: 0.8rem 1rem;
+    margin: 0.2rem auto;
+  }
+
+  .nav-link i, .btn.btn-primary i {
+    margin-right: 0.5rem;
+  }
 }

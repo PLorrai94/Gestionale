@@ -1,7 +1,15 @@
-<app-navbar></app-navbar>
+<div class="full-page-layout">
+  <app-navbar (menuToggle)="toggleSidebar()"></app-navbar>
 
-<main class="main-content">
-  <router-outlet></router-outlet>
-</main>
+  <div [class.sidebar-collapsed]="!isSidebarOpen"
+       [class.sidebar-open]="isSidebarOpen"
+       class="layout-content-area">
+    <app-profile-sidebar [collapsed]="!isSidebarOpen" (toggle)="toggleSidebar()"></app-profile-sidebar>
 
-<app-footer></app-footer>
+    <main class="main-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+
+  <app-footer></app-footer>
+</div>

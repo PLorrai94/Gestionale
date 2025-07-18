@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { LayoutComponent } from './shared/layout/layout.component';
 import { authGuard } from './guards/auth.guard';
 import { loginGuard } from './guards/login.guard';
+import { ProfileSidebarComponent } from './pages/products/profile-sidebar/profile-sidebar';
 
 export const routes: Routes = [
   {
@@ -19,6 +20,7 @@ export const routes: Routes = [
       {
         path: 'products',
         canActivate: [loginGuard],
+        
         loadComponent: () =>
           import('./pages/products/products').then(m => m.ProductsComponent)
       },

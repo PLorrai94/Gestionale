@@ -1,45 +1,47 @@
 <nav class="navbar" @fadeIn>
   <div class="container">
+    
     <div class="logo">
       <i class="lucide lucide-shield-check floating-icon"></i>
       <span class="logo-text">Microservices Dashboard</span>
     </div>
 
-    <div class="nav-links">
-      <!-- Spinner se in caricamento -->
+    <button class="menu-toggle" (click)="toggleMenu()">
+      <i class="lucide lucide-menu"></i>
+    </button>
+
+    <div class="nav-links" [class.open]="isMenuOpen">
       <ng-container *ngIf="loading">
         <span class="nav-link">Loading...</span>
       </ng-container>
 
-      <!-- Se l'utente è loggato -->
       <ng-container *ngIf="!loading && currentUser">
-        <span class="nav-link">
+        <span class="nav-link user-info">
           <i class="lucide lucide-user"></i> {{ currentUser.username }}
         </span>
-        <span class="nav-link">
+        <span class="nav-link user-info">
           <i class="lucide lucide-mail"></i> {{ currentUser.email }}
         </span>
         <a routerLink="/profile" class="nav-link">
           <i class="lucide lucide-user"></i> Profilo
         </a>
         <a routerLink="/dashboard" class="nav-link">
-          <i class="lucide lucide-user"></i> Dashboard
+          <i class="lucide lucide-layout-dashboard"></i> Dashboard
         </a>
         <button class="btn btn-primary" (click)="logout()">
           <i class="lucide lucide-log-out"></i> Logout
         </button>
       </ng-container>
 
-      <!-- Se l'utente NON è loggato -->
       <ng-container *ngIf="!loading && !currentUser">
         <a routerLink="/" class="nav-link">
           <i class="lucide lucide-home"></i> Home
         </a>
         <a routerLink="/auth/register" class="nav-link">
-          <i class="lucide lucide-user-plus"></i> Register
+          <i class="lucide lucide-user-plus"></i> Registrati
         </a>
-        <a routerLink="/auth/login" class="nav-link">
-          <i class="lucide lucide-log-in"></i> Login
+        <a routerLink="/auth/login" class="btn btn-primary">
+          <i class="lucide lucide-log-in"></i> Accedi
         </a>
       </ng-container>
     </div>

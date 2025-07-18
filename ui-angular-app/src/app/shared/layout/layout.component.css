@@ -1,0 +1,97 @@
+/* Contenitore principale che gestisce l'intera pagina verticalmente */
+.full-page-layout {
+  display: flex;
+  flex-direction: column; /* Imposta la direzione principale su colonna */
+  min-height: 100vh; /* Fa in modo che il layout occupi l'intera altezza della viewport */
+}
+
+/* La navbar e il footer prenderanno l'altezza che serve loro */
+app-navbar {
+  flex-shrink: 0; /* Assicurati che la navbar non si riduca */
+}
+
+app-footer {
+  flex-shrink: 0; /* Assicurati che il footer non si riduca */
+}
+
+/* Questa è l'area che contiene la sidebar e il main content */
+.layout-content-area {
+  display: flex; /* Ora questo è un flex container orizzontale */
+  flex: 1; /* Questo fa in modo che occupi tutto lo spazio verticale rimanente */
+  background-color: var(--color-bg);
+  overflow: hidden; /* Mantiene il contenitore senza scrollbar, gestito dai figli */
+  position: relative; /* Importante per posizionare la sidebar mobile */
+}
+
+/* Sidebar base (desktop e mobile - SEMPRE IN-FLOW) */
+app-profile-sidebar {
+  /* Regole di base per la sidebar */
+  width: 220px; /* Larghezza della sidebar aperta */
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-md);
+  transition: width 0.3s ease, transform 0.3s ease; /* Aggiungi transform alla transizione */
+  flex-shrink: 0; /* Impedisce che la sidebar si riduca */
+  /* padding: 2rem 0;  Questo padding verrà gestito INTERNAMENTE alla sidebar */
+}
+
+/* Main content (desktop e mobile) */
+.main-content {
+  flex: 1; /* Il main content occupa tutto lo spazio orizzontale rimanente */
+  padding: 2rem;
+  background-color: var(--color-bg);
+  overflow-x: hidden; /* Impedisce scrollbar orizzontale */
+  overflow-y: auto; /* Permette al contenuto principale di scrollare verticalmente se necessario */
+  height: 100%; /* Assicurati che prenda tutta l'altezza disponibile nel flex container */
+  transition: padding-left 0.3s ease; /* Aggiungi transizione per il padding-left */
+}
+
+/* Stato collassato (desktop) */
+.sidebar-collapsed app-profile-sidebar {
+  width: 70px; /* Larghezza della sidebar collassata */
+  /* padding: 1rem 0;  Questo padding verrà gestito INTERNAMENTE alla sidebar */
+}
+.sidebar-collapsed .main-content {
+  padding-left: 1rem; /* Riduci il padding a sinistra del main-content quando sidebar collassata */
+}
+
+
+/* Responsive: mobile behavior */
+@media (max-width: 768px) {
+  .layout-content-area {
+    flex-direction: row; /* Mantiene la direzione della riga per il contenuto */
+  }
+
+  app-profile-sidebar {
+    position: absolute; /* Rimuoviamo in-flow per il mobile */
+    top: 0;
+    left: 0;
+    height: 100%; /* Occupare tutta l'altezza del layout-content-area */
+    width: 200px; /* Larghezza fissa per la sidebar mobile */
+    transform: translateX(-100%); /* Nascondi la sidebar fuori dallo schermo */
+    box-shadow: var(--shadow-xl); /* Ombra più pronunciata per il drawer */
+    z-index: 1000; /* Assicurati che sia sopra il main content */
+  }
+
+  /* Quando la sidebar è APERTA in mobile */
+  .layout-content-area.sidebar-open app-profile-sidebar {
+    transform: translateX(0); /* Falla scorrere dentro */
+  }
+
+  /* Overlay per quando la sidebar è aperta in mobile */
+  .layout-content-area.sidebar-open::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Scurisce lo sfondo */
+    z-index: 999; /* Dietro la sidebar, sopra il main-content */
+    cursor: pointer;
+  }
+
+  /* Il main content in mobile non ha bisogno di spingere la sidebar */
+  .main-content {
+    padding-left: 1rem; /* Mantieni un padding standard */
+  }
+}
