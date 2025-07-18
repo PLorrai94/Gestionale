@@ -34,6 +34,10 @@ spring:
           filters:
             - StripPrefix=1 # Rimuove /api/ dalla URL prima di inoltrarla al servizio
 
+
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.actuate.autoconfigure.metrics.SystemMetricsAutoConfiguration
 eureka:
   client:
     serviceUrl:
@@ -48,6 +52,7 @@ logging:
     org.springframework.cloud.gateway: DEBUG # Dettagli sull'instradamento e i filtri del gateway
     com.netflix.eureka: DEBUG # Dettagli sul client Eureka nel gateway
     org.springframework.cloud.netflix.eureka: DEBUG
+
 
 management:
   metrics:

@@ -33,6 +33,12 @@ spring:
         password: GESTIONALE_PASS                   # Password verificata con successo
         schemas: GESTIONALE_OWNER                   # Lo schema in cui Flyway gestirà le tabelle (incluso flyway_schema_history)
 
+    autoconfigure:
+        exclude:
+            - org.springframework.boot.actuate.autoconfigure.metrics.SystemMetricsAutoConfiguration
+
+
+
 # === Embedded Web Server (Tomcat) Configuration ===
 server:
     port: 8081 # Porta su cui l'applicazione Spring Boot sarà accessibile

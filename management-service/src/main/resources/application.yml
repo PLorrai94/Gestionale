@@ -23,6 +23,10 @@ spring:
         format_sql: true
         default_schema: GESTIONALE_OWNER         # Schema effettivo delle entità
 
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.actuate.autoconfigure.metrics.SystemMetricsAutoConfiguration
+
 eureka:
   client:
     serviceUrl:
