@@ -9,3 +9,15 @@ eureka:
     fetchRegistry: false      # Il server Eureka non ha bisogno di recuperare il registro da se stesso
     serviceUrl:
       defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/ # URL di Eureka per i client
+
+management:
+  metrics:
+    enable:
+      process:
+        cpu: false
+        files: false
+        memory: false
+        uptime: false
+      system:
+        cpu: false
+        uptime: false

@@ -67,3 +67,15 @@ logging:
         # Aggiungi livelli di logging per Eureka Client se vuoi vedere più dettagli sulla registrazione
         com.netflix.eureka: DEBUG
         org.springframework.cloud.netflix.eureka: DEBUG
+
+management:
+    metrics:
+        enable:
+            process:
+                cpu: false
+                files: false
+                memory: false
+                uptime: false
+            system:
+                cpu: false
+                uptime: false

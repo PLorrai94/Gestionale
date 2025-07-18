@@ -38,3 +38,15 @@ logging:
     com.zaxxer.hikari: DEBUG
     org.hibernate.orm.jdbc.connections.internal: DEBUG
     com.PierLorrai.Gestionale: DEBUG
+
+management:
+  metrics:
+    enable:
+      process:
+        cpu: false
+        files: false
+        memory: false
+        uptime: false
+      system:
+        cpu: false
+        uptime: false

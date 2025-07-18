@@ -48,3 +48,15 @@ logging:
     org.springframework.cloud.gateway: DEBUG # Dettagli sull'instradamento e i filtri del gateway
     com.netflix.eureka: DEBUG # Dettagli sul client Eureka nel gateway
     org.springframework.cloud.netflix.eureka: DEBUG
+
+management:
+  metrics:
+    enable:
+      process:
+        cpu: false
+        files: false
+        memory: false
+        uptime: false
+      system:
+        cpu: false
+        uptime: false
