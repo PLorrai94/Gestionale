@@ -41,7 +41,7 @@ spring:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/ # Indirizzo dell'Eureka Server
+      defaultZone: http://gestionale-eureka-server:8761/eureka/ # Indirizzo dell'Eureka Server
   instance:
     preferIpAddress: true # Registra l'IP del gateway invece dell'hostname con Eureka
 

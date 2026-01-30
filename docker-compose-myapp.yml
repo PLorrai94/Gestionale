@@ -1,52 +1,157 @@
-version: '3.8'
 services:
+
+  # ---------------------------------------------------------------------------
+  # Oracle XE Database
+  # ---------------------------------------------------------------------------
+  oracle-db:
+    image: gvenzl/oracle-xe:21-slim
+    container_name: oracle-db
+    environment:
+      - ORACLE_PASSWORD=${ORACLE_PASSWORD}
+    ports:
+      - "${ORACLE_PORT:-1521}:1521"
+    volumes:
+      - oracle-data:/opt/oracle/oradata
+    healthcheck:
+      test: ["CMD", "healthcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 60s
+    networks:
+      - gestionale_network
+
+  # ---------------------------------------------------------------------------
+  # Eureka Server — Service Discovery
+  # ---------------------------------------------------------------------------
   eureka-server:
     build:
       context: ./eureka-server
       dockerfile: Dockerfile
+    container_name: gestionale-eureka-server
     environment:
-      - JAVA_TOOL_OPTIONS=-Dmicrometer.enable.system.metrics=false
+      - JAVA_TOOL_OPTIONS=-Dmicrometer.enable.system.metrics=false -Dmanagement.metrics.binders.enabled=false
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-default}
     ports:
-      - "8761:8761"
+      - "${EUREKA_PORT:-8761}:8761"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8761/actuator/health || curl -f http://localhost:8761/ || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    networks:
+      - gestionale_network
 
-  api-gateway:
-    build:
-      context: ./api-gateway
-      dockerfile: Dockerfile
-    environment:
-      - JAVA_TOOL_OPTIONS=-Dmicrometer.enable.system.metrics=false
-    ports:
-      - "8082:8082"
-    depends_on:
-      - eureka-server
-
-  management-service:
-    build:
-      context: ./management-service
-      dockerfile: Dockerfile
-    environment:
-      - JAVA_TOOL_OPTIONS=-Dmicrometer.enable.system.metrics=false
-    ports:
-      - "8080:8080"
-    depends_on:
-      - eureka-server
-
+  # ---------------------------------------------------------------------------
+  # Security Service — Auth & JWT
+  # ---------------------------------------------------------------------------
   security-service:
     build:
       context: ./security-service
       dockerfile: Dockerfile
+    container_name: gestionale-security-service
     environment:
-      - JAVA_TOOL_OPTIONS=-Dmicrometer.enable.system.metrics=false
+      - JAVA_TOOL_OPTIONS=-Dmicrometer.enable.system.metrics=false -Dmanagement.metrics.binders.enabled=false
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-default}
+      - SPRING_DATASOURCE_PASSWORD=${SECURITY_DB_PASSWORD}
+      - FLYWAY_PASSWORD=${GESTIONALE_OWNER_PASSWORD}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
     ports:
-      - "8090:8090"
+      - "${SECURITY_PORT:-8081}:8081"
     depends_on:
-      - eureka-server
+      oracle-db:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    networks:
+      - gestionale_network
 
+  # ---------------------------------------------------------------------------
+  # Management Service — Business Logic
+  # ---------------------------------------------------------------------------
+  management-service:
+    build:
+      context: ./management-service
+      dockerfile: Dockerfile
+    container_name: gestionale-management-service
+    environment:
+      - JAVA_TOOL_OPTIONS=-Dmicrometer.enable.system.metrics=false -Dmanagement.metrics.binders.enabled=false
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-default}
+      - SPRING_DATASOURCE_PASSWORD=${MANAGEMENT_DB_PASSWORD}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+    ports:
+      - "${MANAGEMENT_PORT:-8082}:8082"
+    depends_on:
+      oracle-db:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    networks:
+      - gestionale_network
+
+  # ---------------------------------------------------------------------------
+  # Batch Service — Scheduled Jobs
+  # ---------------------------------------------------------------------------
+  batch-service:
+    build:
+      context: ./batch-service
+      dockerfile: Dockerfile
+    container_name: gestionale-batch-service
+    environment:
+      - JAVA_TOOL_OPTIONS=-Dmicrometer.enable.system.metrics=false -Dmanagement.metrics.binders.enabled=false
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-default}
+      - SPRING_DATASOURCE_PASSWORD=${BATCH_DB_PASSWORD}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+    ports:
+      - "${BATCH_PORT:-8083}:8083"
+    depends_on:
+      oracle-db:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    networks:
+      - gestionale_network
+
+  # ---------------------------------------------------------------------------
+  # API Gateway — Routing & Load Balancing
+  # ---------------------------------------------------------------------------
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    container_name: gestionale-api-gateway
+    environment:
+      - JAVA_TOOL_OPTIONS=-Dmicrometer.enable.system.metrics=false -Dmanagement.metrics.binders.enabled=false
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-default}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+    ports:
+      - "${GATEWAY_PORT:-8080}:8080"
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+    networks:
+      - gestionale_network
+
+  # ---------------------------------------------------------------------------
+  # Angular UI
+  # ---------------------------------------------------------------------------
   angular-ui:
     build:
       context: ./ui-angular-app
       dockerfile: Dockerfile
+    container_name: gestionale-angular-ui
     ports:
-      - "4200:80"
+      - "${ANGULAR_PORT:-4200}:80"
     depends_on:
       - api-gateway
+    networks:
+      - gestionale_network
+
+# =============================================================================
+volumes:
+  oracle-data:
+
+networks:
+  gestionale_network:
+    driver: bridge

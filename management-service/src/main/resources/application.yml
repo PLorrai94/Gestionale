@@ -32,7 +32,7 @@ eureka:
     serviceUrl:
       defaultZone: http://gestionale-eureka-server:8761/eureka/
   instance:
-    hostname: localhost
+    hostname: gestionale-management-service
 
 logging:
   level:

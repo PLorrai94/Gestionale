@@ -3,7 +3,7 @@ server:
 
 eureka:
   instance:
-    hostname: localhost # Il nome host del server Eureka
+    hostname: gestionale-eureka-server # Il nome host del server Eureka
   client:
     registerWithEureka: false # Il server Eureka non deve registrarsi a se stesso
     fetchRegistry: false      # Il server Eureka non ha bisogno di recuperare il registro da se stesso
