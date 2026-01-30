@@ -1,0 +1,42 @@
+server:
+  port: 8080 # Porta di default per l'API Gateway, solitamente la porta 80 o 443 in produzione
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true # Abilita il discovery locator, per instradare automaticamente in base al nome del servizio Eureka
+          lower-case-service-id: true # Converti l'ID del servizio Eureka in minuscolo
+      routes: # Definizione delle rotte esplicite
+        - id: security-service-route
+          uri: lb://security-service # lb:// indica che useremo Eureka Load Balancer
+          predicates:
+            - Path=/api/auth/** # Tutte le richieste che iniziano con /api/auth
+          filters:
+            - StripPrefix=1 # Rimuove /api/ dalla URL prima di inoltrarla al servizio (es. /api/auth/login diventa /auth/login)
+
+        - id: management-service-route
+          uri: lb://management-service
+          predicates:
+            - Path=/api/management/**
+          filters:
+            - StripPrefix=1 # Rimuove /api/ dalla URL prima di inoltrarla al servizio (es. /api/management/products diventa /management/products)
+            # Potresti voler aggiungere un filtro qui per la sicurezza, come la validazione del JWT,
+            # ma per ora la lasciamo gestire direttamente al microservizio di destinazione.
+
+        - id: batch-service-route
+          uri: lb://batch-service
+          predicates:
+            - Path=/api/batch/**
+          filters:
+            - StripPrefix=1
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/ # Indirizzo dell'Eureka Server
+  instance:
+    preferIpAddress: true # Registra l'IP invece dell'hostname con Eureka

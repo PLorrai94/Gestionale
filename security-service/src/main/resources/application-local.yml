@@ -1,0 +1,69 @@
+# src/main/resources/application.yml
+
+# === Spring Application Settings ===
+spring:
+    application:
+        name: security-service # Nome del servizio per la registrazione su Eureka
+
+    # === Database Connection Configuration for Application (JPA/Hibernate) ===
+    datasource:
+        url: jdbc:oracle:thin:@localhost:1521/XEPDB1
+        username: security_user                     # Questo utente gestirà le operazioni CRUD dell'applicazione
+        password: SECURITYAPP
+        driver-class-name: oracle.jdbc.OracleDriver
+        hikari:
+            schema: GESTIONALE_OWNER                  # Lo schema predefinito per le tabelle gestite da JPA
+
+    # === JPA (Hibernate) Configuration ===
+    jpa:
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.OracleDialect
+                format_sql: true
+                default_schema: GESTIONALE_OWNER        # Lo schema predefinito per Hibernate
+        show-sql: true # Mostra le query SQL generate da Hibernate nel log
+
+    # === Flyway Database Migration Configuration ===
+    flyway:
+        enabled: true # Lascia a true per abilitare Flyway e le migrazioni all'avvio
+        baseline-on-migrate: false # Crea la tabella di history di Flyway se non esiste e la allinea
+        locations: classpath:db/migration # Percorso delle tue script di migrazione SQL
+        url: jdbc:oracle:thin:@localhost:1521/XEPDB1 # Connessione di Flyway allo stesso PDB
+        user: GESTIONALE_OWNER                  # Utente con privilegi DDL per le migrazioni
+        password: GESTIONALE_PASS                   # Password verificata con successo
+        schemas: GESTIONALE_OWNER                   # Lo schema in cui Flyway gestirà le tabelle (incluso flyway_schema_history)
+
+# === Embedded Web Server (Tomcat) Configuration ===
+server:
+    port: 8080 # Porta su cui l'applicazione Spring Boot sarà accessibile
+
+# === Eureka Client Configuration ===
+eureka:
+    client:
+        serviceUrl:
+            defaultZone: http://localhost:8761/eureka/ # URL del Discovery Server (Eureka Server)
+    instance:
+        hostname: localhost # L'hostname con cui il servizio si registra su Eureka
+        # preferIpAddress: true # Decommenta se preferisci che il servizio si registri con il suo indirizzo IP anziché l'hostname
+
+# === JWT (JSON Web Token) Configuration (example, adjust as needed) ===
+application:
+    security:
+        jwt:
+            secret-key: aG93LXN1cGVyLXNlY3JldC1rZXktZm9yLWhzMjU2LXRlc3QtY2FzZQ== # Base64 di "This-is-my-secret-key-hs256!"
+            expiration: 3600000 # 1 ora in millisecondi
+
+# === Logging Configuration for Debugging ===
+logging:
+    level:
+        root: INFO
+        org.springframework.jdbc: DEBUG # Dettagli sulle operazioni JDBC di Spring
+        org.flywaydb: DEBUG # Dettagli sul processo di migrazione di Flyway
+        com.zaxxer.hikari: DEBUG # Dettagli sul pool di connessioni HikariCP
+        org.hibernate.orm.jdbc.connections.internal: DEBUG # Dettagli sulle connessioni interne di Hibernate
+        com.PierLorrai.Gestionale: DEBUG # Per vedere i log della tua applicazione
+        org.springframework.security: DEBUG
+        org.springframework.web: DEBUG
+        # Aggiungi livelli di logging per Eureka Client se vuoi vedere più dettagli sulla registrazione
+        com.netflix.eureka: DEBUG
+        org.springframework.cloud.netflix.eureka: DEBUG

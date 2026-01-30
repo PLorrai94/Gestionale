@@ -1,0 +1,11 @@
+server:
+  port: 8761 # Porta standard per Eureka Server. Puoi scegliere un'altra, ma questa è la convenzione.
+
+eureka:
+  instance:
+    hostname: localhost # Il nome host del server Eureka
+  client:
+    registerWithEureka: false # Il server Eureka non deve registrarsi a se stesso
+    fetchRegistry: false      # Il server Eureka non ha bisogno di recuperare il registro da se stesso
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/ # URL di Eureka per i client
