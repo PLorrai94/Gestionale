@@ -8,7 +8,7 @@ spring:
   datasource:
     url: jdbc:oracle:thin:@oracle-db:1521/XEPDB1
     username: MANAGEMENT_USER                    # Utente con accesso in sola lettura/scrittura
-    password: MANAGEMENTPASS
+    password: ${SPRING_DATASOURCE_PASSWORD:changeme}
     driver-class-name: oracle.jdbc.OracleDriver
     hikari:
       schema: GESTIONALE_OWNER                   # Schema logico del pool
@@ -42,6 +42,11 @@ logging:
     com.zaxxer.hikari: DEBUG
     org.hibernate.orm.jdbc.connections.internal: DEBUG
     com.PierLorrai.Gestionale: DEBUG
+
+application:
+  security:
+    jwt:
+      secret-key: ${JWT_SECRET_KEY:changeme}
 
 management:
   metrics:

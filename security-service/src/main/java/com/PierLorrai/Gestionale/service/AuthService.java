@@ -22,6 +22,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -67,8 +69,30 @@ public class AuthService {
         return new AuthResponse(jwtToken, savedUser.getUsername(), savedUser.getEmail(), savedUser.getId());
     }
 
+    @Transactional
     public AuthResponse authenticate(UserLoginRequest request) {
         log.info("Attempting to authenticate user: {}", request.getUsername());
+
+        User user = userRepository.findByUsername(request.getUsername())
+                .orElseThrow(() -> {
+                    log.warn("User {} not found.", request.getUsername());
+                    return new UsernameNotFoundException("Invalid credentials for user: " + request.getUsername());
+                });
+
+        // Check if the account is locked
+        if (!user.isAccountNonLocked()) {
+            if (user.getLockedUntil() != null && user.getLockedUntil().isBefore(LocalDateTime.now())) {
+                // Lock period expired, unlock the account
+                user.setAccountNonLocked(true);
+                user.setFailedLoginAttempts(0);
+                user.setLockedUntil(null);
+                userRepository.save(user);
+            } else {
+                log.warn("Account locked for user: {}", request.getUsername());
+                throw new UsernameNotFoundException("Account is locked. Try again later.");
+            }
+        }
+
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -78,14 +102,22 @@ public class AuthService {
             );
         } catch (org.springframework.security.core.AuthenticationException e) {
             log.warn("Authentication failed for user {}: {}", request.getUsername(), e.getMessage());
+            int attempts = user.getFailedLoginAttempts() + 1;
+            user.setFailedLoginAttempts(attempts);
+            if (attempts >= 5) {
+                user.setAccountNonLocked(false);
+                user.setLockedUntil(LocalDateTime.now().plusMinutes(30));
+                log.warn("Account locked for user {} after {} failed attempts.", request.getUsername(), attempts);
+            }
+            userRepository.save(user);
             throw new UsernameNotFoundException("Invalid credentials for user: " + request.getUsername());
         }
 
-        User user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> {
-                    log.error("Authenticated user {} not found in repository.", request.getUsername());
-                    return new UsernameNotFoundException("User not found after authentication.");
-                });
+        // Successful authentication: reset failed attempts
+        if (user.getFailedLoginAttempts() > 0) {
+            user.setFailedLoginAttempts(0);
+            userRepository.save(user);
+        }
 
         var jwtToken = jwtService.generateToken(user);
         log.info("User {} authenticated successfully.", request.getUsername());

@@ -1,6 +1,9 @@
 package com.PierLorrai.Gestionale.management_service.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,15 +23,23 @@ public class Customer {
     @Column(name = "ID")
     private Long id;
 
+    @NotBlank
+    @Size(max = 100)
     @Column(name = "FIRST_NAME", nullable = false)
     private String firstName;
 
+    @NotBlank
+    @Size(max = 100)
     @Column(name = "LAST_NAME", nullable = false)
     private String lastName;
 
+    @NotBlank
+    @Email
+    @Size(max = 150)
     @Column(name = "EMAIL", unique = true, nullable = false)
     private String email;
 
+    @Size(max = 30)
     @Column(name = "PHONE_NUMBER")
     private String phoneNumber;
 }

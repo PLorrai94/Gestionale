@@ -6,12 +6,12 @@ spring:
     name: batch-service
   datasource:
     url: jdbc:oracle:thin:@localhost:1521/XEPDB1 # Assicurati che corrisponda al tuo DB Docker
-    username: SYSTEM
-    password: yourStrongPassword! # Usa la tua password
+    username: ${SPRING_DATASOURCE_USERNAME:BATCH_USER}
+    password: ${SPRING_DATASOURCE_PASSWORD:yourStrongPassword!}
     driver-class-name: oracle.jdbc.OracleDriver
   jpa:
     hibernate:
-      ddl-auto: update # ATTENZIONE: SOLO per sviluppo! In produzione: 'none' o 'validate'.
+      ddl-auto: validate
     show-sql: true
     properties:
       hibernate:
@@ -21,6 +21,11 @@ spring:
       initialize-schema: always # Spring Batch creerà le tabelle necessarie per il JobRepository al primo avvio
     job:
       enabled: false # Disabilita l'auto-esecuzione di tutti i job all'avvio, li lanceremo manualmente
+
+application:
+  security:
+    jwt:
+      secret-key: ${JWT_SECRET_KEY:aG93LXN1cGVyLXNlY3JldC1rZXktZm9yLWhzMjU2LXRlc3QtY2FzZQ==}
 
 eureka:
   client:

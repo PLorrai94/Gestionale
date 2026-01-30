@@ -1,6 +1,7 @@
 package com.PierLorrai.Gestionale.management_service.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,16 +25,20 @@ public class Order {
     @Column(name = "ID")
     private Long id;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY) // Molti ordini per un cliente, caricamento pigro
     @JoinColumn(name = "CUSTOMER_ID", nullable = false) // Colonna FK per il cliente
     private Customer customer;
 
+    @NotNull
     @Column(name = "ORDER_DATE", nullable = false)
     private LocalDateTime orderDate;
 
+    @NotNull
     @Column(name = "TOTAL_AMOUNT", nullable = false, precision = 10, scale = 2)
     private BigDecimal totalAmount;
 
+    @NotNull
     @Column(name = "STATUS", nullable = false)
     private String status; // Es: PENDING, COMPLETED, CANCELLED
 

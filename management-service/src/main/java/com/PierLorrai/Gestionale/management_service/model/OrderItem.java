@@ -1,11 +1,14 @@
 package com.PierLorrai.Gestionale.management_service.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import com.fasterxml.jackson.annotation.JsonIgnore; // Importante per evitare cicli infiniti in JSON
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.math.BigDecimal;
 
@@ -28,13 +31,18 @@ public class OrderItem {
     @JsonIgnore // Evita che OrderItem tenti di serializzare l'intero oggetto Order, prevenendo cicli infiniti
     private Order order;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PRODUCT_ID", nullable = false)
     private Product product;
 
+    @NotNull
+    @Positive
     @Column(name = "QUANTITY", nullable = false)
     private Integer quantity;
 
+    @NotNull
+    @DecimalMin(value = "0.01")
     @Column(name = "UNIT_PRICE", nullable = false, precision = 10, scale = 2)
     private BigDecimal unitPrice;
 }

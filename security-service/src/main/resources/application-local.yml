@@ -9,7 +9,7 @@ spring:
     datasource:
         url: jdbc:oracle:thin:@localhost:1521/XEPDB1
         username: security_user                     # Questo utente gestirà le operazioni CRUD dell'applicazione
-        password: SECURITYAPP
+        password: ${SPRING_DATASOURCE_PASSWORD:SECURITYAPP}
         driver-class-name: oracle.jdbc.OracleDriver
         hikari:
             schema: GESTIONALE_OWNER                  # Lo schema predefinito per le tabelle gestite da JPA
@@ -30,7 +30,7 @@ spring:
         locations: classpath:db/migration # Percorso delle tue script di migrazione SQL
         url: jdbc:oracle:thin:@localhost:1521/XEPDB1 # Connessione di Flyway allo stesso PDB
         user: GESTIONALE_OWNER                  # Utente con privilegi DDL per le migrazioni
-        password: GESTIONALE_PASS                   # Password verificata con successo
+        password: ${FLYWAY_PASSWORD:GESTIONALE_PASS}                   # Password verificata con successo
         schemas: GESTIONALE_OWNER                   # Lo schema in cui Flyway gestirà le tabelle (incluso flyway_schema_history)
 
 # === Embedded Web Server (Tomcat) Configuration ===
@@ -50,7 +50,7 @@ eureka:
 application:
     security:
         jwt:
-            secret-key: aG93LXN1cGVyLXNlY3JldC1rZXktZm9yLWhzMjU2LXRlc3QtY2FzZQ== # Base64 di "This-is-my-secret-key-hs256!"
+            secret-key: ${JWT_SECRET_KEY:aG93LXN1cGVyLXNlY3JldC1rZXktZm9yLWhzMjU2LXRlc3QtY2FzZQ==}
             expiration: 3600000 # 1 ora in millisecondi
 
 # === Logging Configuration for Debugging ===
