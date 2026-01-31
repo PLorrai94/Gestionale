@@ -1,4 +1,3 @@
-// D:/Progetti/Git/Gestionale/security-service/src/main/java/com/PierLorrai/Gestionale/controller/UserController.java
 package com.PierLorrai.Gestionale.controller;
 
 import com.PierLorrai.Gestionale.exception.UserNotFoundException;
@@ -8,12 +7,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -27,9 +27,9 @@ public class UserController {
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<User>> getAllUsers() {
+    public ResponseEntity<Page<User>> getAllUsers(Pageable pageable) {
         log.info("Request to get all users.");
-        return ResponseEntity.ok(userService.getAllUsers());
+        return ResponseEntity.ok(userService.getAllUsers(pageable));
     }
 
     @GetMapping("/{id}")
@@ -42,10 +42,10 @@ public class UserController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')") // Di solito la creazione utenti è solo per admin o tramite endpoint /auth/register
-    public ResponseEntity<User> createUser(@Valid @RequestBody User user) { // Parametro User direttamente per semplicità, puoi usare DTO
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
         log.info("Request to create user: {}", user.getUsername());
-        User createdUser = userService.createUser(user); // CHIAMATA AGGIUSTATA
+        User createdUser = userService.createUser(user);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
@@ -53,7 +53,7 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN') or (isAuthenticated() and @userSecurity.isCurrentUser(#id))")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @Valid @RequestBody User userDetails) {
         log.info("Request to update user with ID: {}", id);
-        User updatedUser = userService.updateUser(id, userDetails); // CHIAMATA AGGIUSTATA
+        User updatedUser = userService.updateUser(id, userDetails);
         return ResponseEntity.ok(updatedUser);
     }
 
@@ -67,7 +67,7 @@ public class UserController {
 
     @PostMapping("/{userId}/roles")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<User> assignRolesToUser(@PathVariable Long userId, @RequestBody Set<String> roleNames) { // CHIAMATA AGGIUSTATA
+    public ResponseEntity<User> assignRolesToUser(@PathVariable Long userId, @RequestBody Set<String> roleNames) {
         log.info("Request to assign roles {} to user with ID: {}", roleNames, userId);
         User updatedUser = userService.assignRolesToUser(userId, roleNames);
         return ResponseEntity.ok(updatedUser);

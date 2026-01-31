@@ -3,9 +3,10 @@ package com.PierLorrai.Gestionale.management_service.service;
 import com.PierLorrai.Gestionale.management_service.model.Product;
 import com.PierLorrai.Gestionale.management_service.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -14,8 +15,11 @@ public class ProductService {
 
     private final ProductRepository productRepository;
 
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    public Page<Product> getAllProducts(Pageable pageable, String search) {
+        if (search != null && !search.isBlank()) {
+            return productRepository.findByNameContainingIgnoreCase(search, pageable);
+        }
+        return productRepository.findAll(pageable);
     }
 
     public Optional<Product> getProductById(Long id) {

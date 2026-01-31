@@ -1,17 +1,17 @@
-// D:/Progetti/Git/Gestionale/security-service/src/main/java/com/PierLorrai/Gestionale/service/AuthService.java
-package com.PierLorrai.Gestionale.service; // AGGIORNATO
+package com.PierLorrai.Gestionale.service;
 
-import com.PierLorrai.Gestionale.dto.AuthResponse; // AGGIORNATO
-import com.PierLorrai.Gestionale.dto.UserLoginRequest; // AGGIORNATO
-import com.PierLorrai.Gestionale.dto.UserRegistrationRequest; // AGGIORNATO
-import com.PierLorrai.Gestionale.model.Role; // AGGIORNATO
-import com.PierLorrai.Gestionale.model.User; // AGGIORNATO
-import com.PierLorrai.Gestionale.exception.EmailAlreadyExistsException; // AGGIORNATO
-import com.PierLorrai.Gestionale.exception.RoleNotFoundException; // AGGIORNATO
-import com.PierLorrai.Gestionale.exception.UserNotFoundException; // AGGIORNATO
-import com.PierLorrai.Gestionale.exception.UsernameAlreadyExistsException; // AGGIORNATO
-import com.PierLorrai.Gestionale.repository.RoleRepository; // AGGIORNATO
-import com.PierLorrai.Gestionale.repository.UserRepository; // AGGIORNATO
+import com.PierLorrai.Gestionale.dto.AuthResponse;
+import com.PierLorrai.Gestionale.dto.UserLoginRequest;
+import com.PierLorrai.Gestionale.dto.UserRegistrationRequest;
+import com.PierLorrai.Gestionale.model.RefreshToken;
+import com.PierLorrai.Gestionale.model.Role;
+import com.PierLorrai.Gestionale.model.User;
+import com.PierLorrai.Gestionale.exception.EmailAlreadyExistsException;
+import com.PierLorrai.Gestionale.exception.RoleNotFoundException;
+import com.PierLorrai.Gestionale.exception.UserNotFoundException;
+import com.PierLorrai.Gestionale.exception.UsernameAlreadyExistsException;
+import com.PierLorrai.Gestionale.repository.RoleRepository;
+import com.PierLorrai.Gestionale.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +35,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final RefreshTokenService refreshTokenService;
 
     @Transactional
     public AuthResponse register(UserRegistrationRequest request) {
@@ -66,7 +67,9 @@ public class AuthService {
         log.info("User {} registered successfully with ID: {}", savedUser.getUsername(), savedUser.getId());
 
         var jwtToken = jwtService.generateToken(savedUser);
-        return new AuthResponse(jwtToken, savedUser.getUsername(), savedUser.getEmail(), savedUser.getId());
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(savedUser);
+
+        return new AuthResponse(jwtToken, refreshToken.getToken(), savedUser.getUsername(), savedUser.getEmail(), savedUser.getId());
     }
 
     @Transactional
@@ -82,7 +85,6 @@ public class AuthService {
         // Check if the account is locked
         if (!user.isAccountNonLocked()) {
             if (user.getLockedUntil() != null && user.getLockedUntil().isBefore(LocalDateTime.now())) {
-                // Lock period expired, unlock the account
                 user.setAccountNonLocked(true);
                 user.setFailedLoginAttempts(0);
                 user.setLockedUntil(null);
@@ -120,8 +122,10 @@ public class AuthService {
         }
 
         var jwtToken = jwtService.generateToken(user);
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user);
+
         log.info("User {} authenticated successfully.", request.getUsername());
-        return new AuthResponse(jwtToken, user.getUsername(), user.getEmail(), user.getId());
+        return new AuthResponse(jwtToken, refreshToken.getToken(), user.getUsername(), user.getEmail(), user.getId());
     }
 
     @Transactional

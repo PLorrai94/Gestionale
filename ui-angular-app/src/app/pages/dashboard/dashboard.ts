@@ -30,18 +30,19 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     forkJoin({
-      products: this.productService.getAll(),
-      customers: this.customerService.getAll(),
-      orders: this.orderService.getAll()
+      products: this.productService.getAll(0, 1),
+      customers: this.customerService.getAll(0, 1),
+      orders: this.orderService.getAll(0, 100, 'orderDate,desc')
     }).subscribe({
       next: ({ products, customers, orders }) => {
-        this.totalProducts = products.length;
-        this.totalCustomers = customers.length;
-        this.pendingOrders = orders.filter(o => o.status === 'PENDING').length;
-        this.totalRevenue = orders
+        this.totalProducts = products.totalElements;
+        this.totalCustomers = customers.totalElements;
+        const orderList = orders.content;
+        this.pendingOrders = orderList.filter(o => o.status === 'PENDING').length;
+        this.totalRevenue = orderList
           .filter(o => o.status !== 'CANCELLED')
           .reduce((sum, o) => sum + o.totalAmount, 0);
-        this.recentOrders = orders
+        this.recentOrders = orderList
           .sort((a, b) => {
             const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
             const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;

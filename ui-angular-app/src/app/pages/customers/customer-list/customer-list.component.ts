@@ -20,16 +20,31 @@ export class CustomerListComponent implements OnInit {
   private notify = inject(NotificationService);
 
   customers: Customer[] = [];
+  currentPage = 0;
+  pageSize = 20;
+  totalElements = 0;
+  totalPages = 0;
 
   ngOnInit() {
     this.loadCustomers();
   }
 
   loadCustomers() {
-    this.customerService.getAll().subscribe({
-      next: data => this.customers = data,
+    this.customerService.getAll(this.currentPage, this.pageSize).subscribe({
+      next: page => {
+        this.customers = page.content;
+        this.totalElements = page.totalElements;
+        this.totalPages = page.totalPages;
+      },
       error: () => this.notify.show('Errore nel caricamento clienti', 'error')
     });
+  }
+
+  goToPage(page: number) {
+    if (page >= 0 && page < this.totalPages) {
+      this.currentPage = page;
+      this.loadCustomers();
+    }
   }
 
   onEdit(customer: Customer) {

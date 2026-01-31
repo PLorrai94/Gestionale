@@ -7,18 +7,20 @@ import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.math.BigDecimal;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "ORDER_ITEM") // Nome della tabella nel DB Oracle
-public class OrderItem {
+@Table(name = "ORDER_ITEM")
+public class OrderItem extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ORDER_ITEMS_SEQ")
@@ -28,7 +30,7 @@ public class OrderItem {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ORDER_ID", nullable = false)
-    @JsonIgnore // Evita che OrderItem tenti di serializzare l'intero oggetto Order, prevenendo cicli infiniti
+    @JsonIgnore
     private Order order;
 
     @NotNull

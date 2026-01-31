@@ -1,5 +1,6 @@
 package com.PierLorrai.Gestionale.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,10 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthResponse {
-    private String token;
+public class RefreshTokenRequest {
+    @NotBlank
     private String refreshToken;
-    private String username;
-    private String email;
-    private Long id;
 }

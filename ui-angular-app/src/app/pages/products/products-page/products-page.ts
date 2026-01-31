@@ -19,26 +19,37 @@ export class ProductsPageComponent implements OnInit {
 
   allProducts: Product[] = [];
   filteredProducts: Product[] = [];
+  currentPage = 0;
+  pageSize = 20;
+  totalElements = 0;
+  totalPages = 0;
 
   ngOnInit() {
     this.loadProducts();
   }
 
-  loadProducts() {
-    this.productService.getAll().subscribe(data => {
-      this.allProducts = data;
-      this.filteredProducts = data;
+  loadProducts(search?: string) {
+    this.productService.getAll(this.currentPage, this.pageSize, undefined, search).subscribe(page => {
+      this.allProducts = page.content;
+      this.filteredProducts = page.content;
+      this.totalElements = page.totalElements;
+      this.totalPages = page.totalPages;
     });
   }
 
+  goToPage(page: number) {
+    if (page >= 0 && page < this.totalPages) {
+      this.currentPage = page;
+      this.loadProducts();
+    }
+  }
+
   onSearch(query: string) {
+    this.currentPage = 0;
     if (!query) {
-      this.filteredProducts = this.allProducts;
+      this.loadProducts();
     } else {
-      const q = query.toLowerCase();
-      this.filteredProducts = this.allProducts.filter(p =>
-        p.name.toLowerCase().includes(q)
-      );
+      this.loadProducts(query);
     }
   }
 

@@ -8,6 +8,8 @@ import com.PierLorrai.Gestionale.management_service.repository.CustomerRepositor
 import com.PierLorrai.Gestionale.management_service.repository.OrderRepository;
 import com.PierLorrai.Gestionale.management_service.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,28 +26,28 @@ public class OrderService {
     private final CustomerRepository customerRepository;
     private final ProductRepository productRepository;
 
-    public List<Order> getAllOrders() {
-        return orderRepository.findAll();
+    public Page<Order> getAllOrders(Pageable pageable, String search) {
+        if (search != null && !search.isBlank()) {
+            return orderRepository.findByStatusContainingIgnoreCase(search, pageable);
+        }
+        return orderRepository.findAll(pageable);
     }
 
     public Optional<Order> getOrderById(Long id) {
-        // Fetch eager di customer e items per evitare problemi di LazyInitializationException
         return orderRepository.findById(id);
     }
 
-    @Transactional // Garantisce che tutte le operazioni all'interno del metodo siano atomiche
+    @Transactional
     public Order createOrder(Order order) {
-        // 1. Verifica e recupera il Cliente
         Customer customer = customerRepository.findById(order.getCustomer().getId())
                 .orElseThrow(() -> new IllegalArgumentException("Customer not found with id: " + order.getCustomer().getId()));
         order.setCustomer(customer);
 
         order.setOrderDate(LocalDateTime.now());
-        order.setStatus("PENDING"); // Stato iniziale dell'ordine
+        order.setStatus("PENDING");
 
         BigDecimal totalAmount = BigDecimal.ZERO;
 
-        // 2. Elabora gli OrderItem, verifica lo stock e calcola il totale
         if (order.getItems() != null && !order.getItems().isEmpty()) {
             for (OrderItem item : order.getItems()) {
                 Product product = productRepository.findById(item.getProduct().getId())
@@ -55,13 +57,12 @@ public class OrderService {
                     throw new IllegalArgumentException("Insufficient stock for product: " + product.getName());
                 }
 
-                // Aggiorna lo stock del prodotto
                 product.setStock(product.getStock() - item.getQuantity());
-                productRepository.save(product); // Salva il prodotto con stock aggiornato
+                productRepository.save(product);
 
-                item.setProduct(product); // Associa il prodotto gestito da JPA
-                item.setOrder(order); // Associa l'OrderItem all'ordine padre
-                item.setUnitPrice(product.getPrice()); // Imposta il prezzo unitario dal prodotto attuale
+                item.setProduct(product);
+                item.setOrder(order);
+                item.setUnitPrice(product.getPrice());
                 totalAmount = totalAmount.add(product.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
             }
         } else {
@@ -77,12 +78,10 @@ public class OrderService {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Order not found with id: " + id));
 
-        // Qui potresti aggiungere una logica per validare la transizione di stato
         order.setStatus(newStatus);
         return orderRepository.save(order);
     }
 
-    // Potresti voler implementare un metodo per annullare l'ordine e ripristinare lo stock
     @Transactional
     public void cancelOrder(Long id) {
         Order order = orderRepository.findById(id)
@@ -92,7 +91,6 @@ public class OrderService {
             throw new IllegalArgumentException("Order is already cancelled.");
         }
 
-        // Ripristina lo stock per ogni item dell'ordine
         for (OrderItem item : order.getItems()) {
             Product product = item.getProduct();
             product.setStock(product.getStock() + item.getQuantity());

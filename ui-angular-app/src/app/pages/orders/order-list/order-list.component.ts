@@ -18,16 +18,31 @@ export class OrderListComponent implements OnInit {
   private notify = inject(NotificationService);
 
   orders: Order[] = [];
+  currentPage = 0;
+  pageSize = 20;
+  totalElements = 0;
+  totalPages = 0;
 
   ngOnInit() {
     this.loadOrders();
   }
 
   loadOrders() {
-    this.orderService.getAll().subscribe({
-      next: data => this.orders = data,
+    this.orderService.getAll(this.currentPage, this.pageSize).subscribe({
+      next: page => {
+        this.orders = page.content;
+        this.totalElements = page.totalElements;
+        this.totalPages = page.totalPages;
+      },
       error: () => this.notify.show('Errore nel caricamento ordini', 'error')
     });
+  }
+
+  goToPage(page: number) {
+    if (page >= 0 && page < this.totalPages) {
+      this.currentPage = page;
+      this.loadOrders();
+    }
   }
 
   viewDetail(order: Order) {

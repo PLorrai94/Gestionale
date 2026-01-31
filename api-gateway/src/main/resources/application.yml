@@ -38,6 +38,15 @@ spring:
   autoconfigure:
     exclude:
       - org.springframework.boot.actuate.autoconfigure.metrics.SystemMetricsAutoConfiguration
+
+application:
+  security:
+    jwt:
+      secret-key: ${JWT_SECRET_KEY:changeme}
+  rate-limit:
+    replenish-rate: 50
+    burst-capacity: 100
+
 eureka:
   client:
     serviceUrl:

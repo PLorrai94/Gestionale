@@ -20,16 +20,31 @@ export class UserListComponent implements OnInit {
   private notify = inject(NotificationService);
 
   users: User[] = [];
+  currentPage = 0;
+  pageSize = 20;
+  totalElements = 0;
+  totalPages = 0;
 
   ngOnInit() {
     this.loadUsers();
   }
 
   loadUsers() {
-    this.userService.getAll().subscribe({
-      next: data => this.users = data,
+    this.userService.getAll(this.currentPage, this.pageSize).subscribe({
+      next: page => {
+        this.users = page.content;
+        this.totalElements = page.totalElements;
+        this.totalPages = page.totalPages;
+      },
       error: () => this.notify.show('Errore nel caricamento utenti', 'error')
     });
+  }
+
+  goToPage(page: number) {
+    if (page >= 0 && page < this.totalPages) {
+      this.currentPage = page;
+      this.loadUsers();
+    }
   }
 
   onEdit(user: User) {

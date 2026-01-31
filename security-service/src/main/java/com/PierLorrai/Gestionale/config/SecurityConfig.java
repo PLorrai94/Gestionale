@@ -34,7 +34,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authz -> {
                     log.info(">>>> Definizione dei permessi sulle rotte");
                     authz
-                            .requestMatchers("/api/auth/register", "/api/auth/authenticate").permitAll()
+                            .requestMatchers(
+                                    "/api/auth/register",
+                                    "/api/auth/authenticate",
+                                    "/api/auth/refresh"
+                            ).permitAll()
                             .anyRequest().authenticated();
                 })
                 .sessionManagement(session -> {

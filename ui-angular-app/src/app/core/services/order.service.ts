@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Order, OrderStatus } from '../models/order.model';
+import { PageResponse } from '../models/page-response.model';
 
 @Injectable({ providedIn: 'root' })
 export class OrderService {
@@ -9,8 +10,13 @@ export class OrderService {
 
   constructor(private http: HttpClient) {}
 
-  getAll(): Observable<Order[]> {
-    return this.http.get<Order[]>(this.apiUrl);
+  getAll(page = 0, size = 20, sort?: string, search?: string): Observable<PageResponse<Order>> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+    if (sort) params = params.set('sort', sort);
+    if (search) params = params.set('search', search);
+    return this.http.get<PageResponse<Order>>(this.apiUrl, { params });
   }
 
   getById(id: number): Observable<Order> {
@@ -38,6 +44,6 @@ export class OrderService {
   }
 
   getByCustomer(customerId: number): Observable<Order[]> {
-    return this.http.get<Order[]>(`${this.apiUrl}?customerId=${customerId}`);
+    return this.http.get<Order[]>(`${this.apiUrl}/by-customer/${customerId}`);
   }
 }

@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
@@ -12,12 +13,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "ORDERS") // Nome della tabella nel DB Oracle
-public class Order {
+@Table(name = "ORDERS")
+public class Order extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ORDERS_SEQ")
@@ -26,8 +28,8 @@ public class Order {
     private Long id;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY) // Molti ordini per un cliente, caricamento pigro
-    @JoinColumn(name = "CUSTOMER_ID", nullable = false) // Colonna FK per il cliente
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CUSTOMER_ID", nullable = false)
     private Customer customer;
 
     @NotNull
@@ -40,9 +42,8 @@ public class Order {
 
     @NotNull
     @Column(name = "STATUS", nullable = false)
-    private String status; // Es: PENDING, COMPLETED, CANCELLED
+    private String status;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    // Un ordine ha molte OrderItem, cascade ALL per salvare/aggiornare/cancellare item con l'ordine
     private List<OrderItem> items;
 }

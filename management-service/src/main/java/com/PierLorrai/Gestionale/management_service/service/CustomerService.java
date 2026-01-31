@@ -4,9 +4,10 @@ import com.PierLorrai.Gestionale.management_service.exception.DuplicateEmailExce
 import com.PierLorrai.Gestionale.management_service.model.Customer;
 import com.PierLorrai.Gestionale.management_service.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -15,8 +16,13 @@ public class CustomerService {
 
     private final CustomerRepository customerRepository;
 
-    public List<Customer> getAllCustomers() {
-        return customerRepository.findAll();
+    public Page<Customer> getAllCustomers(Pageable pageable, String search) {
+        if (search != null && !search.isBlank()) {
+            return customerRepository
+                    .findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCase(
+                            search, search, search, pageable);
+        }
+        return customerRepository.findAll(pageable);
     }
 
     public Optional<Customer> getCustomerById(Long id) {
