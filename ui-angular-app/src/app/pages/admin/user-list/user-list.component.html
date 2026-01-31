@@ -1,0 +1,39 @@
+<div class="page">
+  <div class="page-header">
+    <h2>Gestione Utenti</h2>
+    <a routerLink="/admin/users/new" class="btn btn-primary">Nuovo Utente</a>
+  </div>
+
+  <table class="data-table" *ngIf="users.length; else noData">
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Ruoli</th>
+        <th>Stato</th>
+        <th>Azioni</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let u of users">
+        <td>{{ u.username }}</td>
+        <td>{{ u.email }}</td>
+        <td>
+          <span class="role-badge" *ngFor="let role of u.roles">{{ role }}</span>
+        </td>
+        <td>
+          <span class="status-badge" [class.active]="u.enabled" [class.locked]="!u.accountNonLocked">
+            {{ !u.accountNonLocked ? 'Bloccato' : (u.enabled ? 'Attivo' : 'Disabilitato') }}
+          </span>
+        </td>
+        <td class="actions">
+          <button class="btn-icon" (click)="onEdit(u)" title="Modifica">&#9998;</button>
+          <button class="btn-icon btn-danger" (click)="onDelete(u)" title="Elimina">&#10005;</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <ng-template #noData>
+    <p class="no-data">Nessun utente trovato.</p>
+  </ng-template>
+</div>

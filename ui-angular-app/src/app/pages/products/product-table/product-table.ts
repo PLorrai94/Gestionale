@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProductService } from '../../../core/services/product.service';
 import { Product } from '../../../core/models/product';
 
 @Component({
@@ -10,12 +9,8 @@ import { Product } from '../../../core/models/product';
   styleUrls: ['./product-table.css'],
   imports: [CommonModule]
 })
-export class ProductTableComponent implements OnInit {
-  products: Product[] = [];
-
-  constructor(private productService: ProductService) {}
-
-  ngOnInit() {
-    this.productService.getAll().subscribe((data: Product[]) => { this.products = data; });
-  }
+export class ProductTableComponent {
+  @Input() products: Product[] = [];
+  @Output() edit = new EventEmitter<Product>();
+  @Output() delete = new EventEmitter<Product>();
 }

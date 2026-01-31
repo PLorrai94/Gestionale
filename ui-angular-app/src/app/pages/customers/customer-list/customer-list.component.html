@@ -1,0 +1,33 @@
+<div class="page">
+  <div class="page-header">
+    <h2>Clienti</h2>
+    <a routerLink="/customers/new" class="btn btn-primary">Nuovo Cliente</a>
+  </div>
+
+  <table class="data-table" *ngIf="customers.length; else noData">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Cognome</th>
+        <th>Email</th>
+        <th>Telefono</th>
+        <th>Azioni</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let c of customers">
+        <td>{{ c.firstName }}</td>
+        <td>{{ c.lastName }}</td>
+        <td>{{ c.email }}</td>
+        <td>{{ c.phoneNumber || '-' }}</td>
+        <td class="actions">
+          <button class="btn-icon" (click)="onEdit(c)" title="Modifica">&#9998;</button>
+          <button class="btn-icon btn-danger" (click)="onDelete(c)" title="Elimina">&#10005;</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <ng-template #noData>
+    <p class="no-data">Nessun cliente trovato.</p>
+  </ng-template>
+</div>

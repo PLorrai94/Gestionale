@@ -1,9 +1,11 @@
-<table class="product-table">
+<table class="product-table" *ngIf="products.length; else noProducts">
   <thead>
     <tr>
       <th>Nome</th>
       <th>Descrizione</th>
       <th>Prezzo</th>
+      <th>Stock</th>
+      <th>Azioni</th>
     </tr>
   </thead>
   <tbody>
@@ -11,6 +13,14 @@
       <td>{{ product.name }}</td>
       <td>{{ product.description }}</td>
       <td>{{ product.price | currency:'EUR' }}</td>
+      <td>{{ product.stock }}</td>
+      <td class="actions">
+        <button class="btn-icon" (click)="edit.emit(product)" title="Modifica">&#9998;</button>
+        <button class="btn-icon btn-danger" (click)="delete.emit(product)" title="Elimina">&#10005;</button>
+      </td>
     </tr>
   </tbody>
 </table>
+<ng-template #noProducts>
+  <p class="no-data">Nessun prodotto trovato.</p>
+</ng-template>
