@@ -4,7 +4,7 @@
 
 Microservices-based ERP system built with Spring Boot 3.x, Oracle Database, Docker, and Spring Cloud (Netflix Eureka).
 
-**Tech Stack:** Java 17, Spring Boot 3.x, Spring Cloud 2025.0.0, Oracle DB (XEPDB1), Flyway, Docker, Angular
+**Tech Stack:** Java 17, Spring Boot 3.x, Spring Cloud 2025.0.0, Oracle DB (FREEPDB1), Flyway, Docker, Angular
 
 ---
 
@@ -167,7 +167,7 @@ Microservices-based ERP system built with Spring Boot 3.x, Oracle Database, Dock
 - Each service has its own `Dockerfile` with correct `EXPOSE` directive
 
 ### Database
-- **Engine:** Oracle Database (XEPDB1)
+- **Engine:** Oracle Database (FREEPDB1)
 - **Schema owner:** GESTIONALE_OWNER (DDL privileges, runs Flyway migrations)
 - **Application users:**
   - `security_user` — Used by security-service for CRUD operations

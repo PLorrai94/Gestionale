@@ -5,7 +5,7 @@ spring:
   application:
     name: batch-service
   datasource:
-    url: jdbc:oracle:thin:@oracle-db:1521/XEPDB1 # Connessione al DB Docker
+    url: jdbc:oracle:thin:@oracle-db:1521/FREEPDB1 # Connessione al DB Docker
     username: ${SPRING_DATASOURCE_USERNAME:BATCH_USER}
     password: ${SPRING_DATASOURCE_PASSWORD:changeme}
     driver-class-name: oracle.jdbc.OracleDriver

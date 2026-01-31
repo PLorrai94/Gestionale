@@ -9,8 +9,10 @@ set -euo pipefail
 # ---------------------------------------------------------------------------
 PROJECT_ROOT="$(cd "$(dirname "$0")" && pwd)"
 COMPOSE_FILE="$PROJECT_ROOT/docker-compose-myapp.yml"
+COMPOSE_DB_FILE="$PROJECT_ROOT/docker-compose-db.yml"
 ENV_FILE="$PROJECT_ROOT/.env"
 ENV_EXAMPLE="$PROJECT_ROOT/.env.example"
+NETWORK_NAME="gestionale_network"
 
 SERVICES=(
   "eureka-server"
@@ -81,6 +83,33 @@ build_angular() {
 }
 
 # ---------------------------------------------------------------------------
+# Network & DB helpers
+# ---------------------------------------------------------------------------
+ensure_network() {
+  if ! docker network inspect "$NETWORK_NAME" &>/dev/null; then
+    info "Creating Docker network: $NETWORK_NAME"
+    docker network create "$NETWORK_NAME"
+  fi
+}
+
+ensure_db() {
+  if docker ps --format '{{.Names}}' | grep -q '^oracle-db$'; then
+    info "Oracle DB container already running."
+    # Make sure it's on the right network
+    if ! docker inspect oracle-db --format '{{json .NetworkSettings.Networks}}' | grep -q "$NETWORK_NAME"; then
+      info "Connecting oracle-db to $NETWORK_NAME..."
+      docker network connect "$NETWORK_NAME" oracle-db 2>/dev/null || true
+    fi
+  else
+    info "Oracle DB not running. Starting via docker-compose-db.yml..."
+    docker compose -f "$COMPOSE_DB_FILE" --env-file "$ENV_FILE" up -d
+    info "Waiting for Oracle DB to become healthy..."
+    docker compose -f "$COMPOSE_DB_FILE" --env-file "$ENV_FILE" up --wait
+    info "Oracle DB is ready."
+  fi
+}
+
+# ---------------------------------------------------------------------------
 # Docker Compose wrappers
 # ---------------------------------------------------------------------------
 compose() {
@@ -89,15 +118,18 @@ compose() {
 
 do_up() {
   ensure_env
+  ensure_network
+  ensure_db
   info "Starting services..."
   compose up --build -d
   info "Services started. Use '$0 --logs' to follow output."
 }
 
 do_down() {
-  info "Stopping services..."
+  info "Stopping application services..."
   compose down
-  info "Services stopped."
+  info "Application services stopped. Oracle DB is still running."
+  info "To stop the DB too: docker compose -f docker-compose-db.yml down"
 }
 
 do_restart() {
@@ -114,9 +146,21 @@ do_status() {
 }
 
 do_clean() {
-  info "Stopping services and removing volumes..."
-  compose down -v
-  info "Clean complete."
+  info "Stopping application services..."
+  compose down
+  info "Application services stopped."
+  warn "Oracle DB was NOT removed. To destroy it and its data:"
+  warn "  docker compose -f docker-compose-db.yml down -v"
+}
+
+do_init_db() {
+  ensure_env
+  ensure_network
+  info "Bootstrapping Oracle DB (one-time setup)..."
+  docker compose -f "$COMPOSE_DB_FILE" --env-file "$ENV_FILE" up -d
+  info "Waiting for Oracle DB to become healthy..."
+  docker compose -f "$COMPOSE_DB_FILE" --env-file "$ENV_FILE" up --wait
+  info "Oracle DB is ready."
 }
 
 # ---------------------------------------------------------------------------
@@ -129,17 +173,19 @@ ${CYAN}Usage:${NC} $0 [OPTIONS]
 ${CYAN}Options:${NC}
   --build          Build Maven + Angular, then docker compose up (default)
   --up             Docker compose up (skip builds)
-  --down           Docker compose down
+  --down           Docker compose down (keeps DB running)
   --restart        Down + up
   --logs           Follow docker compose logs
   --status         Show running containers
-  --clean          Down + remove volumes (destroys data!)
+  --clean          Down application services (keeps DB)
+  --init-db        Bootstrap Oracle DB (one-time setup)
   --skip-maven     Skip Maven builds (Angular + docker only)
   --skip-angular   Skip Angular build (Maven + docker only)
   --help           Show this help
 
 ${CYAN}Examples:${NC}
-  $0                 # full build + deploy
+  $0 --init-db       # first-time: start Oracle DB
+  $0                 # full build + deploy (auto-starts DB if needed)
   $0 --up            # just start containers (jars already built)
   $0 --skip-angular  # rebuild only Java services
   $0 --logs          # tail all service logs
@@ -167,6 +213,7 @@ main() {
       --logs)         action="logs" ;;
       --status)       action="status" ;;
       --clean)        action="clean" ;;
+      --init-db)      action="init-db" ;;
       --skip-maven)   skip_maven=true ;;
       --skip-angular) skip_angular=true ;;
       --help|-h)      usage; exit 0 ;;
@@ -196,6 +243,7 @@ main() {
     logs)     do_logs ;;
     status)   do_status ;;
     clean)    do_clean ;;
+    init-db)  do_init_db ;;
   esac
 }
 

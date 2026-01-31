@@ -1,0 +1,47 @@
+services:
+
+  # ---------------------------------------------------------------------------
+  # Oracle Free Database — ONE-TIME SETUP
+  # ---------------------------------------------------------------------------
+  # Run this file once to bootstrap the database:
+  #
+  #   docker compose -f docker-compose-db.yml --env-file .env up -d
+  #
+  # The database persists via the oracle-data volume. After initial setup,
+  # use docker-compose-myapp.yml for day-to-day work (it does NOT include
+  # the database).
+  #
+  # To destroy and recreate from scratch:
+  #
+  #   docker compose -f docker-compose-db.yml --env-file .env down -v
+  #   docker compose -f docker-compose-db.yml --env-file .env up -d
+  # ---------------------------------------------------------------------------
+  oracle-db:
+    image: gvenzl/oracle-free:23-slim
+    container_name: oracle-db
+    environment:
+      - ORACLE_PASSWORD=${ORACLE_PASSWORD}
+      - GESTIONALE_OWNER_PASSWORD=${GESTIONALE_OWNER_PASSWORD}
+      - SECURITY_DB_PASSWORD=${SECURITY_DB_PASSWORD}
+      - MANAGEMENT_DB_PASSWORD=${MANAGEMENT_DB_PASSWORD}
+      - BATCH_DB_PASSWORD=${BATCH_DB_PASSWORD}
+    ports:
+      - "${ORACLE_PORT:-1521}:1521"
+    volumes:
+      - oracle-data:/opt/oracle/oradata
+      - ./init-db:/container-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "healthcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 60s
+    networks:
+      - gestionale_network
+
+volumes:
+  oracle-data:
+
+networks:
+  gestionale_network:
+    external: true

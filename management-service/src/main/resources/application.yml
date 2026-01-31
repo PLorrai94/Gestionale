@@ -6,7 +6,7 @@ spring:
     name: management-service
 
   datasource:
-    url: jdbc:oracle:thin:@oracle-db:1521/XEPDB1
+    url: jdbc:oracle:thin:@oracle-db:1521/FREEPDB1
     username: MANAGEMENT_USER                    # Utente con accesso in sola lettura/scrittura
     password: ${SPRING_DATASOURCE_PASSWORD:changeme}
     driver-class-name: oracle.jdbc.OracleDriver

@@ -5,6 +5,42 @@ Each entry describes **what** was done, **why**, and which files were affected.
 
 ---
 
+## 2026-01-31 — Automated DB User Creation on First Deploy
+
+### What
+Created init scripts that automatically create all Oracle DB users (GESTIONALE_OWNER, SECURITY_USER, MANAGEMENT_USER, BATCH_USER) with proper grants on first container startup. Replaced the old manual `Script DB` folder.
+
+### Why
+Users had to manually run SQL scripts from the `Script DB` folder after starting the DB — with hardcoded passwords and a missing BATCH_USER. Now `docker-compose-db.yml` mounts `init-db/` into the container's init directory, so user creation happens automatically with passwords from `.env`.
+
+### Changes
+1. **Created `init-db/01_create_users.sh`** — shell script that reads password env vars and creates all 4 DB users with correct grants via sqlplus.
+2. **Created `init-db/02_reset_schema.sql`** — utility script (not auto-run) to wipe GESTIONALE_OWNER schema for a fresh Flyway re-migration.
+3. **Updated `docker-compose-db.yml`** — mounts `./init-db` to `/container-entrypoint-initdb.d`, passes all password env vars to the container.
+
+### Files (3)
+`init-db/01_create_users.sh` (new), `init-db/02_reset_schema.sql` (new), `docker-compose-db.yml`
+
+---
+
+## 2026-01-31 — Split Docker Compose (DB vs App)
+
+### What
+Separated Oracle DB into its own `docker-compose-db.yml` (one-time bootstrap) and removed it from `docker-compose-myapp.yml` (app services only).
+
+### Why
+The existing Oracle DB was already running on the host, causing a port 1521 conflict when `docker compose up` tried to start a second instance. The DB lifecycle is independent from the app services — it should be started once and left running.
+
+### Changes
+1. **Created `docker-compose-db.yml`** — standalone compose for Oracle XE with volume, healthcheck, and `gestionale_network`.
+2. **Updated `docker-compose-myapp.yml`** — removed `oracle-db` service, removed `depends_on: oracle-db` from all services, network set to `external: true` (joins the network created by the DB compose).
+3. **Updated `deploy.sh`** — added `ensure_network` and `ensure_db` helpers (auto-starts DB if not running, connects it to the shared network), added `--init-db` CLI option, `--down` and `--clean` no longer touch the DB.
+
+### Files (3)
+`docker-compose-db.yml` (new), `docker-compose-myapp.yml`, `deploy.sh`
+
+---
+
 ## 2026-01-30 — Deployment Infrastructure Overhaul
 
 ### What

@@ -7,9 +7,9 @@ spring:
 
     # === Database Connection Configuration for Application (JPA/Hibernate) ===
     datasource:
-        # url: jdbc:oracle:thin:@localhost:1521/XEPDB1  <--- originale
+        # url: jdbc:oracle:thin:@localhost:1521/FREEPDB1  <--- originale
         # spring.datasource.url=jdbc:oracle:thin:@oracle-db:1521:XE
-        url: jdbc:oracle:thin:@oracle-db:1521/XEPDB1 # OK: Utilizza il nome del servizio Docker
+        url: jdbc:oracle:thin:@oracle-db:1521/FREEPDB1 # OK: Utilizza il nome del servizio Docker
         username: security_user                     # Questo utente gestirà le operazioni CRUD dell'applicazione
         password: ${SPRING_DATASOURCE_PASSWORD:changeme}
         driver-class-name: oracle.jdbc.OracleDriver
@@ -30,7 +30,7 @@ spring:
         enabled: true # Lascia a true per abilitare Flyway e le migrazioni all'avvio
         baseline-on-migrate: false # Crea la tabella di history di Flyway se non esiste e la allinea
         locations: classpath:db/migration # Percorso delle tue script di migrazione SQL
-        url: jdbc:oracle:thin:@oracle-db:1521/XEPDB1 # OK: Connessione di Flyway allo stesso PDB (utilizza il nome del servizio Docker)
+        url: jdbc:oracle:thin:@oracle-db:1521/FREEPDB1 # OK: Connessione di Flyway allo stesso PDB (utilizza il nome del servizio Docker)
         user: GESTIONALE_OWNER                  # Utente con privilegi DDL per le migrazioni
         password: ${FLYWAY_PASSWORD:changeme}                   # Password verificata con successo
         schemas: GESTIONALE_OWNER                   # Lo schema in cui Flyway gestirà le tabelle (incluso flyway_schema_history)

@@ -1,27 +1,6 @@
 services:
 
   # ---------------------------------------------------------------------------
-  # Oracle XE Database
-  # ---------------------------------------------------------------------------
-  oracle-db:
-    image: gvenzl/oracle-xe:21-slim
-    container_name: oracle-db
-    environment:
-      - ORACLE_PASSWORD=${ORACLE_PASSWORD}
-    ports:
-      - "${ORACLE_PORT:-1521}:1521"
-    volumes:
-      - oracle-data:/opt/oracle/oradata
-    healthcheck:
-      test: ["CMD", "healthcheck.sh"]
-      interval: 30s
-      timeout: 10s
-      retries: 10
-      start_period: 60s
-    networks:
-      - gestionale_network
-
-  # ---------------------------------------------------------------------------
   # Eureka Server — Service Discovery
   # ---------------------------------------------------------------------------
   eureka-server:
@@ -60,8 +39,6 @@ services:
     ports:
       - "${SECURITY_PORT:-8081}:8081"
     depends_on:
-      oracle-db:
-        condition: service_healthy
       eureka-server:
         condition: service_healthy
     networks:
@@ -83,8 +60,6 @@ services:
     ports:
       - "${MANAGEMENT_PORT:-8082}:8082"
     depends_on:
-      oracle-db:
-        condition: service_healthy
       eureka-server:
         condition: service_healthy
     networks:
@@ -106,8 +81,6 @@ services:
     ports:
       - "${BATCH_PORT:-8083}:8083"
     depends_on:
-      oracle-db:
-        condition: service_healthy
       eureka-server:
         condition: service_healthy
     networks:
@@ -148,10 +121,6 @@ services:
     networks:
       - gestionale_network
 
-# =============================================================================
-volumes:
-  oracle-data:
-
 networks:
   gestionale_network:
-    driver: bridge
+    external: true
