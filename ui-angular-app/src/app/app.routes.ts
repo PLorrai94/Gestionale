@@ -109,6 +109,18 @@ export const routes: Routes = [
         canActivate: [authGuard],
         loadComponent: () =>
           import('./pages/admin/user-form/user-form.component').then(m => m.UserFormComponent)
+      },
+      {
+        path: 'batch',
+        canActivate: [authGuard],
+        loadComponent: () =>
+          import('./pages/batch/batch').then(m => m.Batch)
+      },
+      {
+        path: 'reports',
+        canActivate: [authGuard],
+        loadComponent: () =>
+          import('./pages/reports/reports').then(m => m.ReportsComponent)
       }
     ]
   },

@@ -5,6 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * @deprecated Use {@link UserRegistrationRequest} instead for registration.
+ * This class is kept for backward compatibility but should not be used in new code.
+ */
+@Deprecated(since = "2026-01-31", forRemoval = true)
 @Data
 @Builder
 @AllArgsConstructor

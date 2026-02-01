@@ -89,7 +89,7 @@
   border-left: 4px solid #f5c6cb;
 }
 
-button[type="submit"] {
+.submit-btn {
   width: 100%;
   font-size: 1rem;
   padding: 0.9rem;
@@ -103,11 +103,11 @@ button[type="submit"] {
   margin-top: 1rem;
 }
 
-button[type="submit"]:hover:not(:disabled) {
+.submit-btn:hover:not(:disabled) {
   background-color: #5a67d8;
 }
 
-button[type="submit"]:disabled {
+.submit-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }

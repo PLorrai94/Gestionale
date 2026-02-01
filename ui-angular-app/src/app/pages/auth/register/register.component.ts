@@ -1,27 +1,27 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/services/auth';
-import { HttpClientModule } from '@angular/common/http';
-import { fadeIn, heroText } from '../../home/animations';
 import { UserRegistrationRequest } from '../../../core/models/user-registration-request.model';
 
 @Component({
-  standalone: true,
   selector: 'app-register',
-  templateUrl: './register.html',
-  styleUrls: ['./register.css'],
-  animations: [fadeIn, heroText],
-  imports: [CommonModule, ReactiveFormsModule, HttpClientModule]
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
   registerForm: FormGroup;
   loading = false;
-  successMessage: string | null = null;
-  errorMessage: string | null = null;
+  errorMessage = '';
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
+  constructor() {
     this.registerForm = this.fb.group({
       username: ['', [
         Validators.required, 
@@ -40,10 +40,6 @@ export class RegisterComponent {
       lastName: ['', [Validators.maxLength(50)]],
       phoneNumber: ['', [Validators.pattern(/^$|^\+?[0-9\s\-()]{7,20}$/)]]
     }, { validators: this.passwordMatchValidator });
-    
-    if (this.authService.isLoggedIn()) {
-      this.router.navigate(['/dashboard']);
-    }
   }
 
   passwordMatchValidator(g: FormGroup) {
@@ -64,8 +60,7 @@ export class RegisterComponent {
     }
 
     this.loading = true;
-    this.errorMessage = null;
-    this.successMessage = null;
+    this.errorMessage = '';
 
     const request: UserRegistrationRequest = {
       username: this.registerForm.value.username,
@@ -78,19 +73,14 @@ export class RegisterComponent {
     };
 
     this.authService.register(request).subscribe({
-      next: () => {
-        this.successMessage = 'Registrazione avvenuta con successo!';
-        this.errorMessage = null;
+      next: (response) => {
+        // User is automatically logged in by the auth service
+        this.router.navigate(['/dashboard']);
         this.loading = false;
-        setTimeout(() => {
-          this.router.navigate(['/dashboard']);
-        }, 2000);
       },
-      error: (err: any) => {
-        this.errorMessage = err.error?.message || err.message || 'Errore durante la registrazione.';
-        this.successMessage = null;
+      error: (error) => {
+        this.errorMessage = error.error?.message || error.message || 'Registration failed. Please try again.';
         this.loading = false;
-        console.error('Registration error:', err);
       }
     });
   }

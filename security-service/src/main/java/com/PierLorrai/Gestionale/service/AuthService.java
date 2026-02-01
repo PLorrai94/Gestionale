@@ -7,6 +7,7 @@ import com.PierLorrai.Gestionale.model.RefreshToken;
 import com.PierLorrai.Gestionale.model.Role;
 import com.PierLorrai.Gestionale.model.User;
 import com.PierLorrai.Gestionale.exception.EmailAlreadyExistsException;
+import com.PierLorrai.Gestionale.exception.PasswordMismatchException;
 import com.PierLorrai.Gestionale.exception.RoleNotFoundException;
 import com.PierLorrai.Gestionale.exception.UserNotFoundException;
 import com.PierLorrai.Gestionale.exception.UsernameAlreadyExistsException;
@@ -41,6 +42,12 @@ public class AuthService {
     public AuthResponse register(UserRegistrationRequest request) {
         log.info("Attempting to register user: {}", request.getUsername());
 
+        // Validate password confirmation
+        if (!request.getPassword().equals(request.getConfirmPassword())) {
+            log.warn("Registration failed: Password and confirmation do not match for user: {}", request.getUsername());
+            throw new PasswordMismatchException("Password and confirmation do not match");
+        }
+
         if (userRepository.findByUsername(request.getUsername()).isPresent()) {
             log.warn("Registration failed: Username {} already taken.", request.getUsername());
             throw new UsernameAlreadyExistsException("Username " + request.getUsername() + " already taken.");
@@ -60,6 +67,9 @@ public class AuthService {
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
+                .phoneNumber(request.getPhoneNumber())
                 .build();
         user.getRoles().add(userRole);
 

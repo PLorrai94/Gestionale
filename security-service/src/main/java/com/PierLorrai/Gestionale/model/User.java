@@ -40,6 +40,15 @@ public class User implements UserDetails { // IMPLEMENTA UserDetails
     @Column(nullable = false, length = 255)
     private String password;
 
+    @Column(name = "FIRST_NAME", length = 50)
+    private String firstName;
+
+    @Column(name = "LAST_NAME", length = 50)
+    private String lastName;
+
+    @Column(name = "PHONE_NUMBER", length = 20)
+    private String phoneNumber;
+
     @JsonIgnore
     @Column(name = "CREATED_AT", nullable = false, updatable = false)
     private LocalDateTime createdAt;

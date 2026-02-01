@@ -153,3 +153,35 @@
   color: var(--color-subtle);
   font-size: 1.2rem;
 }
+.welcome-message {
+  background: var(--color-surface);
+  padding: 2rem;
+  border-radius: var(--radius-card);
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-md);
+}
+
+.welcome-message p {
+  margin-bottom: 0.5rem;
+  color: var(--color-text);
+}
+
+.logout-btn {
+  background: #dc3545;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  width: 100%;
+}
+
+.logout-btn:hover {
+  background: #c82333;
+}
+
+.logout-btn .action-icon {
+  color: white;
+}
+
+.logout-btn:hover .action-icon {
+  color: white;
+}

@@ -1,75 +1,83 @@
-# Gestionale Microservizi - Java, Spring, Oracle, Docker
+# Gestionale
 
-> Progetto realizzato da uno sviluppatore backend Java come **esercizio di stile e portfolio** per dimostrare competenze architetturali e tecniche nel contesto dei microservizi.  
-> Obiettivo: **inserimento nel curriculum** come progetto dimostrativo.
+Microservices-based ERP platform built with Java Spring Boot, Angular, Oracle Database, and Docker.
 
-## 🧭 Descrizione del Progetto
-
-Questo progetto è una **piattaforma gestionale a microservizi** sviluppata in Java, con Spring Boot, Oracle Database e Docker. L'obiettivo è creare un sistema modulare, sicuro e scalabile, prendendo ispirazione dalle funzionalità essenziali dei moderni software ERP.
-
-## 🏗️ Architettura a Microservizi
-
-### Microservizi Identificati:
-
-- **UI Service**  
-  Gestisce l'interfaccia grafica e le interazioni utente.
-
-- **Management & Processing Service**  
-  Contiene la logica di business principale (utenti, ordini, prodotti, ecc.).
-
-- **Batch Service**  
-  Esegue elaborazioni asincrone pianificate (es. report, aggiornamenti notturni).
-
-- **Security Service**  
-  Gestisce autenticazione, autorizzazione, ruoli e utenti.
-
-## ⚙️ Tecnologie Utilizzate
-
-| Categoria            | Tecnologie                                         |
-|----------------------|----------------------------------------------------|
-| Linguaggio           | Java                                               |
-| Backend Framework    | Spring Boot, Spring Security, Spring Cloud         |
-| Database             | Oracle Database (XE o tramite container Docker)    |
-| API                  | RESTful API, Spring Cloud Gateway                  |
-| Sicurezza            | JWT, Spring Security, Authentication Provider      |
-| Container            | Docker                                             |
-| Orchestrazione (*)   | Kubernetes (opzionale per ambienti avanzati)       |
-| Async Messaging (*)  | Kafka / RabbitMQ (per Batch e disaccoppiamento)    |
-
-> ⚠️ *Le funzionalità contrassegnate con (*) sono opzionali o future espansioni.*
-
-## 🔗 Comunicazione Inter-Servizi
-
-- **RESTful API**: per la comunicazione sincrona tra servizi.
-- **Event-driven** (opzionale): tramite Kafka o RabbitMQ per elaborazioni asincrone.
-
-## 📜 API Gateway
-
-Utilizzo di:
-- **Spring Cloud Gateway** oppure
-- **Netflix Zuul** (per integrazioni con Spring Cloud Netflix)
-
-## 📦 Containerizzazione & DevOps
-
-- Ogni microservizio è **containerizzato con Docker**
-- Definita una struttura per il deployment semplice in ambienti di sviluppo.
-- Futuro supporto per orchestrazione con Kubernetes.
-
-## 🛡️ Sicurezza
-
-- **JWT** per la gestione dei token e accesso sicuro alle API.
-- Ruoli e permessi gestiti tramite Spring Security e database Oracle.
-
-## 📝 Autore
-
-Sviluppato da **PLorrai94**  
-Backend Developer & Appassionato di Architetture Distribuite
-
-Questo progetto è stato realizzato con l'obiettivo di **esercitarmi, migliorare il mio portfolio**, e dimostrare competenze concrete nella progettazione di sistemi enterprise moderni.
+**Author:** PLorrai94 -- Backend Developer
 
 ---
 
-### 📌 Note
+## Architecture
 
-- Il progetto è attualmente **in sviluppo attivo**.
-- L'ambiente di sviluppo utilizza **Maven**, **Docker**, e uno stack Spring full-featured.
+```
+Browser --> nginx (prod) / proxy.conf.json (dev)
+               |
+         api-gateway:8080
+          /       |        \
+security    management    batch
+ :8081       :8082        :8083
+          \       |        /
+         Oracle DB (FREEPDB1)
+               |
+         eureka-server:8761 (service discovery)
+```
+
+## Services
+
+| Service | Port | Description | Status |
+|---|---|---|---|
+| eureka-server | 8761 | Netflix Eureka service discovery registry | Complete |
+| api-gateway | 8080 | Spring Cloud Gateway, routes `/api/**` to downstream services | Partial |
+| security-service | 8081 | JWT auth, user registration, role management, account lockout | Complete |
+| management-service | 8082 | CRUD for Customers, Products, Orders | Complete |
+| batch-service | 8083 | Spring Batch -- processes pending orders | Partial |
+| ui-angular-app | 4200 / 80 | Angular standalone-component SPA | Partial |
+
+Each service has its own documentation:
+- `<service>/STATUS.md` -- current state, endpoints, components
+- `<service>/CHANGELOG.md` -- history of changes
+- `<service>/TASKS.md` -- planned features and improvements
+
+## Tech Stack
+
+| Layer | Technologies |
+|---|---|
+| Backend | Java 17, Spring Boot 3.3.1, Spring Cloud 2023.0.2, Spring Security, Spring Batch |
+| Frontend | Angular 20.1, TypeScript 5.8, RxJS 7.8, Karma/Jasmine |
+| Database | Oracle Free 23 (FREEPDB1), Flyway migrations, Hibernate (validate mode) |
+| Auth | JWT (jjwt 0.11.5, HS256), BCrypt, role-based (USER, ADMIN) |
+| Infra | Docker, Docker Compose (two-file strategy), nginx |
+
+## Quick Start
+
+```bash
+cp .env.example .env           # fill in credentials
+./deploy.sh --init-db          # first time: bootstrap Oracle DB
+./deploy.sh                    # build all + deploy
+```
+
+See [DEPLOY.md](DEPLOY.md) for full deployment options and day-to-day commands.
+
+## Database
+
+Oracle Free 23 with schema owned by `GESTIONALE_OWNER`. Per-service DML users: `security_user`, `MANAGEMENT_USER`, `BATCH_USER`. All DDL is managed by Flyway (15 migrations in `security-service/src/main/resources/db/migration/`). Hibernate runs in `validate` mode only.
+
+## Project Structure
+
+```
+Gestionale/
+  README.md                     This file
+  CLAUDE.md                     AI assistant instructions
+  DEPLOY.md                     Deployment guide
+  .env.example                  Environment variable template
+  deploy.sh                     Build and deploy script
+  docker-compose-db.yml         Oracle DB (one-time)
+  docker-compose-myapp.yml      Application services
+  eureka-server/                Service discovery
+  api-gateway/                  Request routing
+  security-service/             Authentication & authorization
+  management-service/           Business logic CRUD
+  batch-service/                Async processing
+  ui-angular-app/               Angular frontend
+  init-db/                      DB bootstrap scripts
+  terraform/                    IaC (placeholder)
+```

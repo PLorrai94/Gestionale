@@ -1,5 +1,7 @@
 # Deployment Guide
 
+See [README.md](README.md) for project overview and architecture.
+
 ## Prerequisites
 
 - Docker & Docker Compose

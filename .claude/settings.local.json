@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(for f in task_doing.md angular_status.md claude_code.md PROJECT_STATUS.md SERVICES_STATUS.md FUTURE_TASK.md ANGULAR_IMPROVEMENT_PLAN.md CHANGELOG.md security-service/readme.md)",
+      "Bash(do if [ -f \"$f\" ])",
+      "Bash(then echo \"STILL EXISTS: $f\")",
+      "Bash(else echo \"DELETED OK: $f\")",
+      "Bash(fi)",
+      "Bash(done)",
+      "Bash(ls:*)"
+    ]
+  }
+}

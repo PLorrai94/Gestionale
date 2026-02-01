@@ -1,0 +1,123 @@
+<div class="register-container">
+  <h2>Create Account</h2>
+  
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+    
+    <div class="form-group">
+      <label for="username">Username *</label>
+      <input 
+        id="username" 
+        type="text" 
+        formControlName="username" 
+        placeholder="Enter username"
+        [class.invalid]="registerForm.get('username')?.invalid && registerForm.get('username')?.touched">
+      <div class="error" *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched">
+        <span *ngIf="registerForm.get('username')?.errors?.['required']">Username is required</span>
+        <span *ngIf="registerForm.get('username')?.errors?.['minlength']">Username must be at least 3 characters</span>
+        <span *ngIf="registerForm.get('username')?.errors?.['maxlength']">Username cannot exceed 50 characters</span>
+        <span *ngIf="registerForm.get('username')?.errors?.['pattern']">
+          Username must start and end with a letter or number, and can only contain letters, numbers, dots, underscores, and hyphens in between
+        </span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email *</label>
+      <input 
+        id="email" 
+        type="email" 
+        formControlName="email" 
+        placeholder="Enter email"
+        [class.invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+      <div class="error" *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+        <span *ngIf="registerForm.get('email')?.errors?.['required']">Email is required</span>
+        <span *ngIf="registerForm.get('email')?.errors?.['email']">Invalid email format</span>
+        <span *ngIf="registerForm.get('email')?.errors?.['maxlength']">Email cannot exceed 100 characters</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password *</label>
+      <input 
+        id="password" 
+        type="password" 
+        formControlName="password" 
+        placeholder="Enter password"
+        [class.invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+      <div class="error" *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+        <span *ngIf="registerForm.get('password')?.errors?.['required']">Password is required</span>
+        <span *ngIf="registerForm.get('password')?.errors?.['minlength']">Password must be at least 8 characters</span>
+        <span *ngIf="registerForm.get('password')?.errors?.['pattern']">
+          Password must contain at least one digit, one lowercase letter, one uppercase letter, and no whitespace
+        </span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="confirmPassword">Confirm Password *</label>
+      <input 
+        id="confirmPassword" 
+        type="password" 
+        formControlName="confirmPassword" 
+        placeholder="Confirm password"
+        [class.invalid]="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched">
+      <div class="error" *ngIf="registerForm.get('confirmPassword')?.errors?.['required']">
+        Please confirm your password
+      </div>
+      <div class="error" *ngIf="registerForm.errors?.['mismatch'] && registerForm.get('confirmPassword')?.touched">
+        Passwords do not match
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="firstName">First Name</label>
+      <input 
+        id="firstName" 
+        type="text" 
+        formControlName="firstName" 
+        placeholder="Enter first name (optional)">
+      <div class="error" *ngIf="registerForm.get('firstName')?.errors?.['maxlength']">
+        First name cannot exceed 50 characters
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="lastName">Last Name</label>
+      <input 
+        id="lastName" 
+        type="text" 
+        formControlName="lastName" 
+        placeholder="Enter last name (optional)">
+      <div class="error" *ngIf="registerForm.get('lastName')?.errors?.['maxlength']">
+        Last name cannot exceed 50 characters
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="phoneNumber">Phone Number</label>
+      <input 
+        id="phoneNumber" 
+        type="tel" 
+        formControlName="phoneNumber" 
+        placeholder="Enter phone number (optional)">
+      <div class="error" *ngIf="registerForm.get('phoneNumber')?.errors?.['pattern']">
+        Invalid phone number format. Use international format with optional + prefix
+      </div>
+    </div>
+
+    <div class="error-message" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <button 
+      type="submit" 
+      class="submit-btn" 
+      [disabled]="registerForm.invalid || loading">
+      {{ loading ? 'Creating Account...' : 'Create Account' }}
+    </button>
+
+    <div class="login-link">
+      Already have an account? <a routerLink="/auth/login">Sign In</a>
+    </div>
+  </form>
+</div>

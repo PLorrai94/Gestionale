@@ -6,18 +6,13 @@ import { Router } from '@angular/router';
 
 import { UserLoginRequest } from '../models/user-login-request.model';
 import { AuthResponse } from '../models/auth-response.model';
-
-export interface RegisterPayload {
-  username: string;
-  email: string;
-  password: string;
-}
+import { UserRegistrationRequest } from '../models/user-registration-request.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = '/api/security/auth';
+  private apiUrl = '/api/auth';
 
   private currentUserSubject: BehaviorSubject<AuthResponse | null>;
   public currentUser: Observable<AuthResponse | null>;
@@ -34,11 +29,31 @@ export class AuthService {
     return this.currentUserSubject.value;
   }
 
-  register(payload: RegisterPayload): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, payload).pipe(
-      tap(() => console.log('Registration successful!')),
+  register(request: UserRegistrationRequest): Observable<AuthResponse> {
+    console.log('AuthService: Sending registration request to', `${this.apiUrl}/register`, 'with data:', request);
+    return this.http.post<AuthResponse>(`${this.apiUrl}/register`, request, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).pipe(
+      tap(response => {
+        console.log('Registration successful! Response:', response);
+        // Auto-login after successful registration
+        const authData: AuthResponse = {
+          token: response.token,
+          refreshToken: response.refreshToken,
+          username: response.username,
+          email: response.email,
+          id: response.id
+        };
+        localStorage.setItem('currentUser', JSON.stringify(authData));
+        this.currentUserSubject.next(authData);
+      }),
       catchError(error => {
         console.error('Registration failed:', error);
+        console.error('Error status:', error.status);
+        console.error('Error message:', error.message);
+        console.error('Error headers:', error.headers);
         throw error;
       })
     );
