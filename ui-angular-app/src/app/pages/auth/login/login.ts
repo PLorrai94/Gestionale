@@ -1,7 +1,6 @@
-// src/app/components/login/login.component.ts
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { HttpErrorResponse, HttpClientModule } from '@angular/common/http';
+import { Router, RouterModule } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../core/services/auth';
@@ -14,11 +13,7 @@ import { UserLoginRequest } from '../../../core/models/user-login-request.model'
   templateUrl: './login.html',
   styleUrls: ['./login.css'],
   animations: [fadeIn, heroText],
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    HttpClientModule
-  ]
+  imports: [CommonModule, ReactiveFormsModule, RouterModule]
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
@@ -30,12 +25,9 @@ export class LoginComponent implements OnInit {
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private router: Router
-  ) {
-    
-  }
+  ) {}
 
   ngOnInit(): void {
-
     if (this.authService.isLoggedIn()) {
       this.router.navigate(['/dashboard']);
       return;
@@ -45,7 +37,7 @@ export class LoginComponent implements OnInit {
       username: ['', Validators.required],
       password: ['', Validators.required]
     });
-}
+  }
 
   get f() {
     return this.loginForm.controls;
@@ -67,21 +59,15 @@ export class LoginComponent implements OnInit {
 
     this.authService.login(loginData).subscribe({
       next: () => {
-        // Ritarda leggermente la navigazione per assicurarti che currentUserSubject sia aggiornato
-        setTimeout(() => {
-          this.router.navigate(['/dashboard']).then(success => {
-            console.log('NAVIGAZIONE:', success ? 'OK' : 'FALLITA');
-          });
-        }, 0);
+        this.router.navigate(['/dashboard']);
       },
       error: (error: HttpErrorResponse) => {
         this.loading = false;
         if (error.status === 401 || error.status === 400) {
-          this.errorMessage = 'Credenziali non valide. Riprova.';
+          this.errorMessage = 'Invalid credentials. Please try again.';
         } else {
-          this.errorMessage = 'Errore imprevisto. Riprova più tardi.';
+          this.errorMessage = 'An unexpected error occurred. Please try again later.';
         }
-        console.error('Errore login:', error);
       }
     });
   }

@@ -14,22 +14,12 @@
   <div class="hero-gradient"></div>
   <div class="container">
     <div class="hero-content" @heroText>
-      <h1>Gestisci i Tuoi Microservizi con Semplicità</h1>
+      <h1>Manage Your Microservices with Ease</h1>
       <p class="subtitle">
-        Una dashboard intuitiva per monitorare e interagire con la tua architettura a microservizi.
+        An intuitive dashboard to monitor and interact with your microservices architecture.
       </p>
       <div class="hero-buttons">
-        <button class="btn btn-primary" (click)="scrollToFeatures()">Scopri i Servizi</button>
-        <a href="https://github.com/your-username/your-microservices-project" target="_blank" class="btn btn-secondary">
-          <i class="lucide lucide-github"></i>
-          GitHub
-        </a>
-      </div>
-      <div class="stats-grid" @staggerCards>
-        <div class="stat-card" *ngFor="let stat of stats">
-          <span class="stat-value">{{ stat.value | number:'1.0-0' }}</span>
-          <span class="stat-label">{{ stat.label }}</span>
-        </div>
+        <button class="btn btn-primary" (click)="scrollToFeatures()">Explore Services</button>
       </div>
     </div>
   </div>
@@ -37,15 +27,8 @@
 
 <section class="features-section" #featuresSection @staggerCards>
   <div class="container">
-    <h2>I Tuoi Servizi</h2>
-    <p class="section-subtitle">Esplora i microservizi che compongono la tua applicazione.</p>
-
-    <div *ngIf="batchMessage" class="message success-message">
-        <p>{{ batchMessage }}</p>
-    </div>
-    <div *ngIf="batchErrorMessage" class="message error-message">
-        <p>{{ batchErrorMessage }}</p>
-    </div>
+    <h2>Your Services</h2>
+    <p class="section-subtitle">Explore the microservices that make up your application.</p>
 
     <div class="features-grid">
       <div class="card" *ngFor="let feature of features; trackBy: trackByFeature">
@@ -58,9 +41,6 @@
           <a *ngIf="feature.link" [routerLink]="feature.link" class="card-arrow">
             <i class="lucide lucide-arrow-right"></i>
           </a>
-          <button *ngIf="feature.action" (click)="feature.action()" class="card-button">
-            Avvia <i class="lucide lucide-play"></i>
-          </button>
         </div>
       </div>
     </div>

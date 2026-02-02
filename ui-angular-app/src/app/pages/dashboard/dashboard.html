@@ -1,1 +1,49 @@
-<p>dashboard works!</p>
+<div class="dashboard">
+  <h2>Welcome, {{ username }}</h2>
+
+  @if (loading) {
+    <div class="loading">Loading dashboard data...</div>
+  }
+  @if (error) {
+    <div class="error-message">{{ error }}</div>
+  }
+
+  @if (!loading && !error) {
+    <div class="stats-grid">
+      <a routerLink="/products" class="stat-card">
+        <span class="stat-value">{{ stats.products }}</span>
+        <span class="stat-label">Products</span>
+      </a>
+      <a routerLink="/customers" class="stat-card">
+        <span class="stat-value">{{ stats.customers }}</span>
+        <span class="stat-label">Customers</span>
+      </a>
+      <a routerLink="/orders" class="stat-card">
+        <span class="stat-value">{{ stats.orders }}</span>
+        <span class="stat-label">Orders</span>
+      </a>
+    </div>
+
+    <div class="quick-actions">
+      <h3>Quick Actions</h3>
+      <div class="actions-grid">
+        <a routerLink="/products/new" class="action-card">
+          <span class="action-icon">+</span>
+          <span>New Product</span>
+        </a>
+        <a routerLink="/customers/new" class="action-card">
+          <span class="action-icon">+</span>
+          <span>New Customer</span>
+        </a>
+        <a routerLink="/orders/new" class="action-card">
+          <span class="action-icon">+</span>
+          <span>New Order</span>
+        </a>
+        <a routerLink="/batch" class="action-card">
+          <span class="action-icon">&#9881;</span>
+          <span>Batch Jobs</span>
+        </a>
+      </div>
+    </div>
+  }
+</div>

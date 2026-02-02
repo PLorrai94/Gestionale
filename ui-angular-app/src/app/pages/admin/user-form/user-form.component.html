@@ -1,33 +1,33 @@
 <div class="form-page">
-  <h2>{{ isEditMode ? 'Modifica Utente' : 'Nuovo Utente' }}</h2>
+  <h2>{{ isEditMode ? 'Edit User' : 'New User' }}</h2>
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()" class="entity-form">
     <div class="form-group">
       <label for="username">Username</label>
       <input id="username" formControlName="username" />
-      <span class="error" *ngIf="form.get('username')?.touched && form.get('username')?.invalid">Campo obbligatorio</span>
+      <span class="error" *ngIf="form.get('username')?.touched && form.get('username')?.invalid">Required field</span>
     </div>
 
     <div class="form-group">
       <label for="email">Email</label>
       <input id="email" type="email" formControlName="email" />
-      <span class="error" *ngIf="form.get('email')?.touched && form.get('email')?.invalid">Email non valida</span>
+      <span class="error" *ngIf="form.get('email')?.touched && form.get('email')?.invalid">Invalid email</span>
     </div>
 
     <div class="form-group checkbox-group" *ngIf="isEditMode">
       <label>
-        <input type="checkbox" formControlName="enabled" /> Abilitato
+        <input type="checkbox" formControlName="enabled" /> Enabled
       </label>
     </div>
 
     <div class="form-group checkbox-group" *ngIf="isEditMode">
       <label>
-        <input type="checkbox" formControlName="accountNonLocked" /> Account Non Bloccato
+        <input type="checkbox" formControlName="accountNonLocked" /> Account Not Locked
       </label>
     </div>
 
     <div class="form-group">
-      <label>Ruoli</label>
+      <label>Roles</label>
       <div class="roles-list">
         <label *ngFor="let role of availableRoles" class="role-checkbox">
           <input type="checkbox" [checked]="isRoleSelected(role)" (change)="toggleRole(role)" />
@@ -37,8 +37,8 @@
     </div>
 
     <div class="form-actions">
-      <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Salva</button>
-      <a routerLink="/admin/users" class="btn btn-secondary">Annulla</a>
+      <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Save</button>
+      <a routerLink="/admin/users" class="btn btn-secondary">Cancel</a>
     </div>
   </form>
 </div>

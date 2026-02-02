@@ -1,1 +1,26 @@
-<p>batch works!</p>
+<div class="batch-page">
+  <h2>Batch Processing</h2>
+  <p class="description">Trigger batch processing jobs to handle pending orders.</p>
+
+  <div class="batch-controls">
+    <button class="btn btn-primary" (click)="startBatchJob()" [disabled]="loading">
+      @if (loading) {
+        <span>Processing...</span>
+      } @else {
+        <span>Start Batch Job</span>
+      }
+    </button>
+  </div>
+
+  @if (lastResult) {
+    <div class="result-message success">
+      <strong>Success:</strong> {{ lastResult }}
+    </div>
+  }
+
+  @if (lastError) {
+    <div class="result-message error">
+      <strong>Error:</strong> {{ lastError }}
+    </div>
+  }
+</div>

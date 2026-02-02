@@ -1,7 +1,7 @@
 <div class="page">
   <div class="page-header">
-    <h2>Gestione Utenti</h2>
-    <a routerLink="/admin/users/new" class="btn btn-primary">Nuovo Utente</a>
+    <h2>User Management</h2>
+    <a routerLink="/admin/users/new" class="btn btn-primary">New User</a>
   </div>
 
   <table class="data-table" *ngIf="users.length; else noData">
@@ -9,9 +9,9 @@
       <tr>
         <th>Username</th>
         <th>Email</th>
-        <th>Ruoli</th>
-        <th>Stato</th>
-        <th>Azioni</th>
+        <th>Roles</th>
+        <th>Status</th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -23,17 +23,17 @@
         </td>
         <td>
           <span class="status-badge" [class.active]="u.enabled" [class.locked]="!u.accountNonLocked">
-            {{ !u.accountNonLocked ? 'Bloccato' : (u.enabled ? 'Attivo' : 'Disabilitato') }}
+            {{ !u.accountNonLocked ? 'Locked' : (u.enabled ? 'Active' : 'Disabled') }}
           </span>
         </td>
         <td class="actions">
-          <button class="btn-icon" (click)="onEdit(u)" title="Modifica">&#9998;</button>
-          <button class="btn-icon btn-danger" (click)="onDelete(u)" title="Elimina">&#10005;</button>
+          <button class="btn-icon" (click)="onEdit(u)" title="Edit">&#9998;</button>
+          <button class="btn-icon btn-danger" (click)="onDelete(u)" title="Delete">&#10005;</button>
         </td>
       </tr>
     </tbody>
   </table>
   <ng-template #noData>
-    <p class="no-data">Nessun utente trovato.</p>
+    <p class="no-data">No users found.</p>
   </ng-template>
 </div>

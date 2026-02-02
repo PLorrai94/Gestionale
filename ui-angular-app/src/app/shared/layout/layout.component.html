@@ -4,7 +4,7 @@
   <div [class.sidebar-collapsed]="!isSidebarOpen"
        [class.sidebar-open]="isSidebarOpen"
        class="layout-content-area">
-    <app-profile-sidebar [collapsed]="!isSidebarOpen" (toggle)="toggleSidebar()"></app-profile-sidebar>
+    <app-sidebar [collapsed]="!isSidebarOpen" (toggle)="toggleSidebar()"></app-sidebar>
 
     <main class="main-content">
       <router-outlet></router-outlet>

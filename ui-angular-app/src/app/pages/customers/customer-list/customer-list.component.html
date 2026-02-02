@@ -1,17 +1,17 @@
 <div class="page">
   <div class="page-header">
-    <h2>Clienti</h2>
-    <a routerLink="/customers/new" class="btn btn-primary">Nuovo Cliente</a>
+    <h2>Customers</h2>
+    <a routerLink="/customers/new" class="btn btn-primary">New Customer</a>
   </div>
 
   <table class="data-table" *ngIf="customers.length; else noData">
     <thead>
       <tr>
-        <th>Nome</th>
-        <th>Cognome</th>
+        <th>First Name</th>
+        <th>Last Name</th>
         <th>Email</th>
-        <th>Telefono</th>
-        <th>Azioni</th>
+        <th>Phone</th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -21,13 +21,13 @@
         <td>{{ c.email }}</td>
         <td>{{ c.phoneNumber || '-' }}</td>
         <td class="actions">
-          <button class="btn-icon" (click)="onEdit(c)" title="Modifica">&#9998;</button>
-          <button class="btn-icon btn-danger" (click)="onDelete(c)" title="Elimina">&#10005;</button>
+          <button class="btn-icon" (click)="onEdit(c)" title="Edit">&#9998;</button>
+          <button class="btn-icon btn-danger" (click)="onDelete(c)" title="Delete">&#10005;</button>
         </td>
       </tr>
     </tbody>
   </table>
   <ng-template #noData>
-    <p class="no-data">Nessun cliente trovato.</p>
+    <p class="no-data">No customers found.</p>
   </ng-template>
 </div>

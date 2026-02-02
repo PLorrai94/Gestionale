@@ -34,7 +34,7 @@ export class OrderListComponent implements OnInit {
         this.totalElements = page.totalElements;
         this.totalPages = page.totalPages;
       },
-      error: () => this.notify.show('Errore nel caricamento ordini', 'error')
+      error: () => this.notify.show('Failed to load orders', 'error')
     });
   }
 

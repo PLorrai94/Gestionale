@@ -1,48 +1,48 @@
 <div class="form-page">
-  <h2>Nuovo Ordine</h2>
+  <h2>New Order</h2>
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()" class="entity-form">
     <div class="form-group">
-      <label for="customerId">Cliente</label>
+      <label for="customerId">Customer</label>
       <select id="customerId" formControlName="customerId">
-        <option [ngValue]="null" disabled>Seleziona un cliente</option>
+        <option [ngValue]="null" disabled>Select a customer</option>
         <option *ngFor="let c of customers" [value]="c.id">{{ c.firstName }} {{ c.lastName }}</option>
       </select>
-      <span class="error" *ngIf="form.get('customerId')?.touched && form.get('customerId')?.invalid">Seleziona un cliente</span>
+      <span class="error" *ngIf="form.get('customerId')?.touched && form.get('customerId')?.invalid">Select a customer</span>
     </div>
 
-    <h3>Articoli</h3>
+    <h3>Items</h3>
     <div formArrayName="items">
       <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i" class="item-row">
         <div class="form-group item-product">
-          <label>Prodotto</label>
+          <label>Product</label>
           <select formControlName="productId" (change)="onProductChange(i)">
-            <option [ngValue]="null" disabled>Seleziona</option>
+            <option [ngValue]="null" disabled>Select</option>
             <option *ngFor="let p of products" [value]="p.id">{{ p.name }}</option>
           </select>
         </div>
         <div class="form-group item-qty">
-          <label>Qtà</label>
+          <label>Qty</label>
           <input type="number" formControlName="quantity" min="1" />
         </div>
         <div class="form-group item-price">
-          <label>Prezzo</label>
+          <label>Price</label>
           <input type="number" formControlName="unitPrice" step="0.01" [readonly]="true" />
         </div>
         <button type="button" class="btn-icon btn-danger remove-btn" (click)="removeItem(i)" *ngIf="items.length > 1">&#10005;</button>
       </div>
     </div>
 
-    <button type="button" class="btn btn-secondary add-item-btn" (click)="addItem()">+ Aggiungi Articolo</button>
+    <button type="button" class="btn btn-secondary add-item-btn" (click)="addItem()">+ Add Item</button>
 
     <div class="order-total">
-      <span>Totale: </span>
+      <span>Total: </span>
       <strong>{{ totalAmount | currency:'EUR' }}</strong>
     </div>
 
     <div class="form-actions">
-      <button type="submit" class="btn btn-primary" [disabled]="form.invalid || items.length === 0">Crea Ordine</button>
-      <a routerLink="/orders" class="btn btn-secondary">Annulla</a>
+      <button type="submit" class="btn btn-primary" [disabled]="form.invalid || items.length === 0">Create Order</button>
+      <a routerLink="/orders" class="btn btn-secondary">Cancel</a>
     </div>
   </form>
 </div>

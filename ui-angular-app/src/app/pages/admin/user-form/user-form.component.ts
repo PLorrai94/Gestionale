@@ -46,7 +46,7 @@ export class UserFormComponent implements OnInit {
           this.form.patchValue(user);
           this.rolesForm.patchValue({ roles: user.roles || [] });
         },
-        error: () => this.notify.show('Errore nel caricamento utente', 'error')
+        error: () => this.notify.show('Failed to load user', 'error')
       });
     }
   }
@@ -79,12 +79,12 @@ export class UserFormComponent implements OnInit {
     op.subscribe({
       next: () => {
         this.notify.show(
-          this.isEditMode ? 'Utente aggiornato' : 'Utente creato',
+          this.isEditMode ? 'User updated' : 'User created',
           'success'
         );
         this.router.navigate(['/admin/users']);
       },
-      error: () => this.notify.show('Errore nel salvataggio', 'error')
+      error: () => this.notify.show('Failed to save user', 'error')
     });
   }
 }

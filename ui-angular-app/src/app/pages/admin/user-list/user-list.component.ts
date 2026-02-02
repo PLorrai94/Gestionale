@@ -36,7 +36,7 @@ export class UserListComponent implements OnInit {
         this.totalElements = page.totalElements;
         this.totalPages = page.totalPages;
       },
-      error: () => this.notify.show('Errore nel caricamento utenti', 'error')
+      error: () => this.notify.show('Failed to load users', 'error')
     });
   }
 
@@ -52,15 +52,15 @@ export class UserListComponent implements OnInit {
   }
 
   onDelete(user: User) {
-    this.confirmService.confirm('Elimina Utente', `Eliminare l'utente "${user.username}"?`)
+    this.confirmService.confirm('Delete User', `Delete user "${user.username}"?`)
       .subscribe(confirmed => {
         if (confirmed) {
           this.userService.delete(user.id).subscribe({
             next: () => {
-              this.notify.show('Utente eliminato', 'success');
+              this.notify.show('User deleted', 'success');
               this.loadUsers();
             },
-            error: () => this.notify.show('Errore durante l\'eliminazione', 'error')
+            error: () => this.notify.show('Failed to delete user', 'error')
           });
         }
       });

@@ -27,7 +27,7 @@ export class OrderDetailComponent implements OnInit {
     if (id) {
       this.orderService.getById(+id).subscribe({
         next: data => this.order = data,
-        error: () => this.notify.show('Errore nel caricamento ordine', 'error')
+        error: () => this.notify.show('Failed to load order', 'error')
       });
     }
   }
@@ -37,23 +37,23 @@ export class OrderDetailComponent implements OnInit {
     this.orderService.updateStatus(this.order.id, status).subscribe({
       next: updated => {
         this.order = updated;
-        this.notify.show(`Stato aggiornato a ${status}`, 'success');
+        this.notify.show(`Status updated to ${status}`, 'success');
       },
-      error: () => this.notify.show('Errore nell\'aggiornamento stato', 'error')
+      error: () => this.notify.show('Failed to update status', 'error')
     });
   }
 
   cancelOrder() {
     if (!this.order) return;
-    this.confirmService.confirm('Annulla Ordine', 'Sei sicuro di voler annullare questo ordine?')
+    this.confirmService.confirm('Cancel Order', 'Are you sure you want to cancel this order?')
       .subscribe(confirmed => {
         if (confirmed) {
           this.orderService.cancel(this.order!.id).subscribe({
             next: updated => {
               this.order = updated;
-              this.notify.show('Ordine annullato', 'success');
+              this.notify.show('Order cancelled', 'success');
             },
-            error: () => this.notify.show('Errore nell\'annullamento', 'error')
+            error: () => this.notify.show('Failed to cancel order', 'error')
           });
         }
       });
@@ -61,15 +61,15 @@ export class OrderDetailComponent implements OnInit {
 
   deleteOrder() {
     if (!this.order) return;
-    this.confirmService.confirm('Elimina Ordine', 'Eliminare definitivamente questo ordine?')
+    this.confirmService.confirm('Delete Order', 'Permanently delete this order?')
       .subscribe(confirmed => {
         if (confirmed) {
           this.orderService.delete(this.order!.id).subscribe({
             next: () => {
-              this.notify.show('Ordine eliminato', 'success');
+              this.notify.show('Order deleted', 'success');
               this.router.navigate(['/orders']);
             },
-            error: () => this.notify.show('Errore nell\'eliminazione', 'error')
+            error: () => this.notify.show('Failed to delete order', 'error')
           });
         }
       });

@@ -12,6 +12,7 @@ import org.springframework.batch.core.repository.JobExecutionAlreadyRunningExcep
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,14 +21,15 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Date;
 
 @RestController
-@RequestMapping("/api/batch") // Base URL per gli endpoint batch
+@RequestMapping("/batch")
+@PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
 @RequiredArgsConstructor
 public class BatchController {
 
     private final JobLauncher jobLauncher;
     private final Job processPendingOrdersJob; // Inietta il Job che abbiamo definito
 
-    @PostMapping("/start-process-orders-job")
+    @PostMapping("/start")
     public ResponseEntity<String> startProcessOrdersJob() {
         // Aggiungi un parametro univoco per ogni esecuzione del job per permettere job multipli
         // Un JobParameter può essere qualsiasi cosa che rende l'esecuzione unica. Qui usiamo un timestamp.

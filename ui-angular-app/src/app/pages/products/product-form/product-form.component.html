@@ -1,36 +1,36 @@
 <div class="form-page">
-  <h2>{{ isEditMode ? 'Modifica Prodotto' : 'Nuovo Prodotto' }}</h2>
+  <h2>{{ isEditMode ? 'Edit Product' : 'New Product' }}</h2>
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()" class="entity-form">
     <div class="form-group">
-      <label for="name">Nome</label>
+      <label for="name">Name</label>
       <input id="name" formControlName="name" />
-      <span class="error" *ngIf="form.get('name')?.touched && form.get('name')?.invalid">Campo obbligatorio</span>
+      <span class="error" *ngIf="form.get('name')?.touched && form.get('name')?.invalid">Required field</span>
     </div>
 
     <div class="form-group">
-      <label for="description">Descrizione</label>
+      <label for="description">Description</label>
       <textarea id="description" formControlName="description" rows="3"></textarea>
-      <span class="error" *ngIf="form.get('description')?.touched && form.get('description')?.invalid">Campo obbligatorio</span>
+      <span class="error" *ngIf="form.get('description')?.touched && form.get('description')?.invalid">Required field</span>
     </div>
 
     <div class="form-row">
       <div class="form-group">
-        <label for="price">Prezzo</label>
+        <label for="price">Price</label>
         <input id="price" type="number" formControlName="price" step="0.01" />
-        <span class="error" *ngIf="form.get('price')?.touched && form.get('price')?.invalid">Valore non valido</span>
+        <span class="error" *ngIf="form.get('price')?.touched && form.get('price')?.invalid">Invalid value</span>
       </div>
 
       <div class="form-group">
         <label for="stock">Stock</label>
         <input id="stock" type="number" formControlName="stock" />
-        <span class="error" *ngIf="form.get('stock')?.touched && form.get('stock')?.invalid">Valore non valido</span>
+        <span class="error" *ngIf="form.get('stock')?.touched && form.get('stock')?.invalid">Invalid value</span>
       </div>
     </div>
 
     <div class="form-actions">
-      <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Salva</button>
-      <a routerLink="/products" class="btn btn-secondary">Annulla</a>
+      <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Save</button>
+      <a routerLink="/products" class="btn btn-secondary">Cancel</a>
     </div>
   </form>
 </div>

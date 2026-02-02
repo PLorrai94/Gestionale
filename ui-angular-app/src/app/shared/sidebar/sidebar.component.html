@@ -37,12 +37,14 @@
         <span>Profile</span>
       }
     </li>
-    <li routerLink="/batch" routerLinkActive="active">
-      <i class="icon">⚙</i>
-      @if (!collapsed) {
-        <span>Batch Jobs</span>
-      }
-    </li>
+    @if (isPrivileged) {
+      <li routerLink="/batch" routerLinkActive="active">
+        <i class="icon">⚙</i>
+        @if (!collapsed) {
+          <span>Batch Jobs</span>
+        }
+      </li>
+    }
     @if (isAdmin) {
       <li routerLink="/admin/users" routerLinkActive="active">
         <i class="icon">⚙</i>

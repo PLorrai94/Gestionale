@@ -36,7 +36,7 @@ export class CustomerListComponent implements OnInit {
         this.totalElements = page.totalElements;
         this.totalPages = page.totalPages;
       },
-      error: () => this.notify.show('Errore nel caricamento clienti', 'error')
+      error: () => this.notify.show('Failed to load customers', 'error')
     });
   }
 
@@ -52,15 +52,15 @@ export class CustomerListComponent implements OnInit {
   }
 
   onDelete(customer: Customer) {
-    this.confirmService.confirm('Elimina Cliente', `Eliminare "${customer.firstName} ${customer.lastName}"?`)
+    this.confirmService.confirm('Delete Customer', `Delete "${customer.firstName} ${customer.lastName}"?`)
       .subscribe(confirmed => {
         if (confirmed) {
           this.customerService.delete(customer.id).subscribe({
             next: () => {
-              this.notify.show('Cliente eliminato', 'success');
+              this.notify.show('Customer deleted', 'success');
               this.loadCustomers();
             },
-            error: () => this.notify.show('Errore durante l\'eliminazione', 'error')
+            error: () => this.notify.show('Failed to delete customer', 'error')
           });
         }
       });

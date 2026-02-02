@@ -1,49 +1,45 @@
 <section class="hero login-hero">
   <div class="container">
     <div class="form-wrapper" @heroText>
-      <h1 class="form-title">Accedi al tuo account</h1>
+      <h1 class="form-title">Sign in to your account</h1>
 
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
-        <!-- Username -->
         <div class="form-group">
           <label for="username">Username</label>
           <input
             type="text"
             id="username"
             formControlName="username"
-            placeholder="Inserisci il tuo username"
+            placeholder="Enter your username"
             [ngClass]="{ 'is-invalid': submitted && f['username'].errors }"
           />
           <div *ngIf="submitted && f['username'].errors" class="invalid-feedback">
             <div *ngIf="f['username'].errors['required']">
-              Il campo username è obbligatorio.
+              Username is required.
             </div>
           </div>
         </div>
 
-        <!-- Password -->
         <div class="form-group">
           <label for="password">Password</label>
           <input
             type="password"
             id="password"
             formControlName="password"
-            placeholder="Inserisci la tua password"
+            placeholder="Enter your password"
             [ngClass]="{ 'is-invalid': submitted && f['password'].errors }"
           />
           <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
             <div *ngIf="f['password'].errors['required']">
-              Il campo password è obbligatorio.
+              Password is required.
             </div>
           </div>
         </div>
 
-        <!-- Messaggio di errore -->
         <div *ngIf="errorMessage" class="alert alert-danger">
           {{ errorMessage }}
         </div>
 
-        <!-- Pulsante login -->
         <button type="submit" class="btn btn-primary" [disabled]="loading || loginForm.invalid">
           <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
           Login
@@ -51,8 +47,8 @@
       </form>
 
       <p class="register-link">
-        Non hai un account?
-        <a routerLink="/auth/register">Registrati qui</a>.
+        Don't have an account?
+        <a routerLink="/auth/register">Register here</a>.
       </p>
     </div>
   </div>

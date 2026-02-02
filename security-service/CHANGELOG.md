@@ -1,5 +1,22 @@
 # Security Service - Changelog
 
+## 2026-02-02 — JWT Roles, Default Admin User, and Role-Based Access Fix
+
+### What
+1. **JWT now includes roles claim:** Modified `JwtService.generateToken(UserDetails)` to extract user authorities and embed them as a `roles` array in the JWT payload. Previously the token only contained subject, issuedAt, and expiration — making all downstream role checks fail.
+2. **Default admin user seeded via Flyway V16:** Created `V16__insert_default_admin_user.sql` that inserts an `admin` user with BCrypt-encoded password "admin" and assigns both ADMIN and USER roles. Password is intentionally weak and must be changed after first login.
+3. **Fixed `hasRole` vs `hasAuthority` mismatch:** Changed `AuthController.assignRole` from `@PreAuthorize("hasRole('ADMIN')")` to `@PreAuthorize("hasAuthority('ADMIN')")` because roles in the DB are stored as `ADMIN` (no `ROLE_` prefix), and `hasRole` expects a `ROLE_ADMIN` authority.
+
+### Why
+Role-based access control was completely non-functional: the JWT contained no roles, so the frontend `adminGuard` always failed, and downstream services hardcoded `ROLE_USER` for every authenticated user regardless of their actual roles. The `hasRole`/`hasAuthority` mismatch also prevented admins from assigning roles via the API.
+
+### Files
+- `service/JwtService.java` — Added roles extraction from UserDetails authorities into JWT claims
+- `controller/AuthController.java` — Changed `hasRole('ADMIN')` to `hasAuthority('ADMIN')`
+- `resources/db/migration/V16__insert_default_admin_user.sql` — New Flyway migration
+
+---
+
 ## 2026-01-31 — Registration System Improvements
 
 ### What

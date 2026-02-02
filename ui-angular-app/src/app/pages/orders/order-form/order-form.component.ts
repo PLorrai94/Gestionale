@@ -35,7 +35,7 @@ export class OrderFormComponent implements OnInit {
     });
 
     this.customerService.getAll(0, 1000).subscribe(page => this.customers = page.content);
-    this.productService.getAll().subscribe(products => this.products = products);
+    this.productService.getAll(0, 1000).subscribe(page => this.products = page.content);
 
     this.addItem();
   }
@@ -88,10 +88,10 @@ export class OrderFormComponent implements OnInit {
 
     this.orderService.create(data).subscribe({
       next: () => {
-        this.notify.show('Ordine creato', 'success');
+        this.notify.show('Order created', 'success');
         this.router.navigate(['/orders']);
       },
-      error: () => this.notify.show('Errore nella creazione ordine', 'error')
+      error: () => this.notify.show('Failed to create order', 'error')
     });
   }
 }

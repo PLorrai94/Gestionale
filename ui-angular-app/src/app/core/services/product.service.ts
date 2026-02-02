@@ -1,18 +1,24 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Product } from '../models/product'; // corretto percorso
+import { Product } from '../models/product';
+import { PageResponse } from '../models/page-response.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductService {
-  private apiUrl = 'http://localhost:8082/products'; // Modifica se serve
+  private apiUrl = '/api/management/products';
 
   constructor(private http: HttpClient) {}
 
-  getAll(): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.apiUrl}/all`);
+  getAll(page = 0, size = 20, sort?: string, search?: string): Observable<PageResponse<Product>> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+    if (sort) params = params.set('sort', sort);
+    if (search) params = params.set('search', search);
+    return this.http.get<PageResponse<Product>>(this.apiUrl, { params });
   }
 
   getById(id: number): Observable<Product> {
@@ -20,7 +26,7 @@ export class ProductService {
   }
 
   create(product: Product): Observable<Product> {
-    return this.http.post<Product>(`${this.apiUrl}`, product);
+    return this.http.post<Product>(this.apiUrl, product);
   }
 
   update(id: number, product: Product): Observable<Product> {

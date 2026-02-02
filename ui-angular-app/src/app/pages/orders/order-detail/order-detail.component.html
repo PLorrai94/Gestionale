@@ -1,41 +1,41 @@
 <div class="detail-page" *ngIf="order">
   <div class="page-header">
-    <h2>Ordine #{{ order.id }}</h2>
-    <a routerLink="/orders" class="btn btn-secondary">Torna alla lista</a>
+    <h2>Order #{{ order.id }}</h2>
+    <a routerLink="/orders" class="btn btn-secondary">Back to list</a>
   </div>
 
   <div class="detail-card">
     <div class="detail-row">
-      <span class="label">Cliente:</span>
-      <span>{{ order.customerName || 'Cliente #' + order.customerId }}</span>
+      <span class="label">Customer:</span>
+      <span>{{ order.customerName || 'Customer #' + order.customerId }}</span>
     </div>
     <div class="detail-row">
-      <span class="label">Stato:</span>
+      <span class="label">Status:</span>
       <span class="status-badge" [ngClass]="getStatusClass(order.status)">{{ order.status }}</span>
     </div>
     <div class="detail-row">
-      <span class="label">Data:</span>
+      <span class="label">Date:</span>
       <span>{{ order.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
     </div>
     <div class="detail-row">
-      <span class="label">Totale:</span>
+      <span class="label">Total:</span>
       <span class="total">{{ order.totalAmount | currency:'EUR' }}</span>
     </div>
   </div>
 
-  <h3>Articoli</h3>
+  <h3>Items</h3>
   <table class="data-table" *ngIf="order.items?.length">
     <thead>
       <tr>
-        <th>Prodotto</th>
-        <th>Quantità</th>
-        <th>Prezzo Unitario</th>
-        <th>Subtotale</th>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Unit Price</th>
+        <th>Subtotal</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let item of order.items">
-        <td>{{ item.productName || 'Prodotto #' + item.productId }}</td>
+        <td>{{ item.productName || 'Product #' + item.productId }}</td>
         <td>{{ item.quantity }}</td>
         <td>{{ item.unitPrice | currency:'EUR' }}</td>
         <td>{{ item.quantity * item.unitPrice | currency:'EUR' }}</td>
@@ -44,13 +44,13 @@
   </table>
 
   <div class="order-actions" *ngIf="order.status !== 'CANCELLED' && order.status !== 'COMPLETED'">
-    <button class="btn btn-primary" *ngIf="order.status === 'PENDING'" (click)="updateStatus('CONFIRMED')">Conferma</button>
-    <button class="btn btn-primary" *ngIf="order.status === 'CONFIRMED'" (click)="updateStatus('SHIPPED')">Spedisci</button>
-    <button class="btn btn-primary" *ngIf="order.status === 'SHIPPED'" (click)="updateStatus('COMPLETED')">Completa</button>
-    <button class="btn btn-secondary" (click)="cancelOrder()">Annulla Ordine</button>
+    <button class="btn btn-primary" *ngIf="order.status === 'PENDING'" (click)="updateStatus('CONFIRMED')">Confirm</button>
+    <button class="btn btn-primary" *ngIf="order.status === 'CONFIRMED'" (click)="updateStatus('SHIPPED')">Ship</button>
+    <button class="btn btn-primary" *ngIf="order.status === 'SHIPPED'" (click)="updateStatus('COMPLETED')">Complete</button>
+    <button class="btn btn-secondary" (click)="cancelOrder()">Cancel Order</button>
   </div>
 
   <div class="order-actions">
-    <button class="btn btn-danger-outline" (click)="deleteOrder()">Elimina Ordine</button>
+    <button class="btn btn-danger-outline" (click)="deleteOrder()">Delete Order</button>
   </div>
 </div>

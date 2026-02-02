@@ -37,7 +37,7 @@ export class CustomerFormComponent implements OnInit {
       this.customerId = +id;
       this.customerService.getById(this.customerId).subscribe({
         next: customer => this.form.patchValue(customer),
-        error: () => this.notify.show('Errore nel caricamento cliente', 'error')
+        error: () => this.notify.show('Failed to load customer', 'error')
       });
     }
   }
@@ -53,12 +53,12 @@ export class CustomerFormComponent implements OnInit {
     op.subscribe({
       next: () => {
         this.notify.show(
-          this.isEditMode ? 'Cliente aggiornato' : 'Cliente creato',
+          this.isEditMode ? 'Customer updated' : 'Customer created',
           'success'
         );
         this.router.navigate(['/customers']);
       },
-      error: () => this.notify.show('Errore nel salvataggio', 'error')
+      error: () => this.notify.show('Failed to save customer', 'error')
     });
   }
 }

@@ -7,7 +7,13 @@
       "Bash(else echo \"DELETED OK: $f\")",
       "Bash(fi)",
       "Bash(done)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(npm run build:*)",
+      "Bash(python -c:*)",
+      "Bash(python3:*)",
+      "Bash(pip install:*)",
+      "Bash(.mvnw.cmd clean package:*)",
+      "Bash(./mvnw.cmd clean package:*)"
     ]
   }
 }

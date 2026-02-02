@@ -19,7 +19,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
@@ -67,7 +67,7 @@ public class AuthController {
     }
 
     @PostMapping("/users/{userId}/roles/{roleName}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<User> assignRole(@PathVariable Long userId, @PathVariable String roleName) {
         log.info("Assigning role '{}' to user ID {}", roleName, userId);
         User updatedUser = authService.assignRoleToUser(userId, roleName);

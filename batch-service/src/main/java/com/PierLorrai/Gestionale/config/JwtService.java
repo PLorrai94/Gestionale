@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.List;
 import java.util.function.Function;
 
 @Service
@@ -28,6 +29,13 @@ public class JwtService {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<String> extractRoles(String token) {
+        Claims claims = extractAllClaims(token);
+        List<String> roles = claims.get("roles", List.class);
+        return roles != null ? roles : List.of("USER");
     }
 
     public boolean isTokenExpired(String token) {

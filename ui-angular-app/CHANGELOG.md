@@ -1,5 +1,95 @@
 # UI Angular App - Changelog
 
+## 2026-02-02 — Privileged Guard and Batch Access Control
+
+### What
+1. **New `privilegedGuard`:** Created `guards/privileged.guard.ts` that checks the JWT `roles` claim for ADMIN or MANAGER roles. Redirects unauthorized users to `/dashboard`.
+2. **Batch route restricted:** Changed the `/batch` route guard from `authGuard` (any logged-in user) to `privilegedGuard` (ADMIN or MANAGER only).
+3. **Sidebar conditional batch link:** The "Batch Jobs" link in the sidebar is now only visible to users with ADMIN or MANAGER roles. Added `isPrivileged` getter and refactored role checking into a shared `hasAnyRole` helper method.
+
+### Why
+Batch jobs should only be accessible to privileged users. Previously any authenticated user could see and access the batch page. Now the sidebar hides the link and the route guard blocks direct URL access for non-privileged users.
+
+### Files
+- `src/app/guards/privileged.guard.ts` — New guard for ADMIN+MANAGER
+- `src/app/app.routes.ts` — Batch route uses `privilegedGuard`
+- `src/app/shared/sidebar/sidebar.component.ts` — Added `isPrivileged` getter, refactored role checks
+- `src/app/shared/sidebar/sidebar.component.html` — Batch link wrapped in `@if (isPrivileged)`
+
+---
+
+## 2026-02-02 — Comprehensive Logic Fixes and English Translation
+
+### What
+- **Fixed critical bootstrap issues in main.ts and app.config.ts**: Removed duplicate providers (provideHttpClient, provideRouter, provideAnimations were all registered twice). Removed unused AppConfigService loading. Replaced broken JWT interceptor that read wrong localStorage key (`jwt` instead of `currentUser`) with a functional interceptor using `inject(AuthService)`.
+- **Fixed ProductService**: Changed from hardcoded `http://localhost:8082/products` to `/api/management/products` (through gateway). Added pagination support matching other services.
+- **Fixed routing**: Added missing routes for customers, orders, batch, admin/users (create/edit). Applied `adminGuard` to admin routes. Removed unused `ProfileSidebarComponent` import.
+- **Fixed layout**: Switched from old `ProfileSidebarComponent` (in pages/products/) to shared `SidebarComponent` (in shared/sidebar/) which has proper navigation links and admin role checking.
+- **Fixed dashboard**: Replaced stub (Italian inline template) with functional component that loads real data from ProductService, CustomerService, and OrderService using `forkJoin`. Added quick action links.
+- **Fixed batch component**: Replaced stub ("batch works!") with functional component using BatchService and NotificationService for user feedback.
+- **Fixed footer**: Removed `@fadeIn` animation trigger that caused runtime error (not registered in component). Replaced dead links (/features, /pricing, /docs) with real app routes. Translated to English.
+- **Fixed home page**: Translated all Italian text to English. Removed batch job trigger logic (belongs on /batch page). Removed fake statistics counter. Added link to `/batch` for Batch Service feature card. Fixed memory leak by properly unsubscribing scroll listener.
+- **Fixed auth service**: Removed all debug console.log/console.error statements (14+ instances). Removed unnecessary `withCredentials: true` and explicit Content-Type headers. Removed unused `refreshUserFromStorage` method and `RegisterPayload` type alias.
+- **Fixed login/register components**: Removed `HttpClientModule` imports (bypassed interceptors by creating second HttpClient instance). Added `RouterModule` import for routerLink directives. Translated Italian error messages to English. Removed console.log statements.
+- **Fixed products.ts**: Was incorrectly declared as `@Injectable` (service) instead of `@Component`. Rewrote as proper component.
+- **Fixed product-table and order-form**: Updated to handle new `PageResponse<Product>` return type from ProductService.
+- **Fixed products-page**: Removed old ProfileSidebarComponent import (sidebar is in layout).
+- **Translated all Italian text**: Translated 60+ Italian strings across all HTML templates and TypeScript notification messages to English.
+- **Removed console statements**: Cleaned all console.log/console.error from auth.ts, home.ts, login.ts, register.ts, user-profile.ts, product-search-form.ts.
+
+### Why
+The app had multiple critical bugs preventing proper operation: broken JWT interceptor (auth tokens never sent), ProductService bypassing the API gateway, missing routes for most pages, stub dashboard and batch components, runtime errors from unregistered animations, and mixed Italian/English text throughout.
+
+### Files
+- `src/main.ts` — Simplified, removed duplicate providers and AppConfigService
+- `src/app/app.config.ts` — Rewritten as constant with proper JWT interceptor
+- `src/app/app.routes.ts` — Added all missing routes, adminGuard for admin pages
+- `src/app/core/services/auth.ts` — Removed debug logging and unused code
+- `src/app/core/services/product.service.ts` — Fixed URL, added pagination
+- `src/app/core/services/batch.service.ts` — Unchanged (already correct)
+- `src/app/shared/layout/layout.component.ts` — Use shared SidebarComponent
+- `src/app/shared/layout/layout.component.html` — Use `<app-sidebar>` tag
+- `src/app/shared/footer/footer.component.html` — Fixed dead links, translated
+- `src/app/shared/navbar/navbar.component.html` — Translated
+- `src/app/pages/dashboard/dashboard.ts` — Rewritten with real API data
+- `src/app/pages/dashboard/dashboard.html` — New functional template
+- `src/app/pages/dashboard/dashboard.css` — New styles
+- `src/app/pages/batch/batch.ts` — Rewritten with BatchService integration
+- `src/app/pages/batch/batch.html` — New functional template
+- `src/app/pages/batch/batch.css` — New styles
+- `src/app/pages/home/home.ts` — Removed batch logic, stats, translated
+- `src/app/pages/home/home.html` — Translated, removed stats/batch sections
+- `src/app/pages/auth/login/login.ts` — Removed HttpClientModule, console.log, translated
+- `src/app/pages/auth/login/login.html` — Translated
+- `src/app/pages/auth/register/register.ts` — Removed HttpClientModule, fixed imports, translated
+- `src/app/pages/auth/register/register.html` — Translated
+- `src/app/pages/products/products.ts` — Rewritten as proper Component
+- `src/app/pages/products/product-table/product-table.ts` — Fixed for PageResponse
+- `src/app/pages/products/products-page/products-page.ts` — Removed old sidebar import
+- `src/app/pages/products/products-page/products-page.html` — Removed sidebar tag
+- `src/app/pages/products/product-form/product-form.component.html` — Translated
+- `src/app/pages/products/product-search-form/product-search-form.html` — Translated
+- `src/app/pages/products/product-search-form/product-search-form.ts` — Removed console.log
+- `src/app/pages/products/product-table/product-table.html` — Translated
+- `src/app/pages/customers/customer-list/customer-list.component.ts` — Translated notifications
+- `src/app/pages/customers/customer-list/customer-list.component.html` — Translated
+- `src/app/pages/customers/customer-form/customer-form.component.ts` — Translated notifications
+- `src/app/pages/customers/customer-form/customer-form.component.html` — Translated
+- `src/app/pages/orders/order-list/order-list.component.ts` — Translated notifications
+- `src/app/pages/orders/order-list/order-list.component.html` — Translated
+- `src/app/pages/orders/order-form/order-form.component.ts` — Fixed ProductService usage, translated
+- `src/app/pages/orders/order-form/order-form.component.html` — Translated
+- `src/app/pages/orders/order-detail/order-detail.component.ts` — Translated notifications
+- `src/app/pages/orders/order-detail/order-detail.component.html` — Translated
+- `src/app/pages/admin/user-list/user-list.component.ts` — Translated notifications
+- `src/app/pages/admin/user-list/user-list.component.html` — Translated
+- `src/app/pages/admin/user-form/user-form.component.ts` — Translated notifications
+- `src/app/pages/admin/user-form/user-form.component.html` — Translated
+- `src/app/pages/profile/user-profile.component.ts` — Removed console.log
+- `src/app/pages/profile/user-profile.component.html` — Translated
+
+---
+
 ## 2026-01-31 — Debugging 401 Registration Error
 
 ### What

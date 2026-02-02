@@ -43,7 +43,7 @@ export class UserProfileComponent implements OnInit {
   saveChanges(): void {
     if (this.profileForm.valid) {
       const updatedData = this.profileForm.value;
-      console.log('TODO: Save to server ->', updatedData);
+      // TODO: implement save to server
       this.toggleEdit();
     }
   }

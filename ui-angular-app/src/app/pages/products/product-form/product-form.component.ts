@@ -38,7 +38,7 @@ export class ProductFormComponent implements OnInit {
       this.productId = +id;
       this.productService.getById(this.productId).subscribe({
         next: (product: Product) => this.form.patchValue(product),
-        error: () => this.notify.show('Errore nel caricamento prodotto', 'error')
+        error: () => this.notify.show('Failed to load product', 'error')
       });
     }
   }
@@ -54,12 +54,12 @@ export class ProductFormComponent implements OnInit {
     op.subscribe({
       next: () => {
         this.notify.show(
-          this.isEditMode ? 'Prodotto aggiornato' : 'Prodotto creato',
+          this.isEditMode ? 'Product updated' : 'Product created',
           'success'
         );
         this.router.navigate(['/products']);
       },
-      error: () => this.notify.show('Errore nel salvataggio', 'error')
+      error: () => this.notify.show('Failed to save product', 'error')
     });
   }
 }

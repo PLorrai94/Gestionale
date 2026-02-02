@@ -1,34 +1,34 @@
 <div class="page">
   <div class="page-header">
-    <h2>Ordini</h2>
-    <a routerLink="/orders/new" class="btn btn-primary">Nuovo Ordine</a>
+    <h2>Orders</h2>
+    <a routerLink="/orders/new" class="btn btn-primary">New Order</a>
   </div>
 
   <table class="data-table" *ngIf="orders.length; else noData">
     <thead>
       <tr>
         <th>ID</th>
-        <th>Cliente</th>
-        <th>Totale</th>
-        <th>Stato</th>
-        <th>Data</th>
-        <th>Azioni</th>
+        <th>Customer</th>
+        <th>Total</th>
+        <th>Status</th>
+        <th>Date</th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let o of orders" (click)="viewDetail(o)" class="clickable-row">
         <td>#{{ o.id }}</td>
-        <td>{{ o.customerName || 'Cliente #' + o.customerId }}</td>
+        <td>{{ o.customerName || 'Customer #' + o.customerId }}</td>
         <td>{{ o.totalAmount | currency:'EUR' }}</td>
         <td><span class="status-badge" [ngClass]="getStatusClass(o.status)">{{ o.status }}</span></td>
         <td>{{ o.createdAt | date:'dd/MM/yyyy' }}</td>
         <td class="actions">
-          <button class="btn-icon" (click)="viewDetail(o); $event.stopPropagation()" title="Dettaglio">&#9654;</button>
+          <button class="btn-icon" (click)="viewDetail(o); $event.stopPropagation()" title="Detail">&#9654;</button>
         </td>
       </tr>
     </tbody>
   </table>
   <ng-template #noData>
-    <p class="no-data">Nessun ordine trovato.</p>
+    <p class="no-data">No orders found.</p>
   </ng-template>
 </div>

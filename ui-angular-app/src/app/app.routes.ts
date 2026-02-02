@@ -2,36 +2,26 @@ import { Routes } from '@angular/router';
 import { LayoutComponent } from './shared/layout/layout.component';
 import { authGuard } from './guards/auth.guard';
 import { loginGuard } from './guards/login.guard';
-import { ProfileSidebarComponent } from './pages/products/profile-sidebar/profile-sidebar';
+import { adminGuard } from './guards/admin.guard';
+import { privilegedGuard } from './guards/privileged.guard';
 
 export const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
     children: [
-      // Home page
       {
         path: '',
         canActivate: [loginGuard],
         loadComponent: () =>
           import('./pages/home/home').then(m => m.HomeComponent)
       },
-      // Products page
-      {
-        path: 'products',
-        canActivate: [loginGuard],
-        
-        loadComponent: () =>
-          import('./pages/products/products').then(m => m.ProductsComponent)
-      },
-      // Register
       {
         path: 'auth/register',
         canActivate: [loginGuard],
         loadComponent: () =>
           import('./pages/auth/register/register').then(m => m.RegisterComponent)
       },
-      // Login
       {
         path: 'auth/login',
         canActivate: [loginGuard],
@@ -51,14 +41,90 @@ export const routes: Routes = [
           import('./pages/profile/user-profile.component').then(m => m.UserProfileComponent)
       },
       {
+        path: 'products',
+        canActivate: [authGuard],
+        loadComponent: () =>
+          import('./pages/products/products').then(m => m.ProductsComponent)
+      },
+      {
         path: 'products/all',
         canActivate: [authGuard],
         loadComponent: () =>
-  import('./pages/products/products-page/products-page').then(m => m.ProductsPageComponent)
+          import('./pages/products/products-page/products-page').then(m => m.ProductsPageComponent)
+      },
+      {
+        path: 'products/new',
+        canActivate: [authGuard],
+        loadComponent: () =>
+          import('./pages/products/product-form/product-form.component').then(m => m.ProductFormComponent)
+      },
+      {
+        path: 'products/:id/edit',
+        canActivate: [authGuard],
+        loadComponent: () =>
+          import('./pages/products/product-form/product-form.component').then(m => m.ProductFormComponent)
+      },
+      {
+        path: 'customers',
+        canActivate: [authGuard],
+        loadComponent: () =>
+          import('./pages/customers/customer-list/customer-list.component').then(m => m.CustomerListComponent)
+      },
+      {
+        path: 'customers/new',
+        canActivate: [authGuard],
+        loadComponent: () =>
+          import('./pages/customers/customer-form/customer-form.component').then(m => m.CustomerFormComponent)
+      },
+      {
+        path: 'customers/:id/edit',
+        canActivate: [authGuard],
+        loadComponent: () =>
+          import('./pages/customers/customer-form/customer-form.component').then(m => m.CustomerFormComponent)
+      },
+      {
+        path: 'orders',
+        canActivate: [authGuard],
+        loadComponent: () =>
+          import('./pages/orders/order-list/order-list.component').then(m => m.OrderListComponent)
+      },
+      {
+        path: 'orders/new',
+        canActivate: [authGuard],
+        loadComponent: () =>
+          import('./pages/orders/order-form/order-form.component').then(m => m.OrderFormComponent)
+      },
+      {
+        path: 'orders/:id',
+        canActivate: [authGuard],
+        loadComponent: () =>
+          import('./pages/orders/order-detail/order-detail.component').then(m => m.OrderDetailComponent)
+      },
+      {
+        path: 'batch',
+        canActivate: [privilegedGuard],
+        loadComponent: () =>
+          import('./pages/batch/batch').then(m => m.Batch)
+      },
+      {
+        path: 'admin/users',
+        canActivate: [adminGuard],
+        loadComponent: () =>
+          import('./pages/admin/user-list/user-list.component').then(m => m.UserListComponent)
+      },
+      {
+        path: 'admin/users/new',
+        canActivate: [adminGuard],
+        loadComponent: () =>
+          import('./pages/admin/user-form/user-form.component').then(m => m.UserFormComponent)
+      },
+      {
+        path: 'admin/users/:id/edit',
+        canActivate: [adminGuard],
+        loadComponent: () =>
+          import('./pages/admin/user-form/user-form.component').then(m => m.UserFormComponent)
       }
-
     ]
   },
-  // Fallback route
   { path: '**', redirectTo: '' }
 ];

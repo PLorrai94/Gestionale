@@ -22,8 +22,7 @@ export class ProductSearchFormComponent {
     const name = this.form.get('name')?.value;
     if (name) {
       this.productService.searchByName(name).subscribe(data => {
-        console.log('Risultati ricerca:', data);
-        // TODO: connettere con tabella
+        // TODO: connect results with table
       });
     }
   }
