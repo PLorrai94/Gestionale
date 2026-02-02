@@ -35,7 +35,7 @@ export class OrderFormComponent implements OnInit {
     });
 
     this.customerService.getAll(0, 1000).subscribe(page => this.customers = page.content);
-    this.productService.getAll(0, 1000).subscribe(page => this.products = page.content);
+    this.productService.getAll().subscribe(products => this.products = products);
 
     this.addItem();
   }

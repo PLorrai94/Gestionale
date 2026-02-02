@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ProductService } from '../../../core/services/product.service';
 import { NotificationService } from '../../../shared/notification/notification.service';
+import { Product } from '../../../core/models/product';
 
 @Component({
   standalone: true,
@@ -36,7 +37,7 @@ export class ProductFormComponent implements OnInit {
       this.isEditMode = true;
       this.productId = +id;
       this.productService.getById(this.productId).subscribe({
-        next: product => this.form.patchValue(product),
+        next: (product: Product) => this.form.patchValue(product),
         error: () => this.notify.show('Errore nel caricamento prodotto', 'error')
       });
     }
@@ -45,7 +46,7 @@ export class ProductFormComponent implements OnInit {
   onSubmit() {
     if (this.form.invalid) return;
 
-    const data = this.form.value;
+    const data: Product = this.form.value;
     const op = this.isEditMode
       ? this.productService.update(this.productId!, data)
       : this.productService.create(data);

@@ -2,10 +2,9 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../../core/services/auth';
+import { AuthService, RegisterPayload } from '../../../core/services/auth';
 import { HttpClientModule } from '@angular/common/http';
 import { fadeIn, heroText } from '../../home/animations';
-import { UserRegistrationRequest } from '../../../core/models/user-registration-request.model';
 
 @Component({
   standalone: true,
@@ -17,81 +16,37 @@ import { UserRegistrationRequest } from '../../../core/models/user-registration-
 })
 export class RegisterComponent {
   registerForm: FormGroup;
-  loading = false;
+  isFloating = true;
   successMessage: string | null = null;
   errorMessage: string | null = null;
 
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.registerForm = this.fb.group({
-      username: ['', [
-        Validators.required, 
-        Validators.minLength(3), 
-        Validators.maxLength(50),
-        Validators.pattern(/^[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9]$/)
-      ]],
-      email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
-      password: ['', [
-        Validators.required, 
-        Validators.minLength(8),
-        Validators.pattern(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\S+$).{8,}$/)
-      ]],
-      confirmPassword: ['', [Validators.required]],
-      firstName: ['', [Validators.maxLength(50)]],
-      lastName: ['', [Validators.maxLength(50)]],
-      phoneNumber: ['', [Validators.pattern(/^$|^\+?[0-9\s\-()]{7,20}$/)]]
-    }, { validators: this.passwordMatchValidator });
-    
+      username: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]]
+    });
     if (this.authService.isLoggedIn()) {
       this.router.navigate(['/dashboard']);
     }
   }
 
-  passwordMatchValidator(g: FormGroup) {
-    const password = g.get('password')?.value;
-    const confirmPassword = g.get('confirmPassword')?.value;
-    return password === confirmPassword ? null : { mismatch: true };
-  }
-
   onSubmit() {
-    if (this.registerForm.invalid) {
-      Object.keys(this.registerForm.controls).forEach(key => {
-        const control = this.registerForm.get(key);
-        if (control?.invalid) {
-          control.markAsTouched();
+    if (this.registerForm.valid) {
+      const payload: RegisterPayload = this.registerForm.value;
+
+      this.authService.register(payload).subscribe({
+        next: () => {
+          this.successMessage = 'Registrazione avvenuta con successo!';
+          this.errorMessage = null;
+          this.registerForm.reset();
+        },
+        error: (err: any) => {
+          this.errorMessage = 'Errore durante la registrazione.';
+          this.successMessage = null;
+          console.error('Registration error:', err);
         }
       });
-      return;
     }
-
-    this.loading = true;
-    this.errorMessage = null;
-    this.successMessage = null;
-
-    const request: UserRegistrationRequest = {
-      username: this.registerForm.value.username,
-      email: this.registerForm.value.email,
-      password: this.registerForm.value.password,
-      confirmPassword: this.registerForm.value.confirmPassword,
-      firstName: this.registerForm.value.firstName || undefined,
-      lastName: this.registerForm.value.lastName || undefined,
-      phoneNumber: this.registerForm.value.phoneNumber || undefined
-    };
-
-    this.authService.register(request).subscribe({
-      next: () => {
-        this.successMessage = 'Registrazione avvenuta con successo!';
-        this.errorMessage = null;
-        this.loading = false;
-        setTimeout(() => {
-          this.router.navigate(['/dashboard']);
-        }, 2000);
-      },
-      error: (err: any) => {
-        this.errorMessage = err.error?.message || err.message || 'Errore durante la registrazione.';
-        this.successMessage = null;
-        this.loading = false;
-        console.error('Registration error:', err);
-      }
-    });
   }
 }

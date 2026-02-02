@@ -1,7 +1,7 @@
-import { Component, DestroyRef, inject, OnInit, EventEmitter, Output, Input } from '@angular/core';
+// navbar.component.ts
+import { Component, inject, OnInit, signal, EventEmitter, Output , Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AuthService } from '../../core/services/auth';
 import { AuthResponse } from '../../core/models/auth-response.model';
 import { fadeIn } from '../animations/fadeIn';
@@ -12,23 +12,21 @@ import { fadeIn } from '../animations/fadeIn';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],
   imports: [CommonModule, RouterModule],
-  animations: [fadeIn]
+  animations: [fadeIn] 
 })
 export class NavbarComponent implements OnInit {
-  private authService = inject(AuthService);
-  private destroyRef = inject(DestroyRef);
 
+  private authService = inject(AuthService);
+  
   currentUser: AuthResponse | null = null;
   loading = true;
-  isMenuOpen = false;
+  isMenuOpen: boolean = false; // Nuovo stato per il menu mobile
 
   ngOnInit(): void {
-    this.authService.currentUser
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(user => {
-        this.currentUser = user;
-        this.loading = false;
-      });
+    this.authService.currentUser.subscribe(user => {
+      this.currentUser = user;
+      this.loading = false;
+    });
   }
 
   logout(): void {
@@ -36,6 +34,6 @@ export class NavbarComponent implements OnInit {
   }
 
   toggleMenu(): void {
-    this.isMenuOpen = !this.isMenuOpen;
+    this.isMenuOpen = !this.isMenuOpen; // Metodo per aprire/chiudere il menu mobile
   }
 }

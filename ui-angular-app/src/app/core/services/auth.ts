@@ -1,3 +1,4 @@
+// src/app/services/auth.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
@@ -6,7 +7,12 @@ import { Router } from '@angular/router';
 
 import { UserLoginRequest } from '../models/user-login-request.model';
 import { AuthResponse } from '../models/auth-response.model';
-import { UserRegistrationRequest } from '../models/user-registration-request.model';
+
+export interface RegisterPayload {
+  username: string;
+  email: string;
+  password: string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -29,42 +35,24 @@ export class AuthService {
     return this.currentUserSubject.value;
   }
 
-  register(request: UserRegistrationRequest): Observable<AuthResponse> {
-    console.log('AuthService: Sending registration request to', `${this.apiUrl}/register`, 'with data:', request);
-    return this.http.post<AuthResponse>(`${this.apiUrl}/register`, request, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }).pipe(
-      tap(response => {
-        console.log('Registration successful! Response:', response);
-        // Auto-login after successful registration
-        const authData: AuthResponse = {
-          token: response.token,
-          refreshToken: response.refreshToken,
-          username: response.username,
-          email: response.email,
-          id: response.id
-        };
-        localStorage.setItem('currentUser', JSON.stringify(authData));
-        this.currentUserSubject.next(authData);
-      }),
+  register(payload: RegisterPayload): Observable<any> {
+    console.log(`Registering user: ${payload.username}`);
+    return this.http.post(`${this.apiUrl}/register`, payload).pipe(
+      tap(() => console.log('Registration successful!')),
       catchError(error => {
         console.error('Registration failed:', error);
-        console.error('Error status:', error.status);
-        console.error('Error message:', error.message);
-        console.error('Error headers:', error.headers);
         throw error;
       })
     );
   }
 
   login(request: UserLoginRequest): Observable<AuthResponse> {
+    console.log(`Attempting login for user: ${request.username}`);
     return this.http.post<AuthResponse>(`${this.apiUrl}/authenticate`, request).pipe(
       tap(response => {
+        // Mappa il token nel formato che ti aspetti
         const authData: AuthResponse = {
           token: response.token,
-          refreshToken: response.refreshToken,
           username: response.username,
           email: response.email,
           id: response.id
@@ -72,6 +60,10 @@ export class AuthService {
 
         localStorage.setItem('currentUser', JSON.stringify(authData));
         this.currentUserSubject.next(authData);
+
+        console.log('Login successful! JWT stored locally.');
+        console.log('Token JWT:', authData.token);
+        console.log('isLoggedIn:', this.isLoggedIn());
       }),
       catchError(error => {
         console.error('Login failed:', error);
@@ -88,36 +80,10 @@ export class AuthService {
     return this.currentUserValue?.token || null;
   }
 
-  getRefreshToken(): string | null {
-    return this.currentUserValue?.refreshToken || null;
-  }
-
-  refreshAccessToken(): Observable<AuthResponse> {
-    const refreshToken = this.getRefreshToken();
-    return this.http.post<AuthResponse>(`${this.apiUrl}/refresh`, { refreshToken }).pipe(
-      tap(response => {
-        const authData: AuthResponse = {
-          token: response.token,
-          refreshToken: response.refreshToken,
-          username: response.username,
-          email: response.email,
-          id: response.id
-        };
-        localStorage.setItem('currentUser', JSON.stringify(authData));
-        this.currentUserSubject.next(authData);
-      })
-    );
-  }
-
   logout(): void {
-    const refreshToken = this.getRefreshToken();
-    if (refreshToken) {
-      this.http.post(`${this.apiUrl}/logout`, { refreshToken }).subscribe({
-        error: () => {} // ignore errors on logout
-      });
-    }
     localStorage.removeItem('currentUser');
     this.currentUserSubject.next(null);
+    console.log('User logged out.');
     this.router.navigate(['/auth/login']);
   }
 

@@ -1,1 +1,25 @@
 
+<section class="hero register-hero">
+  <div class="container">
+    <div class="form-wrapper" @heroText>
+      <h1 class="form-title">Crea un nuovo account</h1>
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input id="username" type="text" formControlName="username" placeholder="Inserisci il tuo username" />
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input id="email" type="email" formControlName="email" placeholder="Inserisci la tua email" />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input id="password" type="password" formControlName="password" placeholder="Crea una password sicura" />
+        </div>
+        <button type="submit" class="btn btn-primary" [disabled]="!registerForm.valid">
+          Registrati
+        </button>
+      </form>
+    </div>
+  </div>
+</section>

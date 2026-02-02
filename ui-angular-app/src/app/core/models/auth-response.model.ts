@@ -1,7 +1,6 @@
 export interface AuthResponse {
-  token: string;
-  refreshToken: string;
+  token: string;        // <-- era jwtToken
   username: string;
-  email?: string;
-  id?: number;
+  email?: string;       // opzionale, se serve
+  id?: number;          // opzionale, se serve
 }

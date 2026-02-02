@@ -1,9 +1,8 @@
-<div class="products-page">
-  <div class="page-header">
-    <h2>Prodotti</h2>
-    <a routerLink="/products/new" class="btn btn-primary">Nuovo Prodotto</a>
-  </div>
+<div class="products-layout">
+  <app-profile-sidebar></app-profile-sidebar>
 
-  <app-product-search-form (search)="onSearch($event)"></app-product-search-form>
-  <app-product-table [products]="filteredProducts" (edit)="onEdit($event)" (delete)="onDelete($event)"></app-product-table>
+  <div class="products-main">
+    <app-product-search-form></app-product-search-form>
+    <app-product-table></app-product-table>
+  </div>
 </div>

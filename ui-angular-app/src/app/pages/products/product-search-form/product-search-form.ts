@@ -1,6 +1,8 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { ProductService } from '../../../core/services/product.service';
+import { Product } from '../../../core/models/product';
 
 @Component({
   standalone: true,
@@ -10,15 +12,19 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule, ReactiveFormsModule]
 })
 export class ProductSearchFormComponent {
-  @Output() search = new EventEmitter<string>();
   form: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private productService: ProductService) {
     this.form = this.fb.group({ name: [''] });
   }
 
   onSubmit() {
-    const name = this.form.get('name')?.value?.trim() || '';
-    this.search.emit(name);
+    const name = this.form.get('name')?.value;
+    if (name) {
+      this.productService.searchByName(name).subscribe(data => {
+        console.log('Risultati ricerca:', data);
+        // TODO: connettere con tabella
+      });
+    }
   }
 }

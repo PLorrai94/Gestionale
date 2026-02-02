@@ -1,33 +1,17 @@
 <nav class="sidebar" [class.collapsed]="collapsed">
   <button class="toggle-btn" (click)="onToggleClick()">
-    ☰
-    <span *ngIf="!collapsed">Menu</span>
+    ☰ 
+    <span *ngIf="!collapsed">Funzionalità</span>
   </button>
 
   <ul class="nav-list">
-    <li routerLink="/dashboard" routerLinkActive="active">
-      <i class="icon">📊</i>
-      <span *ngIf="!collapsed">Dashboard</span>
-    </li>
-    <li routerLink="/products" routerLinkActive="active">
-      <i class="icon">📦</i>
-      <span *ngIf="!collapsed">Prodotti</span>
-    </li>
-    <li routerLink="/customers" routerLinkActive="active">
-      <i class="icon">👥</i>
-      <span *ngIf="!collapsed">Clienti</span>
-    </li>
-    <li routerLink="/orders" routerLinkActive="active">
-      <i class="icon">🛒</i>
-      <span *ngIf="!collapsed">Ordini</span>
-    </li>
     <li routerLink="/profile" routerLinkActive="active">
       <i class="icon">👤</i>
       <span *ngIf="!collapsed">Profilo</span>
     </li>
-    <li routerLink="/admin/users" routerLinkActive="active">
-      <i class="icon">⚙</i>
-      <span *ngIf="!collapsed">Gestione Utenti</span>
+    <li routerLink="/orders" routerLinkActive="active">
+      <i class="icon">📦</i>
+      <span *ngIf="!collapsed">Ordini</span>
     </li>
   </ul>
 </nav>
