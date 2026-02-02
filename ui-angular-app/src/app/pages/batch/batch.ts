@@ -23,12 +23,12 @@ export class Batch {
         this.isRunning = false;
         this.lastRunTime = new Date();
         this.notificationService.show('Batch job started successfully');
-        console.log('Batch job response:', response);
+        // Batch job started successfully
       },
       error: (error) => {
         this.isRunning = false;
         this.notificationService.show('Failed to start batch job: ' + (error.error?.message || error.message || 'Unknown error'));
-        console.error('Batch job error:', error);
+        // Error starting batch job
       }
     });
   }

@@ -1,0 +1,64 @@
+/* Stili per la sidebar */
+.sidebar {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  width: 250px;
+  transition: width 0.3s ease;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar.collapsed {
+  width: 60px;
+}
+
+.toggle-btn {
+  background: none;
+  border: none;
+  color: var(--color-text);
+  padding: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+}
+
+.nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.nav-list li {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: background-color 0.2s;
+}
+
+.nav-list li:hover {
+  background-color: var(--color-card);
+}
+
+.nav-list li.active {
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+.nav-list li.active .icon {
+  color: var(--color-bg);
+}
+
+.icon {
+  font-size: 1.2rem;
+}

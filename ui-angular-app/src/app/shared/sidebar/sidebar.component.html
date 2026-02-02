@@ -1,0 +1,55 @@
+<nav class="sidebar" [class.collapsed]="collapsed">
+  <button class="toggle-btn" (click)="onToggleClick()">
+    ☰
+    @if (!collapsed) {
+      <span>Menu</span>
+    }
+  </button>
+
+  <ul class="nav-list">
+    <li routerLink="/dashboard" routerLinkActive="active">
+      <i class="icon">📊</i>
+      @if (!collapsed) {
+        <span>Dashboard</span>
+      }
+    </li>
+    <li routerLink="/products" routerLinkActive="active">
+      <i class="icon">📦</i>
+      @if (!collapsed) {
+        <span>Products</span>
+      }
+    </li>
+    <li routerLink="/customers" routerLinkActive="active">
+      <i class="icon">👥</i>
+      @if (!collapsed) {
+        <span>Customers</span>
+      }
+    </li>
+    <li routerLink="/orders" routerLinkActive="active">
+      <i class="icon">🛒</i>
+      @if (!collapsed) {
+        <span>Orders</span>
+      }
+    </li>
+    <li routerLink="/profile" routerLinkActive="active">
+      <i class="icon">👤</i>
+      @if (!collapsed) {
+        <span>Profile</span>
+      }
+    </li>
+    <li routerLink="/batch" routerLinkActive="active">
+      <i class="icon">⚙</i>
+      @if (!collapsed) {
+        <span>Batch Jobs</span>
+      }
+    </li>
+    @if (isAdmin) {
+      <li routerLink="/admin/users" routerLinkActive="active">
+        <i class="icon">⚙</i>
+        @if (!collapsed) {
+          <span>User Management</span>
+        }
+      </li>
+    }
+  </ul>
+</nav>

@@ -8,7 +8,7 @@ import { PageResponse } from '../models/page-response.model';
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = '/api/security/users';
+  private apiUrl = '/api/auth/users';
 
   constructor(private http: HttpClient) {}
 

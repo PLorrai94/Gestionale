@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { trigger, state, style, transition, animate, query, stagger } from '@angular/animations';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { BatchService } from '../../core/services/batch.service';
 import { filter, fromEvent, map } from 'rxjs';
 
 interface Feature {
@@ -67,48 +66,47 @@ export class HomeComponent implements OnInit, OnDestroy {
   particles: { x: number; y: number; size: number; speed: number; opacity: number }[] = [];
   particleInterval: any;
 
-  batchMessage: string | null = null;
-  batchErrorMessage: string | null = null;
 
   features: Feature[] = [
     {
       icon: 'key',
       title: 'Security Service',
-      description: 'Gestisci l\'autenticazione e l\'autorizzazione degli utenti.',
+      description: 'Manage user authentication and authorization.',
       link: '/auth/login'
     },
     {
       icon: 'box',
       title: 'Management & Processing',
-      description: 'Gestisci prodotti, clienti e ordini del tuo sistema.',
+      description: 'Manage products, customers, and orders.',
       link: '/products'
     },
     {
       icon: 'layers',
       title: 'Batch Service',
-      description: 'Avvia e monitora job di elaborazione batch asincroni.',
+      description: 'Start and monitor asynchronous batch processing jobs.',
+      link: '/batch'
     },
     {
       icon: 'users',
       title: 'User Management',
-      description: 'Gestione avanzata di utenti e ruoli (accesso ristretto).',
+      description: 'Advanced user and role management (restricted access).',
       link: '/admin/users'
     },
     {
       icon: 'shopping-cart',
       title: 'Orders Overview',
-      description: 'Visualizza e traccia lo stato di tutti gli ordini.',
+      description: 'View and track the status of all orders.',
       link: '/orders'
     }
   ];
 
   stats: Stat[] = [
-    { label: 'Servizi Attivi', target: 7, value: 0 },
-    { label: 'Utenti Registrati', target: 120, value: 0 },
-    { label: 'Transazioni Oggi', target: 540, value: 0 }
+    { label: 'Active Services', target: 6, value: 0 },
+    { label: 'Registered Users', target: 120, value: 0 },
+    { label: 'Transactions Today', target: 540, value: 0 }
   ];
 
-  constructor(private batchService: BatchService) {}
+  constructor() {}
 
   ngOnInit() {
     this.setupScrollListener();
@@ -156,9 +154,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     }, 100);
   }
 
-  trackByFeature(index: number, feature: Feature): string {
-    return feature.title;
-  }
 
   private startStatsCounter() {
     this.stats.forEach(stat => {
@@ -189,21 +184,5 @@ export class HomeComponent implements OnInit, OnDestroy {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  trackByParticle(index: number, particle: any) {
-    return index;
-  }
 
-  startBatchJob(): void {
-    this.batchMessage = null;
-    this.batchErrorMessage = null;
-
-    this.batchService.runBatch().subscribe({
-      next: (response: any) => {
-        this.batchMessage = 'Batch Job Started: ' + response;
-      },
-      error: (error: any) => {
-        this.batchErrorMessage = 'Error starting batch job: ' + error.message;
-      }
-    });
-  }
 }

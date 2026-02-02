@@ -1,18 +1,74 @@
-<div class="full-page-layout">
-  <app-navbar (menuToggle)="toggleSidebar()"></app-navbar>
-
-  <div [class.sidebar-collapsed]="!isSidebarOpen"
-       [class.sidebar-open]="isSidebarOpen"
-       class="layout-content-area">
-    <app-profile-sidebar [collapsed]="!isSidebarOpen" (toggle)="toggleSidebar()"></app-profile-sidebar>
-
-    <main class="main-content">
-      <router-outlet></router-outlet>
-    </main>
-  </div>
-
-  <app-footer></app-footer>
-</div>
+<mat-sidenav-container class="full-page-layout">
+  <!-- Top navbar -->
+  <mat-sidenav-content>
+    <app-navbar (menuToggle)="toggleSidebar()"></app-navbar>
+    
+    <div [class.sidebar-collapsed]="!isSidebarOpen"
+         [class.sidebar-open]="isSidebarOpen"
+         class="layout-content-area">
+      
+      <!-- Sidebar -->
+      <mat-sidenav #sidenav 
+                   [mode]="'side'" 
+                   [opened]="isSidebarOpen"
+                   class="material-sidebar">
+        <div class="sidebar-header">
+          <h3>Navigation</h3>
+          <button mat-icon-button (click)="toggleSidebar()" class="close-sidebar">
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+        </div>
+        
+        <mat-nav-list>
+          <a mat-list-item routerLink="/dashboard" routerLinkActive="active" (click)="onMobileClose()">
+            <mat-icon>dashboard</mat-icon>
+            <span>Dashboard</span>
+          </a>
+          <a mat-list-item routerLink="/products" routerLinkActive="active" (click)="onMobileClose()">
+            <mat-icon>inventory</mat-icon>
+            <span>Products</span>
+          </a>
+          <a mat-list-item routerLink="/customers" routerLinkActive="active" (click)="onMobileClose()">
+            <mat-icon>people</mat-icon>
+            <span>Customers</span>
+          </a>
+          <a mat-list-item routerLink="/orders" routerLinkActive="active" (click)="onMobileClose()">
+            <mat-icon>shopping_cart</mat-icon>
+            <span>Orders</span>
+          </a>
+          <a mat-list-item routerLink="/batch" routerLinkActive="active" (click)="onMobileClose()" *ngIf="currentUser?.role === 'ADMIN'">
+            <mat-icon>play_circle</mat-icon>
+            <span>Batch Processing</span>
+          </a>
+          <a mat-list-item routerLink="/reports" routerLinkActive="active" (click)="onMobileClose()">
+            <mat-icon>assessment</mat-icon>
+            <span>Reports</span>
+          </a>
+          <a mat-list-item routerLink="/admin/users" routerLinkActive="active" (click)="onMobileClose()" *ngIf="currentUser?.role === 'ADMIN'">
+            <mat-icon>admin_panel_settings</mat-icon>
+            <span>User Management</span>
+          </a>
+          <mat-divider></mat-divider>
+          <a mat-list-item routerLink="/profile" routerLinkActive="active" (click)="onMobileClose()">
+            <mat-icon>person</mat-icon>
+            <span>Profile</span>
+          </a>
+          <a mat-list-item (click)="logout()" class="logout-item">
+            <mat-icon>logout</mat-icon>
+            <span>Logout</span>
+          </a>
+        </mat-nav-list>
+      </mat-sidenav>
+      
+      <!-- Main content -->
+      <main class="main-content">
+        <router-outlet></router-outlet>
+      </main>
+    </div>
+    
+    <app-footer></app-footer>
+  </mat-sidenav-content>
+</mat-sidenav-container>
 
 <app-notification></app-notification>
 <app-confirm-dialog></app-confirm-dialog>

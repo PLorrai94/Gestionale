@@ -1,31 +1,43 @@
 <div class="dashboard">
-  <h2>Dashboard</h2>
-  
-  <div class="welcome-message">
-    <p>Welcome to the Gestionale dashboard!</p>
-    <p>This is a placeholder dashboard. Authentication is working correctly.</p>
-    <p>You can navigate to other sections using the sidebar or menu.</p>
+  <h2>Welcome, {{ username }}</h2>
+
+  <div *ngIf="loading" class="loading">Loading dashboard data...</div>
+  <div *ngIf="error" class="error-message">{{ error }}</div>
+
+  <div class="stats-grid" *ngIf="!loading && !error">
+    <a routerLink="/products" class="stat-card">
+      <span class="stat-value">{{ stats.products }}</span>
+      <span class="stat-label">Products</span>
+    </a>
+    <a routerLink="/customers" class="stat-card">
+      <span class="stat-value">{{ stats.customers }}</span>
+      <span class="stat-label">Customers</span>
+    </a>
+    <a routerLink="/orders" class="stat-card">
+      <span class="stat-value">{{ stats.orders }}</span>
+      <span class="stat-label">Orders</span>
+    </a>
   </div>
 
   <div class="quick-actions">
     <h3>Quick Actions</h3>
     <div class="actions-grid">
-      <a routerLink="/products" class="action-card">
-        <span class="action-icon">📦</span>
-        <span>Products</span>
+      <a routerLink="/products/new" class="action-card">
+        <span class="action-icon">+</span>
+        <span>New Product</span>
       </a>
-      <a routerLink="/customers" class="action-card">
-        <span class="action-icon">👥</span>
-        <span>Customers</span>
+      <a routerLink="/customers/new" class="action-card">
+        <span class="action-icon">+</span>
+        <span>New Customer</span>
       </a>
-      <a routerLink="/orders" class="action-card">
-        <span class="action-icon">📋</span>
-        <span>Orders</span>
+      <a routerLink="/orders/new" class="action-card">
+        <span class="action-icon">+</span>
+        <span>New Order</span>
       </a>
-      <button (click)="logout()" class="action-card logout-btn">
-        <span class="action-icon">🚪</span>
-        <span>Logout</span>
-      </button>
+      <a routerLink="/batch" class="action-card">
+        <span class="action-icon">⚙</span>
+        <span>Batch Jobs</span>
+      </a>
     </div>
   </div>
 </div>

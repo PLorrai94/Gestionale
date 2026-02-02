@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { LayoutComponent } from './shared/layout/layout.component';
 import { authGuard } from './guards/auth.guard';
 import { loginGuard } from './guards/login.guard';
+import { adminGuard } from './guards/admin.guard';
 
 export const routes: Routes = [
   {
@@ -18,13 +19,13 @@ export const routes: Routes = [
         path: 'auth/register',
         canActivate: [loginGuard],
         loadComponent: () =>
-          import('./pages/auth/register/register').then(m => m.RegisterComponent)
+          import('./pages/auth/register/register.component').then(m => m.RegisterComponent)
       },
       {
         path: 'auth/login',
         canActivate: [loginGuard],
         loadComponent: () =>
-          import('./pages/auth/login/login').then(m => m.LoginComponent)
+          import('./pages/auth/login/login.component').then(m => m.LoginComponent)
       },
       {
         path: 'dashboard',
@@ -94,19 +95,19 @@ export const routes: Routes = [
       },
       {
         path: 'admin/users',
-        canActivate: [authGuard],
+        canActivate: [adminGuard],
         loadComponent: () =>
           import('./pages/admin/user-list/user-list.component').then(m => m.UserListComponent)
       },
       {
         path: 'admin/users/new',
-        canActivate: [authGuard],
+        canActivate: [adminGuard],
         loadComponent: () =>
           import('./pages/admin/user-form/user-form.component').then(m => m.UserFormComponent)
       },
       {
         path: 'admin/users/:id/edit',
-        canActivate: [authGuard],
+        canActivate: [adminGuard],
         loadComponent: () =>
           import('./pages/admin/user-form/user-form.component').then(m => m.UserFormComponent)
       },

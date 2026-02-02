@@ -1,83 +1,140 @@
-/* Contenitore principale che gestisce l'intera pagina verticalmente */
-.full-page-layout {
+/* Main container */
+mat-sidenav-container.full-page-layout {
+  height: 100vh;
   display: flex;
-  flex-direction: column; /* Imposta la direzione principale su colonna */
-  min-height: 100vh; /* Fa in modo che il layout occupi l'intera altezza della viewport */
+  flex-direction: column;
 }
 
-/* La navbar e il footer prenderanno l'altezza che serve loro */
+/* Navbar and footer */
 app-navbar {
-  flex-shrink: 0; /* Assicurati che la navbar non si riduca */
+  flex-shrink: 0;
 }
 
 app-footer {
-  flex-shrink: 0; /* Assicurati che il footer non si riduca */
+  flex-shrink: 0;
 }
 
-/* Questa è l'area che contiene la sidebar e il main content */
+/* Layout content area */
 .layout-content-area {
-  display: flex; /* Ora questo è un flex container orizzontale */
-  flex: 1; /* Questo fa in modo che occupi tutto lo spazio verticale rimanente */
+  display: flex;
+  flex: 1;
   background-color: var(--color-bg);
-  overflow: hidden; /* Mantiene il contenitore senza scrollbar, gestito dai figli */
-  position: relative; /* Importante per posizionare la sidebar mobile */
+  overflow: hidden;
+  position: relative;
 }
 
-/* Sidebar base (desktop e mobile - SEMPRE IN-FLOW) */
-app-profile-sidebar {
-  /* Regole di base per la sidebar */
-  width: 220px; /* Larghezza della sidebar aperta */
-  background-color: var(--color-surface);
+/* Material sidebar */
+.material-sidebar {
+  width: 250px;
+  background-color: var(--color-surface) !important;
   box-shadow: var(--shadow-md);
-  transition: width 0.3s ease, transform 0.3s ease; /* Aggiungi transform alla transizione */
-  flex-shrink: 0; /* Impedisce che la sidebar si riduca */
-  /* padding: 2rem 0;  Questo padding verrà gestito INTERNAMENTE alla sidebar */
+  transition: width 0.3s ease;
 }
 
-/* Main content (desktop e mobile) */
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background-color: var(--color-card);
+  border-bottom: 1px solid var(--color-light);
+}
+
+.sidebar-header h3 {
+  margin: 0;
+  color: var(--color-accent);
+  font-size: 1.2rem;
+}
+
+.close-sidebar {
+  color: var(--color-subtle);
+}
+
+/* Material list items */
+mat-nav-list {
+  padding-top: 8px;
+}
+
+mat-nav-list a {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+mat-nav-list a.active {
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+mat-nav-list a.active mat-icon {
+  color: var(--color-bg);
+}
+
+mat-nav-list a:hover:not(.active) {
+  background-color: var(--color-card);
+}
+
+.logout-item {
+  color: #f44336 !important;
+}
+
+.logout-item mat-icon {
+  color: #f44336;
+}
+
+/* Main content */
 .main-content {
-  flex: 1; /* Il main content occupa tutto lo spazio orizzontale rimanente */
+  flex: 1;
   padding: 2rem;
   background-color: var(--color-bg);
-  overflow-x: hidden; /* Impedisce scrollbar orizzontale */
-  overflow-y: auto; /* Permette al contenuto principale di scrollare verticalmente se necessario */
-  height: 100%; /* Assicurati che prenda tutta l'altezza disponibile nel flex container */
-  transition: padding-left 0.3s ease; /* Aggiungi transizione per il padding-left */
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 100%;
+  transition: padding-left 0.3s ease;
 }
 
-/* Stato collassato (desktop) */
-.sidebar-collapsed app-profile-sidebar {
-  width: 70px; /* Larghezza della sidebar collassata */
-  /* padding: 1rem 0;  Questo padding verrà gestito INTERNAMENTE alla sidebar */
+/* Collapsed sidebar state */
+.sidebar-collapsed .material-sidebar {
+  width: 70px;
 }
+
+.sidebar-collapsed .sidebar-header h3,
+.sidebar-collapsed mat-nav-list span {
+  display: none;
+}
+
+.sidebar-collapsed .sidebar-header {
+  justify-content: center;
+  padding: 16px 8px;
+}
+
 .sidebar-collapsed .main-content {
-  padding-left: 1rem; /* Riduci il padding a sinistra del main-content quando sidebar collassata */
+  padding-left: 1rem;
 }
 
-
-/* Responsive: mobile behavior */
+/* Mobile responsive */
 @media (max-width: 768px) {
   .layout-content-area {
-    flex-direction: row; /* Mantiene la direzione della riga per il contenuto */
+    flex-direction: row;
   }
 
-  app-profile-sidebar {
-    position: absolute; /* Rimuoviamo in-flow per il mobile */
+  .material-sidebar {
+    position: absolute;
     top: 0;
     left: 0;
-    height: 100%; /* Occupare tutta l'altezza del layout-content-area */
-    width: 200px; /* Larghezza fissa per la sidebar mobile */
-    transform: translateX(-100%); /* Nascondi la sidebar fuori dallo schermo */
-    box-shadow: var(--shadow-xl); /* Ombra più pronunciata per il drawer */
-    z-index: 1000; /* Assicurati che sia sopra il main content */
+    height: 100%;
+    width: 250px;
+    transform: translateX(-100%);
+    box-shadow: var(--shadow-xl);
+    z-index: 1000;
   }
 
-  /* Quando la sidebar è APERTA in mobile */
-  .layout-content-area.sidebar-open app-profile-sidebar {
-    transform: translateX(0); /* Falla scorrere dentro */
+  .layout-content-area.sidebar-open .material-sidebar {
+    transform: translateX(0);
   }
 
-  /* Overlay per quando la sidebar è aperta in mobile */
   .layout-content-area.sidebar-open::after {
     content: '';
     position: absolute;
@@ -85,13 +142,19 @@ app-profile-sidebar {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5); /* Scurisce lo sfondo */
-    z-index: 999; /* Dietro la sidebar, sopra il main-content */
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
     cursor: pointer;
   }
 
-  /* Il main content in mobile non ha bisogno di spingere la sidebar */
   .main-content {
-    padding-left: 1rem; /* Mantieni un padding standard */
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .sidebar-header h3 {
+    font-size: 1rem;
   }
 }
+
+/* Mobile close functionality is handled in the TypeScript component */
